@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/admin/admin_calendar_inc.php,v 1.1 2005/07/15 12:25:01 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/admin/admin_calendar_inc.php,v 1.2 2005/07/15 16:04:07 lsces Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -12,7 +12,7 @@ if (isset($_REQUEST["calendarset"]) && isset($_REQUEST["homeCalendar"])) {
 	$smarty->assign('home_calendar', $_REQUEST["homeCalendar"]);
 }
 
-include_once( CALENDAR_PKG_PATH.'calendar_lib.php' );
+include_once( CALENDAR_PKG_PATH.'CalendarLib.php' );
 
 $formCalendarFeatures = array(
 	"calendar_blogs" => array(

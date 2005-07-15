@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/Attic/add_calendar.php,v 1.1 2005/07/15 12:25:01 bitweaver Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/Attic/add_calendar.php,v 1.2 2005/07/15 16:04:06 lsces Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -9,7 +9,7 @@
 // Initialization
 require_once( '../bit_setup_inc.php' );
 
-include_once( CALENDAR_PKG_PATH.'calendar_lib.php' );
+include_once( CALENDAR_PKG_PATH.'CalendarLib.php' );
 
 if ($bit_p_admin_calendar != 'y' and $bit_p_admin != 'y') {
 	$smarty->assign('msg', tra("You dont have permission to use this feature"));
