@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/Attic/add_calendar.php,v 1.2 2005/07/15 16:04:06 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/Attic/add_calendar.php,v 1.3 2005/07/15 17:48:59 lsces Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -73,7 +73,7 @@ if (isset($_REQUEST["find"])) {
 	$find = '';
 }
 
-$pagination_url = $tikilib->pagination_url($find, $sort_mode);
+$pagination_url = $gBitSystem->pagination_url($find, $sort_mode);
 $smarty->assign_by_ref('pagination_url', $pagination_url);
 
 $calendars = $calendarlib->listCalendars(0, -1, $sort_mode, $find, 0);

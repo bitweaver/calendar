@@ -1,4 +1,4 @@
-<div class="display tikicalendar">
+<div class="display calendar">
 <div class="header">
 <h1><a href="{$gBitLoc.CALENDAR_PKG_URL}admin/index.php">{tr}Manage Calendars{/tr}</a></h1>
 </div>
@@ -106,4 +106,4 @@
 <div class="norecords">{tr}No records found{/tr}</div>
 {/if}
 
-</div> {* end .tikicalendar *}
+</div> {* end .calendar *}

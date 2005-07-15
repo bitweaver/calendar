@@ -60,16 +60,8 @@ global $gBitInstaller;
 $gBitInstaller->makePackageHomeable('calendar');
 
 foreach( array_keys( $tables ) AS $tableName ) {
-	$gBitInstaller->registerSchemaTable( CALENDAR_PKG_DIR, $tableName, $tables[$tableName] );
+	$gBitInstaller->registerSchemaTable( CALENDAR_PKG_NAME, $tableName, $tables[$tableName] );
 }
-
-$gBitInstaller->registerPackageInfo( CALENDAR_PKG_DIR, array(
-	'description' => "Calendar package to display tiki entries by date, and set events",
-	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
-	'version' => '0.1',
-	'state' => 'beta',
-	'dependencies' => '',
-) );
 
 // ### Indexes
 $indices = array (
@@ -78,30 +70,29 @@ $indices = array (
 	'tiki_calendar_locations_idx' => array( 'table' => 'tiki_calendar_locations', 'cols' => 'name', 'opts' => NULL )
 );
 
-$gBitInstaller->registerSchemaIndexes( CALENDAR_PKG_DIR, $indices );
+$gBitInstaller->registerSchemaIndexes( CALENDAR_PKG_NAME, $indices );
+
+$gBitInstaller->registerPackageInfo( CALENDAR_PKG_NAME, array(
+	'description' => "Calendar package to display bitweaver entries by date, and set events",
+	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
+) );
 
 // ### Defaults
 
-// ### Default Menu Options
-$gBitInstaller->registerMenuOptions( CALENDAR_PKG_DIR, array(
-	array(42,'o','Calendar','tiki-calendar.php',0,'feature_calendar','bit_p_view_calendar',''),
-	array(42,'o','Calendar','tiki-admin_calendars.php',1,'feature_calendar','bit_p_admin_calendar','')
-) );
-
 // ### Default User Permissions
-$gBitInstaller->registerUserPermissions( CALENDAR_PKG_DIR, array(
-	array('bit_p_view_calendar', 'Can browse the calendar', 'basic', 'calendar'),
-	array('bit_p_change_events', 'Can change events in the calendar', 'registered', 'calendar'),
-	array('bit_p_add_events', 'Can add events in the calendar', 'registered', 'calendar'),
-	array('bit_p_admin_calendar', 'Can create/admin calendars', 'admin', 'calendar')
+$gBitInstaller->registerUserPermissions( CALENDAR_PKG_NAME, array(
+	array('bit_p_view_calendar', 'Can browse the calendar', 'basic', CALENDAR_PKG_NAME),
+	array('bit_p_change_events', 'Can change events in the calendar', 'registered', CALENDAR_PKG_NAME),
+	array('bit_p_add_events', 'Can add events in the calendar', 'registered', CALENDAR_PKG_NAME),
+	array('bit_p_admin_calendar', 'Can create/admin calendars', 'admin', CALENDAR_PKG_NAME)
 ) );
 
 // ### Default Preferences
-$gBitInstaller->registerPreferences( CALENDAR_PKG_DIR, array(
-	array ('kernel', 'feature_jscalendar', 'n'),
-	array ('calendar', 'calendar_blogs', 'y'),
-	array ('calendar', 'calendar_users', 'y'),
-	array ('calendar', 'calendar_wiki', 'y')
+$gBitInstaller->registerPreferences( CALENDAR_PKG_NAME, array(
+//	array ('kernel', 'feature_jscalendar', 'n'),
+	array (CALENDAR_PKG_NAME, 'calendar_blogs', 'y'),
+	array (CALENDAR_PKG_NAME, 'calendar_users', 'y'),
+	array (CALENDAR_PKG_NAME, 'calendar_wiki', 'y')
 ) );
 
 ?>

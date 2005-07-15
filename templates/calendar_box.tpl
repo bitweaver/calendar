@@ -1,4 +1,4 @@
-<div class="tikicalendar popup box">
+<div class="calendar popup box">
 	<div class="boxtitle">{$cellhead}
 		{if $cellprio}
 			<span class="calprio{$cellprio}">{$cellprio}</span>

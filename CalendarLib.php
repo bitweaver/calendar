@@ -164,12 +164,12 @@ class CalendarLib extends BitBase {
 		return $ret;
 	}
 
-	function listTikiItems($tikiobj, $user_id, $tstart, $tstop, $offset, $maxRecords, $sort_mode, $find) {
+	function listTikiItems($bitobj, $user_id, $tstart, $tstop, $offset, $maxRecords, $sort_mode, $find) {
 		$ret = array();
 
 		$res = $dstart = '';
 
-		foreach ($tikiobj as $tik) {
+		foreach ($bitobj as $tik) {
 //				$query = "select *, ( select page_id from `".BIT_DB_PREFIX."tiki_pages` where `content_id` = tc.`content_id` )" .
 				$query = "select * from `".BIT_DB_PREFIX."tiki_content` tc where (`last_modified`>? and `last_modified`<?) and `content_type_guid` = '".$tik."'";
 				$result = $this->query($query,array($tstart,$tstop));

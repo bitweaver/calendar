@@ -1,16 +1,16 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.tpl,v 1.1 2005/07/15 12:25:01 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.tpl,v 1.2 2005/07/15 17:48:59 lsces Exp $ *}
 
 {php}
 include_once( CALENDAR_PKG_PATH."Calendar.php");
-global $dbTiki,$tikilib;
+global $gBitSystem;
 if(isset($_SESSION["thedate"])) {
   $day=date("d",$_SESSION["thedate"]);
   $mon=date("m",$_SESSION["thedate"]);
   $year=date("Y",$_SESSION["thedate"]);
 } else {
-	$day=date( "d", $tikilib->server_time_to_site_time( time() ) );
-	$mon=date( "m", $tikilib->server_time_to_site_time( time() ) );
-	$year=date( "Y", $tikilib->server_time_to_site_time( time() ) );
+	$day=date( "d", $gBitSystem->server_time_to_site_time( time() ) );
+	$mon=date( "m", $gBitSystem->server_time_to_site_time( time() ) );
+	$year=date( "Y", $gBitSystem->server_time_to_site_time( time() ) );
 }
 if(isset($_REQUEST["day"])) {
  $day = $_REQUEST["day"];
@@ -67,7 +67,7 @@ if (!strstr($father,"?")) {
 }
 {/php}
 
-{bitmodule title="$moduleTitle" name="tikicalendar"}
+{bitmodule title="$moduleTitle" name="calendar"}
     <!-- THIS ROW DISPLAYS THE YEAR AND MONTH -->
     <div class="navigation">
 {php}

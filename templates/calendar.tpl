@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.1 2005/07/15 12:25:01 bitweaver Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.2 2005/07/15 17:48:59 lsces Exp $ *}
 
 {popup_init src="`$gBitLoc.THEMES_PKG_URL`overlib.js"}
 <div class="floaticon">
@@ -7,7 +7,7 @@
 {/if}
 </div>
 
-<div class="display tikicalendar">
+<div class="display calendar">
 <div class="header">
 <h1><a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view={$view}">{tr}Calendar{/tr}</a></h1>
 </div>
@@ -36,7 +36,7 @@
 	<a href="javascript:hide('tabcal',1);{if $modifiable}hide('tabnav',1);{/if}show('tab',1);">{tr}Hide{/tr}</a>
   </div>
 
-  <div class="tikicalendar box">
+  <div class="calendar box">
   <form method="get" action="{$gBitLoc.CALENDAR_PKG_URL}index.php" id="f">
   <table class="panel">
 	<tr>
@@ -74,16 +74,16 @@
 		  <div class="boxtitle">{tr}Tools Calendars{/tr}</div>
 		  <div class="boxcontent">
 		  <div
-			onclick="document.getElementById('tikiswitch').click();document.getElementById('tikiswitch').checked=!document.getElementById('tikiswitch').checked;document.getElementById('tikiswitch').click();"
-			><input name="tikiswitch" id="tikiswitch" type="checkbox" onclick="switchCheckboxes(this.form.id,'tikicals[]','tikiswitch');this.checked=!this.checked;" /> {tr}check / uncheck all{/tr}
+			onclick="document.getElementById('calswitch').click();document.getElementById('calswitch').checked=!document.getElementById('calswitch').checked;document.getElementById('calswitch').click();"
+			><input name="calswitch" id="calswitch" type="checkbox" onclick="switchCheckboxes(this.form.id,'bitcals[]','calswitch');this.checked=!this.checked;" /> {tr}check / uncheck all{/tr}
 		  </div>
-			{foreach from=$tikiItems key=ki item=vi}
+			{foreach from=$bitItems key=ki item=vi}
 			  {if $vi.feature eq 'y' and $vi.right eq 'y'}
 				<div
-				  onclick="document.getElementById('tikical_{$ki}').checked=!document.getElementById('tikical_{$ki}').checked;"
+				  onclick="document.getElementById('bitcal_{$ki}').checked=!document.getElementById('bitcal_{$ki}').checked;"
 				  onmouseout="this.style.textDecoration='none';"  
 				  onmouseover="this.style.textDecoration='underline';" 
-				  ><input type="checkbox" name="tikicals[]" value="{$ki|escape}" id="tikical_{$ki}" {if $tikical.$ki}checked="checked"{/if} onclick="this.checked=!this.checked;"/>
+				  ><input type="checkbox" name="bitcals[]" value="{$ki|escape}" id="bitcal_{$ki}" {if $bitcal.$ki}checked="checked"{/if} onclick="this.checked=!this.checked;"/>
 				  <span class="Cal{$ki}">{$vi.label}</span>
 				</div>
 			  {/if}
@@ -110,7 +110,7 @@
 		<a href="javascript:hide('tabcal',1);hide('tabnav',1);show('tab',1);">{tr}Hide{/tr}</a>
   	</div>
 
-	<div class="tikicalendar box">
+	<div class="calendar box">
 		{* ······························· *}
 		{if ($calitem_id > 0 and $bit_p_change_events eq 'y') or ($calendar_id > 0 and $bit_p_add_events eq 'y')}
 
@@ -377,7 +377,7 @@ onUpdate    : gotocal
 
 
 {* - Calendar Grid - *}
-<table class="tikicalendar">
+<table class="calendar">
 <caption>{tr}selection{/tr}: {$focusdate|bit_long_date}</caption>
 {if $viewmode eq 'day'}
 {* - Single Day - *}
