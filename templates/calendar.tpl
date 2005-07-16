@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.3 2005/07/16 08:03:49 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.4 2005/07/16 10:35:03 lsces Exp $ *}
 
 {popup_init src="`$gBitLoc.THEMES_PKG_URL`js/overlib.js"}
 <div class="floaticon">
@@ -391,11 +391,17 @@ onUpdate    : gotocal
 		<td width="42">{$hours[h]}{tr}h{/tr}</td>
 		<td>
 			{section name=hr loop=$hrows[h]}
-				<div class="Cal{$hrows[h][hr].type}">
-					{$hours[h]}:{$hrows[h][hr].mins} : 
-					<a href="{$hrows[h][hr].url}">{$hrows[h][hr].name}</a>
-					{$hrows[h][hr].description}
-				</div>
+			{assign var=over value=$hrows[h][hr].over}
+			<div class="Cal{$hrows[h][hr].type}">
+				{$hours[h]}:{$hrows[h][hr].mins} : 
+				<span class="cal prio{$hrows[h][hr].prio}"><a href="{$hrows[h][hr].url}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+					{$hrows[h][hr].name|default:"..."}</a>
+				</span>
+				{if $hrows[h][hr].web}
+					<a href="{$hrows[h][hr].web}" class="calweb" title="{$hrows[h][hr].web}">w</a>
+				{/if}
+{* - Omit description for moment - need to strip <CR> $hrows[h][hr].description *}
+			</div>
 			{/section}
 		</td>
 	</tr>

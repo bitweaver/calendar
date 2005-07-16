@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.3 2005/07/15 17:48:59 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.4 2005/07/16 10:35:05 lsces Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -394,6 +394,7 @@ if ($_SESSION['CalendarViewMode'] == 'month') {
    $weekdays = array(date('w',$focusdate));
    $numberofweeks = 0;
 }
+
 // untested (by me, anyway!) function grabbed from the php.net site:
 // [2004/01/05:rpg]
 function m_weeks($y, $m){
@@ -409,7 +410,7 @@ function m_weeks($y, $m){
   // get the weekday of the first day of the month
   $wn = strftime("%u",$date);
   $days = $monthdays[$m] - $weekdays[$wn];
-  return (ceil($days/7) + 1);
+  return (ceil($days/7)+1);
 }
 
 
@@ -448,12 +449,17 @@ for ($i = 0; $i <= $numberofweeks; $i++) {
 
 	$weeks[] = $wee;
 
-   // $startOfWeek is a unix timestamp
-   $startOfWeek = $viewstart + $i * weekInSeconds;
+	// $startOfWeek is a unix timestamp
+	$startOfWeek = $viewstart + $i * weekInSeconds;
 
 	foreach ($weekdays as $w) {
 		$leday = array();
-	        $dday = $startOfWeek + $d * $w;
+	    if ($_SESSION['CalendarViewMode'] == 'day') {
+			$dday = $startOfWeek;
+		} else {
+			$dday = $startOfWeek + $d * $w;
+		}
+
 		$cell[$i][$w]['day'] = $dday;
 
 		if (isset($listevents["$dday"])) {
@@ -505,7 +511,12 @@ if ($_SESSION['CalendarViewMode'] == 'day') {
 		$hrows["$rawhour"][] = $dayitems;
 	}
 }
+$hours = array(  '0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00',
+				 '8:00', '8:00','10:00','11:00','12:00','13:00','14:00','15:00',
+				'16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00');
+
 $smarty->assign('hrows', $hrows); 
+$smarty->assign('hours', $hours); 
 
 $smarty->assign('trunc', $trunc); 
 $smarty->assign('daformat', $gBitSystem->get_long_date_format()." ".tra("at")." %H:%M"); 
