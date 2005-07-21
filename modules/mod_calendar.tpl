@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.tpl,v 1.2 2005/07/15 17:48:59 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.tpl,v 1.3 2005/07/21 12:01:57 lsces Exp $ *}
 
 {php}
 include_once( CALENDAR_PKG_PATH."Calendar.php");
@@ -44,7 +44,8 @@ parse_str($parsed["query"],$query);
 unset($query["day"]);
 unset($query["mon"]);
 unset($query["year"]);
-$father=$parsed["path"];
+$father = CALENDAR_PKG_URL.'index.php'; 
+{* $parsed["path"]; *}
 if (count($query)>0) {
   $first=1;
   foreach ($query as $name => $val) {
