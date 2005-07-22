@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.5 2005/07/21 09:39:31 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.6 2005/07/22 10:51:19 lsces Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -184,11 +184,6 @@ $daysnames = array(
 $weeks = array();
 $cell = array();
 
-if ($_SESSION['CalendarViewGroups']) {
-	$listevents = $calendarlib->listItems($_SESSION['CalendarViewGroups'], $gBitUser->mUserId, $viewstart, $viewend, 0, 50, 'name_desc', '');
-} else {
-	$listevents = array();
-}
 if ($_SESSION['CalendarViewBitCals']) {
 	$listbitevents = $calendarlib->listBitItems($_SESSION['CalendarViewBitCals'], $gBitUser->mUserId, $viewstart, $viewend, 0, 50, 'name_desc', '');
 } else {
