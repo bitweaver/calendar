@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Attic/CalendarLib.php,v 1.3 2005/07/21 09:39:31 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Attic/CalendarLib.php,v 1.4 2005/07/24 17:41:13 lsces Exp $
  * @package calendar
  */
 
@@ -8,34 +8,10 @@
  * @package calendar
  * @subpackage CalendarLib
  */
-class CalendarLib extends BitBase {
-	var $gContentTypes;
+class CalendarLib extends LibertyContent {
 
 	function CalendarLib() {
-				BitBase::BitBase();
-	}
-
-    /**
-	* This method builds a table of content_type records to be displayed in the calendar.
-	* It populates the $this->gContentTypes array
-	**/
-	function loadContentTypes() {
-		global $gBitSystem, $gBitUser;
-		$query = "select `content_type_guid`, `content_description`, `handler_class`, `handler_package`, `handler_file` from `".BIT_DB_PREFIX."tiki_content_types` order by `content_type_guid`";
-		$rs = $this->query($query);
-		$this->gContentTypes = array();
-		if ($rs) {
-			while (!$rs->EOF) {
-				$ctg = $rs->fields['content_type_guid'];
-				$this->gContentTypes[$ctg] = array();
-				$this->gContentTypes[$ctg]['label'] = tra($rs->fields['content_description']);
-				$this->gContentTypes[$ctg]['feature'] = $gBitSystem->getPreference('calendar_'.$rs->fields['handler_package'], 'y');
-				$this->gContentTypes[$ctg]['right'] = $gBitUser->getPreference('bit_p_calendar_'.$rs->fields['handler_package'], 'y');
-				$this->gContentTypes[$ctg]['content_type_guid'] = $rs->fields['content_type_guid'];
-				$this->gContentTypes[$ctg]['handler'] = $rs->fields['handler_package'];
-				$rs->MoveNext();
-			}
-		}
+		LibertyContent::LibertyContent();
 	}
 
     /**
@@ -44,7 +20,8 @@ class CalendarLib extends BitBase {
 	* At present no filtering is provided on $user_id
 	* It a full array of items between $tstart and $tstop 
 	**/
-	function listBitItems($bitobj, $user_id, $tstart, $tstop, $offset, $maxRecords, $sort_mode, $find) {
+	function getList($bitobj, $user_id, $tstart, $tstop, $offset, $maxRecords, $sort_mode, $find) {
+		global $gLibertySystem, $gBitUser;
 		$ret = array();
 
 		$res = $dstart = '';
@@ -62,7 +39,7 @@ class CalendarLib extends BitBase {
 						"prio" => "",
 						"time" => $tstart,
 						"type" => $bit,
-						"url" => BIT_ROOT_URL.$this->gContentTypes[$bit]['handler']."/index.php?content_id=" . $res["content_id"],
+						"url" => BIT_ROOT_URL.$gLibertySystem->mContentTypes[$bit]['handler_package']."/index.php?content_id=" . $res["content_id"],
 						"name" => $res["title"],
 						"head" => "<b>" . date("H:i", $res["last_modified"]). "</b> " . tra("in"). " <b>$bit</b>",
 						"description" => str_replace("\n|\r", "", $quote)

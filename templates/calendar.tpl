@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.5 2005/07/21 09:39:30 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.6 2005/07/24 17:41:13 lsces Exp $ *}
 
 {popup_init src="`$gBitLoc.THEMES_PKG_URL`js/overlib.js"}
 <div class="floaticon">
@@ -42,15 +42,13 @@
 			><input name="calswitch" id="calswitch" type="checkbox" onclick="switchCheckboxes(this.form.id,'bitcals[]','calswitch');this.checked=!this.checked;" /> {tr}check / uncheck all{/tr}
 		  </div>
 			{foreach from=$bitItems key=ki item=vi}
-			  {if $vi.feature eq 'y' and $vi.right eq 'y'}
 				<div
 				  onclick="document.getElementById('bitcal_{$ki}').checked=!document.getElementById('bitcal_{$ki}').checked;"
 				  onmouseout="this.style.textDecoration='none';"  
 				  onmouseover="this.style.textDecoration='underline';" 
 				  ><input type="checkbox" name="bitcals[]" value="{$ki|escape}" id="bitcal_{$ki}" {if $bitcal.$ki}checked="checked"{/if} onclick="this.checked=!this.checked;"/>
-				  <span class="Cal{$ki}">{$vi.label}</span>
+				  <span class="Cal{$ki}">{$vi.content_description}</span>
 				</div>
-			  {/if}
 			{/foreach}
 		  </div>
 		  </td>
