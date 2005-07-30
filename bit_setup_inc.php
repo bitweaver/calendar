@@ -1,5 +1,5 @@
 <?php
-global $gBitSystem, $smarty;
+global $gBitSystem, $gBitSmarty;
 $gBitSystem->registerPackage( 'calendar', dirname( __FILE__).'/' );
 
 if( $gBitSystem->isPackageActive( 'calendar' ) ) {
