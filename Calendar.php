@@ -1,4 +1,9 @@
 <?php
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.2 2005/08/01 21:08:12 lsces Exp $
+ * @package calendar
+ */
+
 // class_calendar.php EXTENDS: None Abstract: No.
 // 
 // The calendar class provides basic functions to build calendars,
@@ -28,6 +33,10 @@
 // buildMinBox($name,$h)                  : Builds a select box for minutes
 // buildIntBox($name,$min,$max,$inter,$def=0) : Generic Select box indicating minimum, maximum, interval and default values
 // buildIntBoxMul($name,$min,$max,$inter,$def=0,$cu=0) : Idem but allowing multiple selections
+/**
+ * @package calendar
+ * @subpackage Calendar
+ */
 class Calendar {
 	var $lan;
 
