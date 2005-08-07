@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Attic/CalendarLib.php,v 1.4 2005/07/24 17:41:13 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Attic/CalendarLib.php,v 1.5 2005/08/07 16:37:33 lsces Exp $
  * @package calendar
  */
 
@@ -28,7 +28,7 @@ class CalendarLib extends LibertyContent {
 
 		foreach ($bitobj as $bit) {
 				$query = "select * from `".BIT_DB_PREFIX."tiki_content` tc where (`last_modified`>? and `last_modified`<?) and `content_type_guid` = '".$bit."'";
-				$result = $this->query($query,array($tstart,$tstop));
+				$result = $this->mDb->query($query,array($tstart,$tstop));
 
 				while ($res = $result->fetchRow()) {
 					$dstart = mktime(0, 0, 0, date("m", $res['last_modified']), date("d", $res['last_modified']), date("Y", $res['last_modified']));
