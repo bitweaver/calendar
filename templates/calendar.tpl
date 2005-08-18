@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.8 2005/08/18 19:05:05 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.9 2005/08/18 20:42:56 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -100,7 +100,7 @@
 					</td>
 
 					<td style="text-align:center;">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$now}" title="{$now|bit_short_date}">{tr}Today{/tr}: <strong>{$now|bit_short_date}</strong></a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$now}" title="{$nowt|bit_short_date}">{tr}Today{/tr}: <strong>{$now|bit_short_date}</strong></a>
 					</td>
 
 					<td rowspan="2" style="text-align:right;">
@@ -124,20 +124,20 @@
 		<caption>{tr}Selection: {$focusdate|bit_long_date}{/tr}</caption>
 			{if $viewmode eq 'day'}
 				<tr>
-					<th style="width:30px;">{tr}Hours{/tr}</th>
+					<th style="width:15%;">{tr}Hours{/tr}</th>
 					<th>{tr}Events{/tr}</th>
 				</tr>
 				{cycle values="odd,even" print=false}
 				{section name=h loop=$hours}
 					<tr class="{cycle}">
-						<td style="text-align:right;">{$hours[h]}</td>
+						<td style="text-align:right; vertical-align:top; padding-right:15px;">{$hours[h]}</td>
 						<td>
 							{section name=hr loop=$hrows[h]}
 								{assign var=over value=$hrows[h][hr].over}
 								<div class="cal{$hrows[h][hr].content_type_guid}">
-									{$hours[h]}:{$hrows[h][hr].mins} : 
+									{$hrows[h][hr].last_modified|date_format:"%H:%M"}:
 
-									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+									&nbsp; <a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
 										{$hrows[h][hr].title|default:"..."}
 									</a>
 

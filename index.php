@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.10 2005/08/18 19:05:03 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.11 2005/08/18 20:42:56 squareing Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -211,10 +211,8 @@ for( $i = 0; $i <= $numberofweeks; $i++ ) {
 
 $hrows = array();
 if ($_SESSION['calendar_view_mode'] == 'day') {
-	foreach ($cell[0]["{$weekdays[0]}"]['items'] as $dayitems) {
-		$rawhour = substr($dayitems['time'],0,2);
-		$dayitems['mins'] = substr($dayitems['time'],2);
-		$hrows["$rawhour"][] = $dayitems;
+	foreach( $cell[0]["{$weekdays[0]}"]['items'] as $dayitems ) {
+		$hrows[date( 'H', $dayitems['last_modified'] )][] = $dayitems;
 	}
 }
 $hours = array(  '0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00',
