@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.12 2005/08/18 21:42:37 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.13 2005/08/18 22:27:26 squareing Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -34,9 +34,9 @@ foreach ($_SESSION['calendarContentGuids'] as $calt) {
 }
 $gBitSmarty->assign('bitcal', $bitcal);
 
-if (isset($_REQUEST["todate"]) && $_REQUEST['todate']) {
+if (!empty($_REQUEST["todate"])) {
 	$_SESSION['calendar_focus_date'] = $_REQUEST['todate'];
-} elseif (isset($_SESSION['calendar_focus_date']) && $_SESSION['calendar_focus_date']) {
+} elseif (!empty($_SESSION['calendar_focus_date'])) {
 	$_REQUEST["todate"] = $_SESSION['calendar_focus_date'];
 } else {
 	$_SESSION['calendar_focus_date'] = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
