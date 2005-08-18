@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Attic/CalendarLib.php,v 1.5 2005/08/07 16:37:33 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Attic/CalendarLib.php,v 1.6 2005/08/18 11:37:11 squareing Exp $
  * @package calendar
  */
 
@@ -26,25 +26,30 @@ class CalendarLib extends LibertyContent {
 
 		$res = $dstart = '';
 
-		foreach ($bitobj as $bit) {
-				$query = "select * from `".BIT_DB_PREFIX."tiki_content` tc where (`last_modified`>? and `last_modified`<?) and `content_type_guid` = '".$bit."'";
-				$result = $this->mDb->query($query,array($tstart,$tstop));
+		foreach( $bitobj as $bit ) {
+			$query = "SELECT tc.*,
+				uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name,
+				uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
+				FROM `".BIT_DB_PREFIX."tiki_content` tc
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON ( uue.`user_id` = tc.`modifier_user_id` )
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON ( uuc.`user_id` = tc.`user_id` )
+				WHERE (`last_modified`>? AND `last_modified`<?) AND `content_type_guid` = ?
+				ORDER BY tc.`last_modified`";
+			$result = $this->mDb->query( $query, array( $tstart, $tstop, $bit ) );
 
-				while ($res = $result->fetchRow()) {
-					$dstart = mktime(0, 0, 0, date("m", $res['last_modified']), date("d", $res['last_modified']), date("Y", $res['last_modified']));
-					$tstart = date("Hi", $res["last_modified"]);
-					$quote = "<i>" . tra("by"). " " . $res["modifier_user_id"] . "</i><br/>" . addslashes(str_replace('"', "'", $res["title"]));
-					$ret["$dstart"][] = array(
-						"calname" => "",
-						"prio" => "",
-						"time" => $tstart,
-						"type" => $bit,
-						"url" => BIT_ROOT_URL.$gLibertySystem->mContentTypes[$bit]['handler_package']."/index.php?content_id=" . $res["content_id"],
-						"name" => $res["title"],
-						"head" => "<b>" . date("H:i", $res["last_modified"]). "</b> " . tra("in"). " <b>$bit</b>",
-						"description" => str_replace("\n|\r", "", $quote)
-					);
-				}
+			while( $res = $result->fetchRow() ) {
+				$dstart = mktime(0, 0, 0, date("m", $res['last_modified']), date("d", $res['last_modified']), date("Y", $res['last_modified']));
+				$tstart = date("Hi", $res["last_modified"]);
+
+				$aux = $res;
+				$aux['calname'] = "";
+				$aux['prio'] = "";
+				$aux['time'] = $tstart;
+				$aux['type'] = $bit;
+				$aux['url'] = BIT_ROOT_URL.$gLibertySystem->mContentTypes[$bit]['handler_package']."/index.php?content_id=" . $res["content_id"];
+				$aux['name'] = $res["title"];
+				$ret[$dstart][] = $aux;
+			}
 		}
 		return $ret;
 	}

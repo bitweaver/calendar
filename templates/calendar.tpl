@@ -1,209 +1,197 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.6 2005/07/24 17:41:13 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.7 2005/08/18 11:37:11 squareing Exp $ *}
+{strip}
 
-{popup_init src="`$gBitLoc.THEMES_PKG_URL`js/overlib.js"}
-<div class="floaticon">
-{if $bit_p_admin_calendar eq 'y' or $bit_p_admin eq 'y'}
-  <a href="{$gBitLoc.CALENDAR_PKG_URL}admin/index.php"><img class="icon" src="{$gBitLoc.LIBERTY_PKG_URL}icons/config.gif"  alt="{tr}admin{/tr}" /></a>
+{if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
+	{popup_init src="`$smarty.const.THEMES_PKG_URL`js/overlib.js"}
 {/if}
-</div>
 
 <div class="display calendar">
-<div class="header">
-<h1><a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view={$view}">{tr}Calendar{/tr}</a></h1>
-</div>
+	<div class="header">
+		<h1>{tr}Calendar{/tr}</h1>
+	</div>
 
-<div class="body">
+	<div class="body">
 
-{* ----------------------------------- *}
+{/strip}
+	<script type="text/javascript">//<![CDATA[
+		document.write("<a href=\"javascript:toggle('tabcal');\">{tr}Display Options{/tr}</a>");
+		document.write("<div id=\"tabcal\" style=\"display:{if $smarty.cookies.tabcal eq 'o'}block{else}none{/if};\">");
+	//]]></script>
 
-<div id="tab" style="display:{if $smarty.cookies.tab eq 'c' or $show_navtab}none{else}block{/if};">
-  <div class="navbar above">
-	<a href="javascript:show('tabcal',1);{if $modifiable}hide('tabnav',1);{/if}hide('tab',1);">{tr}Calendars Panel{/tr}</a>
-  </div>
-</div>
+		{form legend="Display Options" id="display_options"}
+			<div class="row">
+				{formlabel label="" for=""}
+				{forminput}
+					{foreach from=$bitItems key=ki item=vi}
+						<label><input type="checkbox" name="bitcals[]" value="{$ki}" id="bitcal_{$ki}" {if $bitcal.$ki}checked="checked"{/if} /> {$vi.content_description}</label><br />
+					{/foreach}
 
-{* ----------------------------------- *}
-
-<div id="tabcal" style="display:{if $smarty.cookies.tabcal eq 'o' and !$show_navtab}block{else}none{/if};">
-  <div class="navbar above">
-	<a class="highlight" href="javascript:show('tabcal',1);{if $modifiable}hide('tabnav',1);{/if}hide('tab',1);">{tr}Calendars Panel{/tr}</a>
-	<a href="javascript:hide('tabcal',1);{if $modifiable}hide('tabnav',1);{/if}show('tab',1);">{tr}Hide{/tr}</a>
-  </div>
-
-  <div class="calendar box">
-  <form method="get" action="{$gBitLoc.CALENDAR_PKG_URL}index.php" id="f">
-  <table class="panel">
-	<tr>
-		<td valign="top" width="100%">
-		  <div class="boxtitle">{tr}Tools Calendars{/tr}</div>
-		  <div class="boxcontent">
-		  <div
-			onclick="document.getElementById('calswitch').click();document.getElementById('calswitch').checked=!document.getElementById('calswitch').checked;document.getElementById('calswitch').click();"
-			><input name="calswitch" id="calswitch" type="checkbox" onclick="switchCheckboxes(this.form.id,'bitcals[]','calswitch');this.checked=!this.checked;" /> {tr}check / uncheck all{/tr}
-		  </div>
-			{foreach from=$bitItems key=ki item=vi}
-				<div
-				  onclick="document.getElementById('bitcal_{$ki}').checked=!document.getElementById('bitcal_{$ki}').checked;"
-				  onmouseout="this.style.textDecoration='none';"  
-				  onmouseover="this.style.textDecoration='underline';" 
-				  ><input type="checkbox" name="bitcals[]" value="{$ki|escape}" id="bitcal_{$ki}" {if $bitcal.$ki}checked="checked"{/if} onclick="this.checked=!this.checked;"/>
-				  <span class="Cal{$ki}">{$vi.content_description}</span>
-				</div>
-			{/foreach}
-		  </div>
-		  </td>
-		</tr>
-		<tr class="panelsubmitrow">
-		  <td colspan="2">
-			<input type="submit" name="refresh" value="{tr}Refresh{/tr}" />
-		  </td>
-		</tr>
-  </table>
-  </form>
-  </div>
-</div>
-
-
-{* - Date Selection Row - *}
-<div class="navigation">
-<table>
-	<tr><td>
-	{if $gBitSystemPrefs.feature_jscalendar eq 'y'}
-		<form action="{$gBitLoc.CALENDAR_PKG_URL}index.php" method="get" id="f">
-			<input type="hidden" id="todate" name="todate" value="{$focusdate|date_format:"%B %e, %Y %H:%M"}" />
-			<span title="{tr}Date Selector{/tr}" id="datrigger" class="daterow" >{$focusdate|bit_long_date}</span>
-			&lt;- {tr}click to navigate{/tr}
-		</form>
-		<script type="text/javascript">
-{literal}function gotocal()  { {/literal}
-window.location = '{$gBitLoc.CALENDAR_PKG_URL}index.php?todate='+document.getElementById('todate').value;
-{literal} } {/literal}
-{literal}Calendar.setup( { {/literal}
-date        : "{$focusdate|date_format:"%m/%d/%Y %H:%M"}",      // initial date
-inputField  : "todate",      // ID of the input field
-ifFormat    : "%s",    // the date format
-displayArea : "datrigger",       // ID of the span where the date is to be shown
-daFormat    : "{"%d/%m/%Y %H:%M"}",  // format of the displayed date
-electric    : false,
-onUpdate    : gotocal
-{literal} } );{/literal}
-		</script>
-		</td>
-		<td nowrap="nowrap" width="120" align="right">
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=day" class="viewmode{if $viewmode eq 'day'}on{else}off{/if}"><img class="icon" src="{$gBitLoc.IMG_PKG_URL}icons/day.gif" width="30" height="24" border="0" alt="{tr}day{/tr}" align="top" /></a>
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=week" class="viewmode{if $viewmode eq 'week'}on{else}off{/if}"><img class="icon" src="{$gBitLoc.IMG_PKG_URL}icons/week.gif" width="30" height="24" border="0" alt="{tr}week{/tr}" align="top" /></a>
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=month" class="viewmode{if $viewmode eq 'month'}on{else}off{/if}"><img class="icon" src="{$gBitLoc.IMG_PKG_URL}icons/month.gif" width="30" height="24" border="0" alt="{tr}month{/tr}" align="top" /></a>
-	{else}
-		<table><tr><td rowspan="2" align="left">
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$daybefore}" title="{$daybefore|bit_long_date}">&laquo; {tr}day{/tr}</a><br />
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekbefore}" title="{$weekbefore|bit_long_date}">&laquo; {tr}week{/tr}</a><br />
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthbefore}" title="{$monthbefore|bit_long_date}">&laquo; {tr}month{/tr}</a>
-		</td>
-		<td align="center">
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$now}" title="{$now|bit_short_date}"><b>{tr}today{/tr}:</b> {$now|bit_short_date}</a>
-		</td>
-		<td rowspan="2" align="right">
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$dayafter}" title="{$dayafter|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekafter}" title="{$weekafter|bit_long_date}">{tr}week{/tr} &raquo;</a><br />
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthafter}" title="{$monthafter|bit_long_date}">{tr}month{/tr} &raquo;</a>
-		</td>
-		</tr><tr>
-		<td align="center">
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=day" class="viewmode{if $viewmode eq 'day'}on{else}off{/if}"><img class="icon" src="{$gBitLoc.IMG_PKG_URL}icons/day.gif" width="30" height="24" border="0" alt="{tr}day{/tr}" align="top" /></a>
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=week" class="viewmode{if $viewmode eq 'week'}on{else}off{/if}"><img class="icon" src="{$gBitLoc.IMG_PKG_URL}icons/week.gif" width="30" height="24" border="0" alt="{tr}week{/tr}" align="top" /></a>
-			<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=month" class="viewmode{if $viewmode eq 'month'}on{else}off{/if}"><img class="icon" src="{$gBitLoc.IMG_PKG_URL}icons/month.gif" width="30" height="24" border="0" alt="{tr}month{/tr}" align="top" /></a>
-		</td>
-		</tr></table>
-	{/if}
-	</td>
-</tr></table>
-</div>
-
-
-
-{* - Calendar Grid - *}
-<table class="calendar">
-<caption>{tr}selection{/tr}: {$focusdate|bit_long_date}</caption>
-{if $viewmode eq 'day'}
-{* - Single Day - *}
-	<tr>
-		<th width="42">{tr}Hours{/tr}</th>
-		<th>{tr}Events{/tr}</th>
-	</tr>
-	{cycle values="odd,even" print=false}
-	{section name=h loop=$hours}
-	<tr class="{cycle}">
-		<td width="42">{$hours[h]}{tr}h{/tr}</td>
-		<td>
-			{section name=hr loop=$hrows[h]}
-			{assign var=over value=$hrows[h][hr].over}
-			<div class="Cal{$hrows[h][hr].type}">
-				{$hours[h]}:{$hrows[h][hr].mins} : 
-				<span class="cal prio{$hrows[h][hr].prio}"><a href="{$hrows[h][hr].url}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
-					{$hrows[h][hr].name|default:"..."}</a>
-				</span>
-				{if $hrows[h][hr].web}
-					<a href="{$hrows[h][hr].web}" class="calweb" title="{$hrows[h][hr].web}">w</a>
-				{/if}
-{* - Omit description for moment - need to strip <CR> $hrows[h][hr].description *}
+					<script type="text/javascript">//<![CDATA[
+						document.write("<label><input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'bitcals[]','switcher')\" /> {tr}Select all{/tr}</label><br />");
+					//]]></script>
+				{/forminput}
 			</div>
-			{/section}
-		</td>
-	</tr>
-	{/section}
-{else}
-{* - Calendar Headings - *}
-	<tr>
-		<th width="2%"></th>
-		{section name=dn loop=$daysnames}
-			<th width="14%">{$daysnames[dn]}</th>
-		{/section}
-	</tr>
-	{section name=w loop=$cell}
-		<tr>
-			<th class="weeknumber">{$weeks[w]}</th>
-		{section name=d loop=$weekdays}
 
-			{if $viewmode eq "month"}
-				{if $cell[w][d].day|date_format:"%m" eq $focusmonth}
-					{cycle values="odd,even" print=false advance=false}
-				{else}
-					{cycle values="notmonth" print=false advance=false}
-				{/if}
+			<div class="row submit">
+				<input type="submit" name="refresh" value="{tr}Update Calendar{/tr}" />
+			</div>
+		{/form}
+
+	<script type="text/javascript">//<![CDATA[
+		document.write("</div>");
+	//]]></script>
+{strip}
+
+		{if $gBitSystemPrefs.feature_jscalendar eq 'y'}
+			<table>
+				<tr>
+					<td>
+						<form action="{$gBitLoc.CALENDAR_PKG_URL}index.php" method="get" id="f">
+							<input type="hidden" id="todate" name="todate" value="{$focusdate|date_format:"%B %e, %Y %H:%M"}" />
+							<span title="{tr}Date Selector{/tr}" id="datrigger">{$focusdate|bit_long_date}</span>
+							&lt;- {tr}click to navigate{/tr}
+						</form>
+
+						<script type="text/javascript">
+							function gotocal() {ldelim}
+								window.location = '{$gBitLoc.CALENDAR_PKG_URL}index.php?todate='+document.getElementById('todate').value;
+							{rdelim}
+
+							Calendar.setup( {ldelim}
+								date			: "{$focusdate|date_format:"%m/%d/%Y %H:%M"}",			// initial date
+								inputField		: "todate",												// ID of the input field
+								ifFormat		: "%s",													// the date format
+								displayArea 	: "datrigger",											// ID of the span where the date is to be shown
+								daFormat		: "{"%d/%m/%Y %H:%M"}",									// format of the displayed date
+								electric		: false,
+								onUpdate		: gotocal
+							{rdelim} );
+						</script>
+					</td>
+
+					<td nowrap="nowrap" width="120" align="right">
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=day" class="{if $viewmode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=week" class="{if $viewmode eq 'week'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=month" class="{if $viewmode eq 'month'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
+					</td>
+				</tr>
+			</table>
+		{else}
+			<table>
+				<tr>
+					<td rowspan="2" style="text-align:left;">
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$daybefore}" title="{$daybefore|bit_long_date}">&laquo; {tr}day{/tr}</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekbefore}" title="{$weekbefore|bit_long_date}">&laquo; {tr}week{/tr}</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthbefore}" title="{$monthbefore|bit_long_date}">&laquo; {tr}month{/tr}</a>
+					</td>
+
+					<td style="text-align:center;">
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$now}" title="{$now|bit_short_date}">{tr}View Today{/tr}: <strong>{$now|bit_short_date}</strong></a>
+					</td>
+
+					<td rowspan="2" style="text-align:right;">
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$dayafter}" title="{$dayafter|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekafter}" title="{$weekafter|bit_long_date}">{tr}week{/tr} &raquo;</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthafter}" title="{$monthafter|bit_long_date}">{tr}month{/tr} &raquo;</a>
+					</td>
+				</tr>
+
+				<tr>
+					<td style="text-align:center;">
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=day" class="{if $viewmode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=week" class="{if $viewmode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=month" class="{if $viewmode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
+					</td>
+				</tr>
+			</table>
+		{/if}
+
+	<table class="data">
+		<caption>{tr}Selection: {$focusdate|bit_long_date}{/tr}</caption>
+			{if $viewmode eq 'day'}
+				<tr>
+					<th style="width:30px;">{tr}Hours{/tr}</th>
+					<th>{tr}Events{/tr}</th>
+				</tr>
+				{cycle values="odd,even" print=false}
+				{section name=h loop=$hours}
+					<tr class="{cycle}">
+						<td style="text-align:right;">{$hours[h]}</td>
+						<td>
+							{section name=hr loop=$hrows[h]}
+								{assign var=over value=$hrows[h][hr].over}
+								<div class="cal{$hrows[h][hr].type}">
+									{$hours[h]}:{$hrows[h][hr].mins} : 
+
+									<span class="prio{$hrows[h][hr].prio}">
+										<a href="{$hrows[h][hr].url}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+											{$hrows[h][hr].name|default:"..."}
+										</a>
+									</span>
+
+									{if $hrows[h][hr].web}
+										<a href="{$hrows[h][hr].web}" title="{$hrows[h][hr].web}">w</a>
+									{/if}
+{* - Omit description for moment - need to strip <CR> $hrows[h][hr].description *}
+								</div>
+							{/section}
+						</td>
+					</tr>
+				{/section}
 			{else}
-				{cycle values="odd,even" print=false advance=false}
-			{/if}
-
-			<td class="{cycle}">
-			{if $cell[w][d].day|date_format:"%m" eq $focusmonth or $viewmode eq "week"}
-				<div class="calday{if $cell[w][d].day eq $focusdate} highlight{/if}">
-					<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$cell[w][d].day}">{$cell[w][d].day|date_format:"%d/%m"}</a>
-				</div>
-
-				{* - Calendar Content - *}
-				<div class="calcontent">
-					{section name=items loop=$cell[w][d].items}
-					{assign var=over value=$cell[w][d].items[items].over}
-					<div class="Cal{$cell[w][d].items[items].type}">
-						<span class="cal prio{$cell[w][d].items[items].prio}"><a href="{$cell[w][d].items[items].url}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
-							{$cell[w][d].items[items].name|truncate:$trunc:".."|default:"..."}</a>
-						</span>
-						{if $cell[w][d].items[items].web}
-							<a href="{$cell[w][d].items[items].web}" class="calweb" title="{$cell[w][d].items[items].web}">w</a>
-						{/if}
-						<br />
-					</div>
+				<tr>
+					<th style="width:2%;"></th>
+					{section name=dn loop=$daysnames}
+						<th width="14%">{$daysnames[dn]}</th>
 					{/section}
-				</div>
-			{else}
-				&nbsp;
-			{/if}
-			</td>
-		{/section}
-		</tr>
-	{/section}
-{/if}
-</table>
+				</tr>
 
-</div>
-</div>
+				{section name=w loop=$cell}
+					<tr style="height:6em;">
+						<th>{$weeks[w]}</th>
+
+						{section name=d loop=$weekdays}
+							{if $viewmode eq "month"}
+								{if $cell[w][d].day|date_format:"%m" eq $focusmonth}
+									{cycle values="odd,even" print=false advance=false}
+								{else}
+									{cycle values="notmonth" print=false advance=false}
+								{/if}
+							{else}
+								{cycle values="odd,even" print=false advance=false}
+							{/if}
+
+							<td class="calday {cycle}" style="vertical-align:top;">
+								{if $cell[w][d].day|date_format:"%m" eq $focusmonth or $viewmode eq "week"}
+									{if $cell[w][d].day eq $focusdate}<strong>{/if}
+										<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$cell[w][d].day}">{$cell[w][d].day|date_format:"%d/%m"}</a>
+									{if $cell[w][d].day eq $focusdate}</strong>{/if}
+									<hr />
+
+									{* - Calendar Content - *}
+									{section name=items loop=$cell[w][d].items}
+										{assign var=over value=$cell[w][d].items[items].over}
+										<div class="cal{$cell[w][d].items[items].type} prio{$cell[w][d].items[items].prio}">
+
+											<a href="{$cell[w][d].items[items].url}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+												{$cell[w][d].items[items].name|truncate:$trunc:".."|default:"..."}
+											</a>
+
+											{if $cell[w][d].items[items].web}
+												<a href="{$cell[w][d].items[items].web}" title="{$cell[w][d].items[items].web}">w</a>
+											{/if}
+											<br />
+										</div>
+									{/section}
+								{else}
+									&nbsp;
+								{/if}
+							</td>
+						{/section}
+					</tr>
+				{/section}
+			{/if}
+		</table>
+	</div><!-- end .body -->
+</div><!-- end .calendar -->
+{/strip}

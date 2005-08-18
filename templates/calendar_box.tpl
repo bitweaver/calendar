@@ -1,13 +1,11 @@
 <div class="calendar popup box">
-	<div class="boxtitle">{$cellhead}
-		{if $cellprio}
-			<span class="calprio{$cellprio}">{$cellprio}</span>
-		{/if}
-	</div>
-	<div class="boxcontent"><b>{$cellname}</b>
+	<h3 class="{if $cellprio}calprio{$cellprio}{/if}">{$cellHash.last_modified|bit_short_time} in {$cellHash.type}</h3>
+	<div class="boxcontent">
+		<strong>{$cellHash.name}</strong>
 		{if $cellcalname}
-			{tr}in{/tr} <b>{$cellcalname}</b>
-		{/if}<br />
-		{$celldescription}
+			{tr}in {$cellcalname}{/tr}
+		{/if}
+		<br />
+		{tr}Last modified by {displayname login=$cellHash.modifier_user real_name=$cellHash.modifier_real_name}{/tr}
 	</div>
 </div>

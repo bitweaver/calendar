@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.8 2005/07/30 12:00:32 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.9 2005/08/18 11:37:11 squareing Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -214,14 +214,8 @@ for ($i = 0; $i <= $numberofweeks; $i++) {
 
 			foreach ($listevents["$dday"] as $le) {
 				$leday["{$le['time']}$e"] = $le;
-
-				$gBitSmarty->assign_by_ref('cellextra', $le["extra"]);
-				$gBitSmarty->assign_by_ref('cellhead', $le["head"]);
-				$gBitSmarty->assign_by_ref('cellprio', $le["prio"]);
-				$gBitSmarty->assign_by_ref('cellcalname', $le["calname"]);
-				$gBitSmarty->assign_by_ref('cellname', $le["name"]);
-				$gBitSmarty->assign_by_ref('celldescription', $le["description"]);
 				$leday["{$le['time']}$e"]["over"] = $gBitSmarty->fetch("bitpackage:calendar/calendar_box.tpl");
+				$gBitSmarty->assign( 'cellHash', $le );
 				$e++;
 			}
 		}
@@ -231,14 +225,8 @@ for ($i = 0; $i <= $numberofweeks; $i++) {
 
 			foreach ($listbitevents["$dday"] as $lte) {
 				$leday["{$lte['time']}$e"] = $lte;
-
-				$gBitSmarty->assign('cellextra', "");
-				$gBitSmarty->assign_by_ref('cellhead', $lte["head"]);
-				$gBitSmarty->assign_by_ref('cellprio', $lte["prio"]);
-				$gBitSmarty->assign_by_ref('cellcalname', $lte["calname"]);
-				$gBitSmarty->assign_by_ref('cellname', $lte["name"]);
-				$gBitSmarty->assign_by_ref('celldescription', $lte["description"]);
 				$leday["{$lte['time']}$e"]["over"] = $gBitSmarty->fetch("bitpackage:calendar/calendar_box.tpl");
+				$gBitSmarty->assign( 'cellHash', $lte );
 				$e++;
 			}
 		}
