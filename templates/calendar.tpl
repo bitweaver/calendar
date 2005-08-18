@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.7 2005/08/18 11:37:11 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.8 2005/08/18 19:05:05 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -13,10 +13,24 @@
 	<div class="body">
 
 {/strip}
-	<script type="text/javascript">//<![CDATA[
-		document.write("<a href=\"javascript:toggle('tabcal');\">{tr}Display Options{/tr}</a>");
-		document.write("<div id=\"tabcal\" style=\"display:{if $smarty.cookies.tabcal eq 'o'}block{else}none{/if};\">");
-	//]]></script>
+		<div class="navbar">
+			<ul>
+				<script type="text/javascript">//<![CDATA[
+					document.write("<li><a href=\"javascript:toggle('tabcal');\">{tr}Show / Hide Options{/tr}</a></li>");
+				//]]></script>
+				{if $smarty.request.user_id}
+					<li>{smartlink ititle="Show all"}</li>
+				{else}
+					<li>{smartlink ititle="Show only my items" user_id=$gBitUser->mUserId}</li>
+				{/if}
+			</ul>
+		</div>
+
+		<div class="clear"></div>
+
+		<script type="text/javascript">//<![CDATA[
+			document.write("<div id=\"tabcal\" style=\"display:{if $smarty.cookies.tabcal eq 'o'}block{else}none{/if};\">");
+		//]]></script>
 
 		{form legend="Display Options" id="display_options"}
 			<div class="row">
@@ -37,9 +51,9 @@
 			</div>
 		{/form}
 
-	<script type="text/javascript">//<![CDATA[
-		document.write("</div>");
-	//]]></script>
+		<script type="text/javascript">//<![CDATA[
+			document.write("</div>");
+		//]]></script>
 {strip}
 
 		{if $gBitSystemPrefs.feature_jscalendar eq 'y'}
@@ -86,7 +100,7 @@
 					</td>
 
 					<td style="text-align:center;">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$now}" title="{$now|bit_short_date}">{tr}View Today{/tr}: <strong>{$now|bit_short_date}</strong></a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$now}" title="{$now|bit_short_date}">{tr}Today{/tr}: <strong>{$now|bit_short_date}</strong></a>
 					</td>
 
 					<td rowspan="2" style="text-align:right;">
@@ -120,14 +134,12 @@
 						<td>
 							{section name=hr loop=$hrows[h]}
 								{assign var=over value=$hrows[h][hr].over}
-								<div class="cal{$hrows[h][hr].type}">
+								<div class="cal{$hrows[h][hr].content_type_guid}">
 									{$hours[h]}:{$hrows[h][hr].mins} : 
 
-									<span class="prio{$hrows[h][hr].prio}">
-										<a href="{$hrows[h][hr].url}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
-											{$hrows[h][hr].name|default:"..."}
-										</a>
-									</span>
+									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+										{$hrows[h][hr].title|default:"..."}
+									</a>
 
 									{if $hrows[h][hr].web}
 										<a href="{$hrows[h][hr].web}" title="{$hrows[h][hr].web}">w</a>
@@ -171,10 +183,10 @@
 									{* - Calendar Content - *}
 									{section name=items loop=$cell[w][d].items}
 										{assign var=over value=$cell[w][d].items[items].over}
-										<div class="cal{$cell[w][d].items[items].type} prio{$cell[w][d].items[items].prio}">
+										<div class="cal{$cell[w][d].items[items].content_type_guid}">
 
-											<a href="{$cell[w][d].items[items].url}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
-												{$cell[w][d].items[items].name|truncate:$trunc:".."|default:"..."}
+											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+												{$cell[w][d].items[items].title|truncate:$trunc:"..."|default:"?"}
 											</a>
 
 											{if $cell[w][d].items[items].web}
