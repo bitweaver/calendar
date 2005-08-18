@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.11 2005/08/18 20:42:56 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.12 2005/08/18 21:42:37 lsces Exp $
 
 // Copyright (c) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -212,11 +212,11 @@ for( $i = 0; $i <= $numberofweeks; $i++ ) {
 $hrows = array();
 if ($_SESSION['calendar_view_mode'] == 'day') {
 	foreach( $cell[0]["{$weekdays[0]}"]['items'] as $dayitems ) {
-		$hrows[date( 'H', $dayitems['last_modified'] )][] = $dayitems;
+		$hrows[intval(date( 'h', $dayitems['last_modified'] ))][] = $dayitems;
 	}
 }
 $hours = array(  '0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00',
-				 '8:00', '8:00','10:00','11:00','12:00','13:00','14:00','15:00',
+				 '8:00', '9:00','10:00','11:00','12:00','13:00','14:00','15:00',
 				'16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00');
 
 $gBitSmarty->assign('hrows', $hrows); 
