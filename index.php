@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.14 2005/08/19 11:46:31 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.15 2005/08/19 11:54:23 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -57,9 +57,11 @@ $z = date( "z" );
 $gBitSmarty->assign( 'daybefore',	mktime( 0, 0, 0, $focus_month, $focus_day - 1, $focus_year ) );
 $gBitSmarty->assign( 'weekbefore',	mktime( 0, 0, 0, $focus_month, $focus_day - 7, $focus_year ) );
 $gBitSmarty->assign( 'monthbefore',	mktime( 0, 0, 0, $focus_month - 1, $focus_day, $focus_year ) );
+$gBitSmarty->assign( 'yearbefore',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year - 1 ) );
 $gBitSmarty->assign( 'dayafter',	mktime( 0, 0, 0, $focus_month, $focus_day + 1, $focus_year ) );
 $gBitSmarty->assign( 'weekafter',	mktime( 0, 0, 0, $focus_month, $focus_day + 7, $focus_year ) );
 $gBitSmarty->assign( 'monthafter',	mktime( 0, 0, 0, $focus_month + 1, $focus_day, $focus_year ) );
+$gBitSmarty->assign( 'yearafter',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year + 1 ) );
 $gBitSmarty->assign( 'focusmonth',	$focus_month );
 $gBitSmarty->assign( 'focusdate',	$focusdate );
 $gBitSmarty->assign( 'now',			mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'Y' ) ) );
