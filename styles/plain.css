@@ -1,0 +1,16 @@
+/* simple file to apply background colours to various content types */
+/* .cal is the class that can be used for all of these collectively */
+.cal					{border-bottom:1px solid #aaa;}
+.cal a					{display:block;}
+
+/* now for the individual content type settings */
+.calbitblog				{background:#feb;}
+.calbitblogpost			{background:#fd9;}
+.calbitcomment			{background:#eed;}
+.calbituser				{background:#cfb;}
+.calfisheyegallery		{background:#cdf;}
+.calfisheyeimage		{background:#bcf;}
+.calpigeonholes			{background:#fcc;}
+.caltikisticky			{background:#ffc;}
+.calbitbook				{background:#ccc;}
+.calbitpage				{background:#ddd;}

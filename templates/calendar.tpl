@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.12 2005/08/19 18:04:25 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.13 2005/08/19 19:34:15 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -61,7 +61,7 @@
 					</td>
 
 					<td style="text-align:center;">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$smarty.now}&amp;{$url_string}" title="{$smarty.now|bit_long_date}">{tr}Today{/tr}: <strong>{$smarty.now|bit_short_date}</strong></a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$smarty.now}&amp;{$url_string}" title="{$smarty.now|bit_long_date}">{tr}Today{/tr}: <strong>{$smarty.now|bit_long_date}</strong></a>
 					</td>
 
 					<td rowspan="2" style="text-align:right;">
@@ -82,8 +82,8 @@
 			</table>
 		{/if}
 
-	<table class="data">
-		<caption>{tr}Selection: {$focusdate|bit_long_date}{/tr}</caption>
+		<table class="data">
+			<caption>{tr}Selection: {$focusdate|bit_long_date}{/tr}</caption>
 			{if $smarty.session.calendar.view_mode eq 'day'}
 				<tr>
 					<th style="width:15%;">{tr}Time{/tr}</th>
@@ -95,7 +95,7 @@
 						<td>
 							{section name=hr loop=$hrows[h]}
 								{assign var=over value=$hrows[h][hr].over}
-								<div class="cal{$hrows[h][hr].content_type_guid}">
+								<div class="cal cal{$hrows[h][hr].content_type_guid}">
 									{$hrows[h][hr].last_modified|date_format:"%H:%M"}:
 
 									&nbsp; <a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
@@ -132,15 +132,15 @@
 							<td class="calday {cycle}" style="vertical-align:top;">
 								{if $cell[w][d].day|date_format:"%m" eq $focusmonth or $smarty.session.calendar.view_mode eq "week"}
 									{if $cell[w][d].day eq $focusdate}<strong>{/if}
-										<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$cell[w][d].day}&amp;{$url_string}">{$cell[w][d].day|date_format:"%d/%m"}</a>
+									<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$cell[w][d].day}&amp;{$url_string}">{$cell[w][d].day|date_format:"%d"}</a>
 									{if $cell[w][d].day eq $focusdate}</strong>{/if}
 									<hr />
 
 									{* - Calendar Content - *}
 									{section name=items loop=$cell[w][d].items}
 										{assign var=over value=$cell[w][d].items[items].over}
-										<div class="cal{$cell[w][d].items[items].content_type_guid}">
-											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}&amp;{$url_string}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+										<div class="cal cal{$cell[w][d].items[items].content_type_guid}">
+											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
 												{$cell[w][d].items[items].title|truncate:$trunc:"..."|default:"?"}
 											</a>
 										</div>
