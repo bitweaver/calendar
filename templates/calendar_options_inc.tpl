@@ -6,8 +6,10 @@
 		{if $smarty.request.user_id}
 			<li>{smartlink ititle="Show all"}</li>
 		{else}
-			<li>{smartlink ititle="Show only my items" user_id=$gBitUser->mUserId}</li>
+			<li>{smartlink ititle="Only my items" user_id=$gBitUser->mUserId}</li>
 		{/if}
+		<li>{smartlink ititle="Creation date" isort="created"}</li>
+		<li>{smartlink ititle="Modification date" idefault=1 isort="last_modified"}</li>
 	</ul>
 </div>
 
