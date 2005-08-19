@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.15 2005/08/19 11:54:23 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.16 2005/08/19 18:04:24 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -64,39 +64,6 @@ $gBitSmarty->assign( 'monthafter',	mktime( 0, 0, 0, $focus_month + 1, $focus_day
 $gBitSmarty->assign( 'yearafter',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year + 1 ) );
 $gBitSmarty->assign( 'focusmonth',	$focus_month );
 $gBitSmarty->assign( 'focusdate',	$focusdate );
-$gBitSmarty->assign( 'now',			mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'Y' ) ) );
-
-$weekdays = range( 0, 6 );
-
-// calculate timespan for sql query
-if( $_SESSION['calendar']['view_mode'] == 'month' ) {
-	$viewstart = mktime( 0, 0, 0, $focus_month    , 1, $focus_year );
-	$viewend   = mktime( 0, 0, 0, $focus_month + 1, 0, $focus_year );
-	// move viewstart back to Sunday....
-	$viewstart -= date( "w", $viewstart ) * 86400;
-	$viewend +=( 6 - date( "w", $viewend ) ) * 86400 - 1;
-
-	// ISO weeks --- kinda mangled because ours begin on Sunday...
-	$firstweek = date( "W", $viewstart + 86400 );
-	$lastweek  = date( "W", $viewend );
-	if( $lastweek < $firstweek ) {
-		if( date( "W", $focusdate ) < $firstweek ) {
-			$firstweek -= 52;
-		} else {
-			$lastweek += 52;
-		}
-	}
-	$numberofweeks = $lastweek - $firstweek;
-} elseif( $_SESSION['calendar']['view_mode'] == 'week' ) {
-	$viewstart = mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year );
-	$numberofweeks = 0;
-} else {
-	$viewstart = mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year );
-	$numberofweeks = 0;
-}
-
-$weeks = array();
-$cell = array();
 
 if( $_SESSION['calendar']['content_type_guid'] ) {
 	$listHash = $_SESSION['calendar'];
@@ -109,12 +76,18 @@ if( $_SESSION['calendar']['content_type_guid'] ) {
 	$bitEvents = array();
 }
 
+$calDates = $Calendar->doDateCalculations( $_SESSION['calendar'] );
+
+$weekdays = range( 0, 6 );
+$weeks = array();
+$cell = array();
+
 // note that number of weeks starts at ZERO( i.e., zero = 1 week to display ).
-for( $i = 0; $i <= $numberofweeks; $i++ ) {
-	$weeks[] = $firstweek + $i;
+for( $i = 0; $i <= $calDates['number_of_weeks']; $i++ ) {
+	$weeks[] = $calDates['first_week'] + $i;
 
 	// $start_of_week is a unix timestamp
-	$start_of_week = $viewstart + $i * 604800; // one week
+	$start_of_week = $calDates['view_start'] + $i * 604800; // one week
 
 	foreach( $weekdays as $wd ) {
 		$leday = array();
@@ -146,7 +119,7 @@ for( $i = 0; $i <= $numberofweeks; $i++ ) {
 $hrows = array();
 if( $_SESSION['calendar']['view_mode'] == 'day' ) {
 	foreach( $cell[0]["{$weekdays[0]}"]['items'] as $dayitems ) {
-		$hrows[intval( date( 'h', $dayitems['last_modified'] ) )][] = $dayitems;
+		$hrows[intval( date( 'G', $dayitems['last_modified'] ) )][] = $dayitems;
 	}
 }
 $hours = array(	'0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00',
@@ -169,12 +142,9 @@ $gBitSmarty->assign( 'hours', $hours );
 $gBitSmarty->assign( 'trunc', 12 ); // put in a pref, number of chars displayed in cal cells
 $gBitSmarty->assign( 'daformat', $gBitSystem->get_long_date_format()." ".tra( "at" )." %H:%M" ); 
 $gBitSmarty->assign( 'daformat2', $gBitSystem->get_long_date_format() ); 
-$gBitSmarty->assign( 'firstweek', $firstweek );
-$gBitSmarty->assign( 'lastweek', $lastweek );
 $gBitSmarty->assign( 'weekdays', $weekdays );
 $gBitSmarty->assign( 'weeks', $weeks );
 $gBitSmarty->assign( 'cell', $cell );
-$gBitSmarty->assign( 'var', '' );
 
 $gBitSystem->display( 'bitpackage:calendar/calendar.tpl' );
 ?>

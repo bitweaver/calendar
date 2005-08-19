@@ -4,9 +4,9 @@
 			document.write("<li><a href=\"javascript:toggle('tabcal');\">{tr}Show / Hide Options{/tr}</a></li>");
 		//]]></script>
 		{if $smarty.request.user_id}
-			<li>{smartlink ititle="Show all"}</li>
+			<li>{smartlink ititle="Show all" sort_mode=$smarty.request.sort_mode}</li>
 		{else}
-			<li>{smartlink ititle="Only my items" user_id=$gBitUser->mUserId}</li>
+			<li>{smartlink ititle="Only my items" user_id=$gBitUser->mUserId sort_mode=$smarty.request.sort_mode}</li>
 		{/if}
 		<li>{smartlink ititle="Creation date" isort="created"}</li>
 		<li>{smartlink ititle="Modification date" idefault=1 isort="last_modified"}</li>
@@ -14,6 +14,7 @@
 </div>
 
 <div class="clear"></div>
+<br />
 
 <script type="text/javascript">//<![CDATA[
 	document.write("<div id=\"tabcal\" style=\"display:{if $smarty.cookies.tabcal eq 'o'}block{else}none{/if};\">");

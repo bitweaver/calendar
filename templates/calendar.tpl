@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.11 2005/08/19 11:54:23 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.12 2005/08/19 18:04:25 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -12,6 +12,9 @@
 
 	<div class="body">
 		{include file="bitpackage:calendar/calendar_options_inc.tpl"}
+
+		{* this is used to keep stuff like sort_mode persistent in all links on this page *}
+		{assign var=url_string value="sort_mode=`$smarty.request.sort_mode`&amp;user_id=`$smarty.request.user_id`"}
 
 		{if $gBitSystemPrefs.feature_jscalendar eq 'y'}
 			<table>
@@ -41,9 +44,9 @@
 					</td>
 
 					<td nowrap="nowrap" width="120" align="right">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=day" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=week" class="{if $smarty.session.calendar.view_mode eq 'week'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=month" class="{if $smarty.session.calendar.view_mode eq 'month'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=day&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=week&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'week'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=month&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'month'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
 					</td>
 				</tr>
 			</table>
@@ -51,29 +54,29 @@
 			<table>
 				<tr>
 					<td rowspan="2" style="text-align:left;">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$daybefore}" title="{$daybefore|bit_long_date}">&laquo; {tr}day{/tr}</a><br />
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekbefore}" title="{$weekbefore|bit_long_date}">&laquo; {tr}week{/tr}</a><br />
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthbefore}" title="{$monthbefore|bit_long_date}">&laquo; {tr}month{/tr}</a><br />
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$yearbefore}" title="{$yearbefore|bit_long_date}">&laquo; {tr}year{/tr}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$daybefore}&amp;{$url_string}" title="{$daybefore|bit_long_date}">&laquo; {tr}day{/tr}</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekbefore}&amp;{$url_string}" title="{$weekbefore|bit_long_date}">&laquo; {tr}week{/tr}</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthbefore}&amp;{$url_string}" title="{$monthbefore|bit_long_date}">&laquo; {tr}month{/tr}</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$yearbefore}&amp;{$url_string}" title="{$yearbefore|bit_long_date}">&laquo; {tr}year{/tr}</a>
 					</td>
 
 					<td style="text-align:center;">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$now}" title="{$nowt|bit_short_date}">{tr}Today{/tr}: <strong>{$now|bit_short_date}</strong></a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$smarty.now}&amp;{$url_string}" title="{$smarty.now|bit_long_date}">{tr}Today{/tr}: <strong>{$smarty.now|bit_short_date}</strong></a>
 					</td>
 
 					<td rowspan="2" style="text-align:right;">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$dayafter}" title="{$dayafter|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekafter}" title="{$weekafter|bit_long_date}">{tr}week{/tr} &raquo;</a><br />
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthafter}" title="{$monthafter|bit_long_date}">{tr}month{/tr} &raquo;</a><br />
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$yearafter}" title="{$yearafter|bit_long_date}">{tr}year{/tr} &raquo;</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$dayafter}&amp;{$url_string}" title="{$dayafter|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekafter}&amp;{$url_string}" title="{$weekafter|bit_long_date}">{tr}week{/tr} &raquo;</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthafter}&amp;{$url_string}" title="{$monthafter|bit_long_date}">{tr}month{/tr} &raquo;</a><br />
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$yearafter}&amp;{$url_string}" title="{$yearafter|bit_long_date}">{tr}year{/tr} &raquo;</a>
 					</td>
 				</tr>
 
 				<tr>
 					<td style="text-align:center;">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=day" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=week" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=month" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=day&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=week&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'week'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=month&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'month'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
 					</td>
 				</tr>
 			</table>
@@ -83,12 +86,11 @@
 		<caption>{tr}Selection: {$focusdate|bit_long_date}{/tr}</caption>
 			{if $smarty.session.calendar.view_mode eq 'day'}
 				<tr>
-					<th style="width:15%;">{tr}Hours{/tr}</th>
+					<th style="width:15%;">{tr}Time{/tr}</th>
 					<th>{tr}Events{/tr}</th>
 				</tr>
-				{cycle values="odd,even" print=false}
 				{section name=h loop=$hours}
-					<tr class="{cycle}">
+					<tr class="{cycle values="odd,even"}">
 						<td style="text-align:right; vertical-align:top; padding-right:15px;">{$hours[h]}</td>
 						<td>
 							{section name=hr loop=$hrows[h]}
@@ -99,11 +101,6 @@
 									&nbsp; <a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
 										{$hrows[h][hr].title|default:"..."}
 									</a>
-
-									{if $hrows[h][hr].web}
-										<a href="{$hrows[h][hr].web}" title="{$hrows[h][hr].web}">w</a>
-									{/if}
-{* - Omit description for moment - need to strip <CR> $hrows[h][hr].description *}
 								</div>
 							{/section}
 						</td>
@@ -135,7 +132,7 @@
 							<td class="calday {cycle}" style="vertical-align:top;">
 								{if $cell[w][d].day|date_format:"%m" eq $focusmonth or $smarty.session.calendar.view_mode eq "week"}
 									{if $cell[w][d].day eq $focusdate}<strong>{/if}
-										<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$cell[w][d].day}">{$cell[w][d].day|date_format:"%d/%m"}</a>
+										<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$cell[w][d].day}&amp;{$url_string}">{$cell[w][d].day|date_format:"%d/%m"}</a>
 									{if $cell[w][d].day eq $focusdate}</strong>{/if}
 									<hr />
 
@@ -143,15 +140,9 @@
 									{section name=items loop=$cell[w][d].items}
 										{assign var=over value=$cell[w][d].items[items].over}
 										<div class="cal{$cell[w][d].items[items].content_type_guid}">
-
-											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}&amp;{$url_string}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
 												{$cell[w][d].items[items].title|truncate:$trunc:"..."|default:"?"}
 											</a>
-
-											{if $cell[w][d].items[items].web}
-												<a href="{$cell[w][d].items[items].web}" title="{$cell[w][d].items[items].web}">w</a>
-											{/if}
-											<br />
 										</div>
 									{/section}
 								{else}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.4 2005/08/19 11:46:31 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.5 2005/08/19 18:04:24 squareing Exp $
  * @package calendar
  */
 
@@ -36,39 +36,69 @@ class Calendar extends LibertyContent {
 		return $ret;
 	}
 
+	function doDateCalculations( $pDateHash ) {
+		$d = 60 * 60 * 24;
+		$currentweek = date( "W", $pDateHash['focus_date'] );
+		$wd = date( 'w', $pDateHash['focus_date'] );
+
+		$year  = date( 'Y', $pDateHash['focus_date'] );
+		$month = date( 'm', $pDateHash['focus_date'] );
+		$day   = date( 'd', $pDateHash['focus_date'] );
+
+		if( $pDateHash['view_mode'] == 'month' ) {
+			$viewstart = mktime( 0, 0, 0, $month,     1, $year );
+			// this is the last day of $month
+			$viewend   = mktime( 0, 0, 0, $month + 1, 0, $year );
+			// move viewstart back to Sunday....
+			$viewstart -= date( "w", $viewstart ) * $d;
+			$viewend += ( 6 - date( "w", $viewend ) ) * $d -1;
+
+			// ISO weeks --- kinda mangled because ours begin on Sunday...
+			$firstweek = date( "W", $viewstart + $d );
+			$lastweek  = date( "W", $viewend );
+			if( $lastweek < $firstweek ) {
+				if( $currentweek < $firstweek ) {
+					$firstweek -= 52;
+				} else {
+					$lastweek += 52;
+				}
+			}
+			$numberofweeks = $lastweek - $firstweek;
+		} elseif( $pDateHash['view_mode'] == 'week') {
+			$firstweek = $currentweek;
+			$lastweek = $currentweek;
+			// start by putting $viewstart at midnight starting focusdate
+			$viewstart = mktime( 0, 0, 0, $month, $day, $year);
+			// then back up to the preceding Sunday;
+			$viewstart -= $wd * $d;
+			// then go to the end of the week for $viewend
+			$viewend = $viewstart + ( ( 7 * $d ) - 1 );
+			$numberofweeks = 0;
+		} else {
+			$firstweek = $currentweek;
+			$lastweek = $currentweek;
+			$viewstart = mktime( 0, 0, 0, $month, $day, $year);
+			$viewend = $viewstart + ( $d - 1 );
+			$weekdays = array( date( 'w', $pDateHash['focus_date'] ) );
+			$numberofweeks = 0;
+		}
+
+		$ret = array(
+			'first_week' => $firstweek,
+			'last_week' => $lastweek,
+			'view_start' => $viewstart,
+			'view_end' => $viewend,
+			'number_of_weeks' => $numberofweeks,
+		);
+
+		return $ret;
+	}
+
 	function prepGetList( &$pListHash ) {
 		if( !empty( $pListHash['focus_date'] ) ) {
-			if( !empty( $pListHash['view_mode'] ) ) {
-				$pListHash['view_mode'] = 'month';
-			}
-
-			$year  = date( 'Y', $pListHash['focus_date'] );
-			$month = date( 'm', $pListHash['focus_date'] );
-			$day   = date( 'd', $pListHash['focus_date'] );
-
-			$day_secs    = 60 * 60 * 24;
-			$currentweek = date( "W", $pListHash['focus_date'] );
-			$weekday     = date( 'w', $pListHash['focus_date'] );
-
-			if( $pListHash['view_mode'] == 'day' ) {
-				$firstweek = $currentweek;
-				$lastweek = $currentweek;
-				$viewstart = mktime( 0, 0, 0, $month, $day, $year);
-				$viewend = $viewstart + ( $d - 1 );
-				$weekdays = array( date( 'w',$focusdate ) );
-			} elseif( $pListHash['view_mode'] == 'week' ) {
-				// start by putting $viewstart at midnight starting focusdate
-				$viewstart = mktime( 0, 0, 0, $month, $day, $year);
-				// then back up to the preceding Sunday;
-				$viewstart -= $wd * $day_secs;
-				// then go to the end of the week for $viewend
-				$viewend = $viewstart + ((7 * $d) - 1);
-			} else {
-				$viewstart = mktime( 0, 0, 0, $month    , 1, $year);
-				$viewend   = mktime( 0, 0, 0, $month + 1, 0, $year);
-			}
-			$pListHash['start'] = $viewstart;
-			$pListHash['stop'] = $viewend;
+			$calDates = $this->doDateCalculations( $pListHash );
+			$pListHash['start'] = $calDates['view_start'];
+			$pListHash['stop'] = $calDates['view_end'];
 		}
 
 		if( !empty( $pListHash['sort_mode'] ) ) {
@@ -78,6 +108,7 @@ class Calendar extends LibertyContent {
 		return TRUE;
 	}
 
+/* testing stuff - xing
 	function getCalendarList( $pListHash ) {
 		$calendarHash = $this->buildCalendar( $pListHash['focus_date'] );
 
@@ -85,15 +116,15 @@ class Calendar extends LibertyContent {
 		if( !empty( $pListHash['content_type_guid'] ) ) {
 			$year  = date( 'Y', $pListHash['focus_date'] );
 			$month = date( 'm', $pListHash['focus_date'] );
-			$day   = date( 'd', $pListHash['focus_date'] );
+			$day	= date( 'd', $pListHash['focus_date'] );
 
-			$day_secs    = 60 * 60 * 24;
+			$day_secs	 = 60 * 60 * 24;
 			$currentweek = date( "W", $pListHash['focus_date'] );
-			$weekday     = date( 'w', $pListHash['focus_date'] );
+			$weekday	  = date( 'w', $pListHash['focus_date'] );
 
 			if( $pListHash['calendar_view_mode'] == 'month' ) {
-				$viewstart = mktime( 0, 0, 0, $month    , 1, $year);
-				$viewend   = mktime( 0, 0, 0, $month + 1, 0, $year);
+				$viewstart = mktime( 0, 0, 0, $month	 , 1, $year);
+				$viewend	= mktime( 0, 0, 0, $month + 1, 0, $year);
 			} elseif( $pListHash['calendar_view_mode'] == 'week' ) {
 				// start by putting $viewstart at midnight starting focusdate
 				$viewstart = mktime( 0, 0, 0, $month, $day, $year);
@@ -132,9 +163,9 @@ class Calendar extends LibertyContent {
 
 		$year  = date( 'Y', $pTimeStamp );
 		$month = date( 'm', $pTimeStamp );
-		$day   = date( 'd', $pTimeStamp );
+		$day	= date( 'd', $pTimeStamp );
 
-		$prev_month_end   = mktime( 0, 0, 0, $month    , 0, $year );
+		$prev_month_end	= mktime( 0, 0, 0, $month	 , 0, $year );
 		$next_month_begin = mktime( 0, 0, 0, $month + 1, 1, $year );
 
 		//$prev_month_end = mktime( 0, 0, 0, $month - 1, $day, $year );
@@ -236,12 +267,13 @@ class Calendar extends LibertyContent {
 				assert( FALSE );
 		}
 	}
+*/
 
 	/**
 	 * @param int $pDayOfWeek Sunday is 0, Monday is 1, etc.
 	 * @return string
 	 */
-	function dayOfWeek( $pDayOfWeek ) {
+/*	function dayOfWeek( $pDayOfWeek ) {
 		// January 2, 2000 is an arbitrary Sunday that serves as the basis for
 		// using strftime() to get the localized name (or abbreviation) of the
 		// specified day of week.
@@ -268,6 +300,7 @@ class Calendar extends LibertyContent {
 		$days = $monthdays[$m] - $weekdays[$wn];
 		return( ceil( $days/7 )+1 );
 	}
+*/
 }
 
 ?>
