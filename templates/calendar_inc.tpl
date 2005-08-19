@@ -1,4 +1,4 @@
-<table class="calendar" border="0" cellpadding="1" cellspacing="1">
+<table class="calendar">
 	<caption>{$month_name}&nbsp;{$year}</caption>
 	<tr>
 		<td style="text-align:left;" colspan="2">
@@ -35,7 +35,7 @@
 							</a>
 						</td>
 					{else}
-						<td class="day"></td>
+						<td></td>
 					{/if}
 				{/section}
 			</tr>

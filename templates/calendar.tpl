@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.9 2005/08/18 20:42:56 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.10 2005/08/19 11:44:54 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -11,50 +11,7 @@
 	</div>
 
 	<div class="body">
-
-{/strip}
-		<div class="navbar">
-			<ul>
-				<script type="text/javascript">//<![CDATA[
-					document.write("<li><a href=\"javascript:toggle('tabcal');\">{tr}Show / Hide Options{/tr}</a></li>");
-				//]]></script>
-				{if $smarty.request.user_id}
-					<li>{smartlink ititle="Show all"}</li>
-				{else}
-					<li>{smartlink ititle="Show only my items" user_id=$gBitUser->mUserId}</li>
-				{/if}
-			</ul>
-		</div>
-
-		<div class="clear"></div>
-
-		<script type="text/javascript">//<![CDATA[
-			document.write("<div id=\"tabcal\" style=\"display:{if $smarty.cookies.tabcal eq 'o'}block{else}none{/if};\">");
-		//]]></script>
-
-		{form legend="Display Options" id="display_options"}
-			<div class="row">
-				{formlabel label="" for=""}
-				{forminput}
-					{foreach from=$bitItems key=ki item=vi}
-						<label><input type="checkbox" name="bitcals[]" value="{$ki}" id="bitcal_{$ki}" {if $bitcal.$ki}checked="checked"{/if} /> {$vi.content_description}</label><br />
-					{/foreach}
-
-					<script type="text/javascript">//<![CDATA[
-						document.write("<label><input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'bitcals[]','switcher')\" /> {tr}Select all{/tr}</label><br />");
-					//]]></script>
-				{/forminput}
-			</div>
-
-			<div class="row submit">
-				<input type="submit" name="refresh" value="{tr}Update Calendar{/tr}" />
-			</div>
-		{/form}
-
-		<script type="text/javascript">//<![CDATA[
-			document.write("</div>");
-		//]]></script>
-{strip}
+		{include file="bitpackage:calendar/calendar_options_inc.tpl"}
 
 		{if $gBitSystemPrefs.feature_jscalendar eq 'y'}
 			<table>
@@ -84,9 +41,9 @@
 					</td>
 
 					<td nowrap="nowrap" width="120" align="right">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=day" class="{if $viewmode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=week" class="{if $viewmode eq 'week'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=month" class="{if $viewmode eq 'month'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=day" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=week" class="{if $smarty.session.calendar.view_mode eq 'week'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=month" class="{if $smarty.session.calendar.view_mode eq 'month'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
 					</td>
 				</tr>
 			</table>
@@ -112,9 +69,9 @@
 
 				<tr>
 					<td style="text-align:center;">
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=day" class="{if $viewmode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=week" class="{if $viewmode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
-						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?viewmode=month" class="{if $viewmode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=day" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=week" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
+						<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=month" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
 					</td>
 				</tr>
 			</table>
@@ -122,7 +79,7 @@
 
 	<table class="data">
 		<caption>{tr}Selection: {$focusdate|bit_long_date}{/tr}</caption>
-			{if $viewmode eq 'day'}
+			{if $smarty.session.calendar.view_mode eq 'day'}
 				<tr>
 					<th style="width:15%;">{tr}Hours{/tr}</th>
 					<th>{tr}Events{/tr}</th>
@@ -163,7 +120,7 @@
 						<th>{$weeks[w]}</th>
 
 						{section name=d loop=$weekdays}
-							{if $viewmode eq "month"}
+							{if $smarty.session.calendar.view_mode eq "month"}
 								{if $cell[w][d].day|date_format:"%m" eq $focusmonth}
 									{cycle values="odd,even" print=false advance=false}
 								{else}
@@ -174,7 +131,7 @@
 							{/if}
 
 							<td class="calday {cycle}" style="vertical-align:top;">
-								{if $cell[w][d].day|date_format:"%m" eq $focusmonth or $viewmode eq "week"}
+								{if $cell[w][d].day|date_format:"%m" eq $focusmonth or $smarty.session.calendar.view_mode eq "week"}
 									{if $cell[w][d].day eq $focusdate}<strong>{/if}
 										<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$cell[w][d].day}">{$cell[w][d].day|date_format:"%d/%m"}</a>
 									{if $cell[w][d].day eq $focusdate}</strong>{/if}
