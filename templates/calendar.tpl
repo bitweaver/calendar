@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.13 2005/08/19 19:34:15 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.14 2005/08/19 23:29:08 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -82,7 +82,7 @@
 			</table>
 		{/if}
 
-		<table class="data">
+		<table class="data {$smarty.session.calendar.view_mode}">
 			<caption>{tr}Selection: {$focusdate|bit_long_date}{/tr}</caption>
 			{if $smarty.session.calendar.view_mode eq 'day'}
 				<tr>
@@ -96,10 +96,8 @@
 							{section name=hr loop=$hrows[h]}
 								{assign var=over value=$hrows[h][hr].over}
 								<div class="cal cal{$hrows[h][hr].content_type_guid}">
-									{$hrows[h][hr].last_modified|date_format:"%H:%M"}:
-
-									&nbsp; <a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
-										{$hrows[h][hr].title|default:"..."}
+									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+										{$hrows[h][hr].last_modified|date_format:"%H:%M"} &nbsp; {$hrows[h][hr].title|default:"..."}
 									</a>
 								</div>
 							{/section}
