@@ -1,7 +1,7 @@
 /* simple file to apply background colours to various content types */
 /* .cal is the class that can be used for all of these collectively */
-.cal					{border-bottom:1px solid #aaa;}
-.cal a					{display:block;}
+.calday div				{border-bottom:1px solid #aaa;}
+.calday div a			{display:block;}
 
 /* now for the individual content type settings */
 .calbitblog				{background:#feb;}

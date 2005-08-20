@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.16 2005/08/19 18:04:24 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.17 2005/08/20 23:46:32 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -54,17 +54,6 @@ if( !empty( $_REQUEST["view_mode"] ) ) {
 
 $z = date( "z" );
 
-$gBitSmarty->assign( 'daybefore',	mktime( 0, 0, 0, $focus_month, $focus_day - 1, $focus_year ) );
-$gBitSmarty->assign( 'weekbefore',	mktime( 0, 0, 0, $focus_month, $focus_day - 7, $focus_year ) );
-$gBitSmarty->assign( 'monthbefore',	mktime( 0, 0, 0, $focus_month - 1, $focus_day, $focus_year ) );
-$gBitSmarty->assign( 'yearbefore',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year - 1 ) );
-$gBitSmarty->assign( 'dayafter',	mktime( 0, 0, 0, $focus_month, $focus_day + 1, $focus_year ) );
-$gBitSmarty->assign( 'weekafter',	mktime( 0, 0, 0, $focus_month, $focus_day + 7, $focus_year ) );
-$gBitSmarty->assign( 'monthafter',	mktime( 0, 0, 0, $focus_month + 1, $focus_day, $focus_year ) );
-$gBitSmarty->assign( 'yearafter',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year + 1 ) );
-$gBitSmarty->assign( 'focusmonth',	$focus_month );
-$gBitSmarty->assign( 'focusdate',	$focusdate );
-
 if( $_SESSION['calendar']['content_type_guid'] ) {
 	$listHash = $_SESSION['calendar'];
 	$listHash['user_id'] = !empty( $_REQUEST['user_id'] ) ?	$_REQUEST['user_id'] : NULL;
@@ -76,6 +65,68 @@ if( $_SESSION['calendar']['content_type_guid'] ) {
 	$bitEvents = array();
 }
 
+$calendar = $Calendar->buildCalendar( $_SESSION['calendar'] );
+
+// TODO: make start and end time of day view configurable
+if( $_SESSION['calendar']['view_mode'] == 'day' ) {
+	// calculations in preparation of custom dayview range setting - all that needs to be done is adjust start and stop times accordingly
+	$start_time = $focusdate;
+	$stop_time  = mktime( 0, 0, 0, $focus_month, $focus_day + 1, $focus_year );
+	$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
+
+	// allow for custom time intervals
+	$hour_fraction = $gBitSystem->getPreference( 'calendar_hour_fraction', 1 );
+	$row_count = $hours_count * $hour_fraction;
+	$hour = strftime( '%H', $start ) - 1;
+	$mins = 0;
+	for( $i = 0; $i < $row_count; $i++ ) {
+		if( !( $i % $hour_fraction ) ) {
+			// set vars
+			$hour++;
+			$mins = 0;
+		}
+		$dayTime[$i]['time'] = mktime( $hour, $mins, 0, $focus_month, $focus_day, $focus_year );
+		$mins += 60 / $hour_fraction;
+	}
+
+	// calendar data is added below
+	$gBitSmarty->assign_by_ref( 'dayTime', $dayTime ); 
+}
+
+foreach( $calendar as $w => $week ) {
+	foreach( $week as $d => $day ) {
+		$dayEvents = array();
+		if( !empty( $bitEvents[$day['day']] ) ) {
+			$i = 0;
+			foreach( $bitEvents[$day['day']] as $bitEvent ) {
+				$dayEvents[$i] = $bitEvent;
+				$gBitSmarty->assign( 'cellHash', $bitEvent );
+				$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
+
+				// populate $dayTime array with events
+				if( !empty ( $bitEvent ) ) {
+					foreach( $dayTime as $key => $t ) {
+						// special case - last time entry in array - check this first
+						if( $bitEvent['last_modified'] >= $dayTime[$key]['time'] && empty( $dayTime[$key + 1]['time'] ) ) {
+							$dayTime[$key]['items'][] = $dayEvents[$i];
+						} elseif( $bitEvent['last_modified'] >= $dayTime[$key]['time'] && $bitEvent['last_modified'] <= $dayTime[$key + 1]['time'] ) {
+							$dayTime[$key]['items'][] = $dayEvents[$i];
+						}
+					}
+				}
+
+				$i++;
+			}
+		}
+
+		if( !empty( $dayEvents ) ) {
+			$calendar[$w][$d]['items'] = array_values( $dayEvents );
+		}
+	}
+}
+$gBitSmarty->assign( 'calendar', $calendar );
+
+/* old method - was buggy * /
 $calDates = $Calendar->doDateCalculations( $_SESSION['calendar'] );
 
 $weekdays = range( 0, 6 );
@@ -98,6 +149,7 @@ for( $i = 0; $i <= $calDates['number_of_weeks']; $i++ ) {
 		}
 
 		$cell[$i][$wd]['day'] = $dday;
+		//$cell[$i][$wd]['day'] = mktime();
 
 		if( isset( $bitEvents[$dday] ) ) {
 			$event = 0;
@@ -115,16 +167,8 @@ for( $i = 0; $i <= $calDates['number_of_weeks']; $i++ ) {
 		}
 	}
 }
-
-$hrows = array();
-if( $_SESSION['calendar']['view_mode'] == 'day' ) {
-	foreach( $cell[0]["{$weekdays[0]}"]['items'] as $dayitems ) {
-		$hrows[intval( date( 'G', $dayitems['last_modified'] ) )][] = $dayitems;
-	}
-}
-$hours = array(	'0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00',
-				 '8:00', '9:00','10:00','11:00','12:00','13:00','14:00','15:00',
-				'16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00' );
+//vd($cell);
+/**/
 
 $daysnames = array(
 	tra( "Sunday" ),
@@ -133,18 +177,23 @@ $daysnames = array(
 	tra( "Wednesday" ),
 	tra( "Thursday" ),
 	tra( "Friday" ),
-	tra( "Saturday" )
+	tra( "Saturday" ),
 );
 $gBitSmarty->assign( 'daysnames', $daysnames );
 
-$gBitSmarty->assign( 'hrows', $hrows ); 
-$gBitSmarty->assign( 'hours', $hours ); 
+// calendar navigation
+$gBitSmarty->assign( 'daybefore',	mktime( 0, 0, 0, $focus_month, $focus_day - 1, $focus_year ) );
+$gBitSmarty->assign( 'weekbefore',	mktime( 0, 0, 0, $focus_month, $focus_day - 7, $focus_year ) );
+$gBitSmarty->assign( 'monthbefore',	mktime( 0, 0, 0, $focus_month - 1, $focus_day, $focus_year ) );
+$gBitSmarty->assign( 'yearbefore',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year - 1 ) );
+$gBitSmarty->assign( 'dayafter',	mktime( 0, 0, 0, $focus_month, $focus_day + 1, $focus_year ) );
+$gBitSmarty->assign( 'weekafter',	mktime( 0, 0, 0, $focus_month, $focus_day + 7, $focus_year ) );
+$gBitSmarty->assign( 'monthafter',	mktime( 0, 0, 0, $focus_month + 1, $focus_day, $focus_year ) );
+$gBitSmarty->assign( 'yearafter',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year + 1 ) );
+$gBitSmarty->assign( 'focusmonth',	$focus_month );
+$gBitSmarty->assign( 'focusdate',	$focusdate );
+
 $gBitSmarty->assign( 'trunc', 12 ); // put in a pref, number of chars displayed in cal cells
-$gBitSmarty->assign( 'daformat', $gBitSystem->get_long_date_format()." ".tra( "at" )." %H:%M" ); 
-$gBitSmarty->assign( 'daformat2', $gBitSystem->get_long_date_format() ); 
-$gBitSmarty->assign( 'weekdays', $weekdays );
-$gBitSmarty->assign( 'weeks', $weeks );
-$gBitSmarty->assign( 'cell', $cell );
 
 $gBitSystem->display( 'bitpackage:calendar/calendar.tpl' );
 ?>

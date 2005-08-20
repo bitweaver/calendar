@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.14 2005/08/19 23:29:08 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.15 2005/08/20 23:46:33 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -89,36 +89,36 @@
 					<th style="width:15%;">{tr}Time{/tr}</th>
 					<th>{tr}Events{/tr}</th>
 				</tr>
-				{section name=h loop=$hours}
+				{foreach item=t from=$dayTime}
 					<tr class="{cycle values="odd,even"}">
-						<td style="text-align:right; vertical-align:top; padding-right:15px;">{$hours[h]}</td>
+						<td style="text-align:right; vertical-align:top; padding-right:15px;">{$t.time|date_format:"%R"}</td>
 						<td>
-							{section name=hr loop=$hrows[h]}
-								{assign var=over value=$hrows[h][hr].over}
-								<div class="cal cal{$hrows[h][hr].content_type_guid}">
-									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
-										{$hrows[h][hr].last_modified|date_format:"%H:%M"} &nbsp; {$hrows[h][hr].title|default:"..."}
+							{foreach from=$t.items item=item}
+								{assign var=over value=$item.over}
+								<div class="cal cal{$item.content_type_guid}">
+									{$item.last_modified|date_format:"%R"}: &nbsp;
+									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+										 {$item.title|default:"..."}
 									</a>
 								</div>
-							{/section}
+							{/foreach}
 						</td>
 					</tr>
-				{/section}
+				{/foreach}
 			{else}
 				<tr>
 					<th style="width:2%;"></th>
-					{section name=dn loop=$daysnames}
-						<th width="14%">{$daysnames[dn]}</th>
-					{/section}
+					{foreach from=$daysnames item=dayname}
+						<th width="14%">{$dayname}</th>
+					{/foreach}
 				</tr>
 
-				{section name=w loop=$cell}
+				{foreach from=$calendar key=week_num item=week}
 					<tr style="height:6em;">
-						<th>{$weeks[w]}</th>
-
-						{section name=d loop=$weekdays}
+						<th>{$week_num}</th>
+						{foreach from=$week item=day}
 							{if $smarty.session.calendar.view_mode eq "month"}
-								{if $cell[w][d].day|date_format:"%m" eq $focusmonth}
+								{if $day.day|date_format:"%m" eq $focusmonth}
 									{cycle values="odd,even" print=false advance=false}
 								{else}
 									{cycle values="notmonth" print=false advance=false}
@@ -128,28 +128,28 @@
 							{/if}
 
 							<td class="calday {cycle}" style="vertical-align:top;">
-								{if $cell[w][d].day|date_format:"%m" eq $focusmonth or $smarty.session.calendar.view_mode eq "week"}
-									{if $cell[w][d].day eq $focusdate}<strong>{/if}
-									<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$cell[w][d].day}&amp;{$url_string}">{$cell[w][d].day|date_format:"%d"}</a>
-									{if $cell[w][d].day eq $focusdate}</strong>{/if}
+								{if $day.day|date_format:"%m" eq $focusmonth or $smarty.session.calendar.view_mode eq "week"}
+									{if $day.day eq $focusdate}<strong>{/if}
+									<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$day.day}&amp;{$url_string}">{$day.day|date_format:"%d"}</a>
+									{if $day.day eq $focusdate}</strong>{/if}
 									<hr />
 
 									{* - Calendar Content - *}
-									{section name=items loop=$cell[w][d].items}
-										{assign var=over value=$cell[w][d].items[items].over}
-										<div class="cal cal{$cell[w][d].items[items].content_type_guid}">
-											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$cell[w][d].items[items].content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
-												{$cell[w][d].items[items].title|truncate:$trunc:"..."|default:"?"}
+									{foreach from=$day.items item=item}
+										{assign var=over value=$item.over}
+										<div class="cal{$item.content_type_guid}">
+											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+												{$item.title|truncate:$trunc:"..."|default:"?"}
 											</a>
 										</div>
-									{/section}
+									{/foreach}
 								{else}
 									&nbsp;
 								{/if}
 							</td>
-						{/section}
+						{/foreach}
 					</tr>
-				{/section}
+				{/foreach}
 			{/if}
 		</table>
 	</div><!-- end .body -->
