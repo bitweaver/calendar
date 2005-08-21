@@ -20,13 +20,13 @@ $calHash = array(
 
 // set up daynames for the calendar
 $dayNames = array(
-	tra( "Mon" ),
-	tra( "Tue" ),
-	tra( "Wed" ),
-	tra( "Thu" ),
-	tra( "Fri" ),
-	tra( "Sat" ),
-	tra( "Sun" ),
+	tra( "Monday" ),
+	tra( "Tuesday" ),
+	tra( "Wednesday" ),
+	tra( "Thursday" ),
+	tra( "Friday" ),
+	tra( "Saturday" ),
+	tra( "Sunday" ),
 );
 
 // depending on what day we want to view first, we need to adjust the dayNames array
