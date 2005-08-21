@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.23 2005/08/21 08:33:35 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.24 2005/08/21 09:54:50 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -53,8 +53,6 @@ if( !empty( $_REQUEST["view_mode"] ) ) {
 	$_SESSION['calendar']['view_mode'] = 'month';
 }
 
-$z = date( "z" );
-
 if( $_SESSION['calendar']['content_type_guid'] ) {
 	$listHash = $_SESSION['calendar'];
 	$listHash['user_id'] = !empty( $_REQUEST['user_id'] ) ?	$_REQUEST['user_id'] : NULL;
@@ -68,15 +66,15 @@ if( $_SESSION['calendar']['content_type_guid'] ) {
 
 $calendar = $Calendar->buildCalendar( $_SESSION['calendar'] );
 
-// TODO: make start and end time of day view configurable
 if( $_SESSION['calendar']['view_mode'] == 'day' ) {
-	// calculations in preparation of custom dayview range setting - all that needs to be done is adjust start and stop times accordingly
-	$start_time = $focus_date;
-	$stop_time  = mktime( 0, 0, 0, $focus_month, $focus_day + 1, $focus_year );
+	// calculations in preparation of custom dayview range setting
+	// all that needs to be done is adjust start and stop times accordingly
+	$start_time  = $focus_date;
+	$stop_time   = mktime( 0, 0, 0, $focus_month, $focus_day + 1, $focus_year );
 	$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
 
 	// allow for custom time intervals
-	$hour_fraction = $gBitSystem->getPreference( 'calendar_hour_fraction', 1 );
+	$hour_fraction = $gBitSystem->getPreference( 'hour_fraction', 1 );
 	$row_count = $hours_count * $hour_fraction;
 	$hour = strftime( '%H', $start_time ) - 1;
 	$mins = 0;
@@ -181,7 +179,7 @@ $dayNames = array(
 	tra( "Sunday" ),
 );
 
-$week_offset = $gBitSystem->getPreference( 'calendar_week_offset', 1 );
+$week_offset = $gBitSystem->getPreference( 'week_offset', 4 );
 if( !empty( $week_offset ) ) {
 	for( $i = 0; $i < $week_offset; $i++ ) {
 		$pop = array_pop( $dayNames );
@@ -200,6 +198,7 @@ $gBitSmarty->assign( 'weekafter',	mktime( 0, 0, 0, $focus_month, $focus_day + 7,
 $gBitSmarty->assign( 'monthafter',	mktime( 0, 0, 0, $focus_month + 1, $focus_day, $focus_year ) );
 $gBitSmarty->assign( 'yearafter',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year + 1 ) );
 $gBitSmarty->assign( 'focusmonth',	$focus_month );
+$gBitSmarty->assign( 'focus_date',	$focus_date );
 
 $gBitSmarty->assign( 'trunc', 12 ); // put in a pref, number of chars displayed in cal cells
 

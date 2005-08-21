@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.7 2005/08/21 01:14:21 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.8 2005/08/21 09:54:50 squareing Exp $
  * @package calendar
  */
 
@@ -15,10 +15,8 @@ class Calendar extends LibertyContent {
 	}
 
 	/**
-	* This method generates a calendar entry record which is displayed as a fly over pop-up.
-	* The Liberty items to be displayed are defined in the $bitObjects array
-	* At present no filtering is provided on $user_id
-	* It a full array of items between $tstart and $tstop
+	* get a full list of content for a given time period
+	* return array of items
 	**/
 	function getList( $pListHash ) {
 		$ret = array();
@@ -36,64 +34,48 @@ class Calendar extends LibertyContent {
 		return $ret;
 	}
 
+	/**
+	* calculate the start and stop time for the current display page
+	**/
 	function doDateCalculations( $pDateHash ) {
-		$d = 60 * 60 * 24;
-		$currentweek = date( "W", $pDateHash['focus_date'] );
-		$wd = date( 'w', $pDateHash['focus_date'] );
-
+		global $gBitSystem;
 		$year  = date( 'Y', $pDateHash['focus_date'] );
 		$month = date( 'm', $pDateHash['focus_date'] );
 		$day   = date( 'd', $pDateHash['focus_date'] );
 
 		if( $pDateHash['view_mode'] == 'month' ) {
-			$viewstart = mktime( 0, 0, 0, $month,     1, $year );
-			// this is the last day of $month
-			$viewend   = mktime( 0, 0, 0, $month + 1, 0, $year );
-			// move viewstart back to Sunday....
-			$viewstart -= date( "w", $viewstart ) * $d;
-			$viewend += ( 6 - date( "w", $viewend ) ) * $d -1;
-
-			// ISO weeks --- kinda mangled because ours begin on Sunday...
-			$firstweek = date( "W", $viewstart + $d );
-			$lastweek  = date( "W", $viewend );
-			if( $lastweek < $firstweek ) {
-				if( $currentweek < $firstweek ) {
-					$firstweek -= 52;
-				} else {
-					$lastweek += 52;
-				}
-			}
-			$numberofweeks = $lastweek - $firstweek;
+			$view_start = mktime( 0, 0, 0, $month,     1, $year );
+			$view_end   = mktime( 0, 0, 0, $month + 1, 1, $year ) - 1;
 		} elseif( $pDateHash['view_mode'] == 'week') {
-			$firstweek = $currentweek;
-			$lastweek = $currentweek;
-			// start by putting $viewstart at midnight starting focusdate
-			$viewstart = mktime( 0, 0, 0, $month, $day, $year);
-			// then back up to the preceding Sunday;
-			$viewstart -= $wd * $d;
-			// then go to the end of the week for $viewend
-			$viewend = $viewstart + ( ( 7 * $d ) - 1 );
-			$numberofweeks = 0;
+			$wd  = date( 'w', $pDateHash['focus_date'] );
+			$wd += $gBitSystem->getPreference( 'week_offset', 4 );
+			// if we are moving out from the selected week, move us back in
+			if( $wd > 7 ) {
+				$wd -= 7;
+			}
+
+			// for some very odd reason, which i can't work out, we need to add a day here
+			$view_start = mktime( 0, 0, 0, $month, $day - $wd + 1 , $year );
+			$view_end   = mktime( 0, 0, 0, $month, $day - $wd + 8, $year ) - 1;
 		} else {
-			$firstweek = $currentweek;
-			$lastweek = $currentweek;
-			$viewstart = mktime( 0, 0, 0, $month, $day, $year);
-			$viewend = $viewstart + ( $d - 1 );
-			$weekdays = array( date( 'w', $pDateHash['focus_date'] ) );
-			$numberofweeks = 0;
+			$view_start = mktime( 0, 0, 0, $month, $day    , $year );
+			$view_end   = mktime( 0, 0, 0, $month, $day + 1, $year ) - 1;
 		}
 
+//		vd( 'start: '.strftime( '%d %m %Y, %T', $view_start ) );
+//		vd( 'end: '.  strftime( '%d %m %Y, %T', $view_end   ) );
+
 		$ret = array(
-			'first_week' => $firstweek,
-			'last_week' => $lastweek,
-			'view_start' => $viewstart,
-			'view_end' => $viewend,
-			'number_of_weeks' => $numberofweeks,
+			'view_start' => $view_start,
+			'view_end' => $view_end,
 		);
 
 		return $ret;
 	}
 
+	/**
+	* prepare ListHash to ensure errorfree usage
+	**/
 	function prepGetList( &$pListHash ) {
 		if( !empty( $pListHash['focus_date'] ) ) {
 			$calDates = $this->doDateCalculations( $pListHash );
@@ -108,7 +90,9 @@ class Calendar extends LibertyContent {
 		return TRUE;
 	}
 
-	// Build a two-dimensional array of UNIX timestamps.
+	/**
+	* build a two dimensional array of unix timestamps
+	**/
 	function buildCalendar( $pDateHash ) {
 		global $gBitSmarty, $gBitSystem;
 
@@ -117,7 +101,7 @@ class Calendar extends LibertyContent {
 		$day   = date( 'd', $pDateHash['focus_date'] );
 
 		// set week offset - start with a day other than monday
-		$week_offset = $gBitSystem->getPreference( 'calendar_week_offset', 1 );
+		$week_offset = $gBitSystem->getPreference( 'week_offset', 4 );
 
 		$prev_month_end	  = mktime( 0, 0, 0, $month,     0, $year );
 		$next_month_begin = mktime( 0, 0, 0, $month + 1, 1, $year );
