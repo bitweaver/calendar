@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.17 2005/08/20 23:46:32 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.18 2005/08/21 00:21:50 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -170,16 +170,23 @@ for( $i = 0; $i <= $calDates['number_of_weeks']; $i++ ) {
 //vd($cell);
 /**/
 
-$daysnames = array(
-	tra( "Sunday" ),
+$week_start = 1;
+$dayNames = array(
 	tra( "Monday" ),
 	tra( "Tuesday" ),
 	tra( "Wednesday" ),
 	tra( "Thursday" ),
 	tra( "Friday" ),
 	tra( "Saturday" ),
+	tra( "Sunday" ),
 );
-$gBitSmarty->assign( 'daysnames', $daysnames );
+if( !empty( $week_starts ) ) {
+	for( $i = 0; $i <= $week_start; ) {
+		$pop = array_pop( $dayNames );
+		$dayNames[] = $pop;
+	}
+}
+$gBitSmarty->assign( 'dayNames', $dayNames );
 
 // calendar navigation
 $gBitSmarty->assign( 'daybefore',	mktime( 0, 0, 0, $focus_month, $focus_day - 1, $focus_year ) );
