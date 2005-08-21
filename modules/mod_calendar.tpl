@@ -23,7 +23,7 @@
 
 		<tr>
 			{foreach from=$dayNames item=name}
-				<th width="14%">{$name|truncate:"1":""}</th>
+				<th style="width:14%">{$name|truncate:"1":""}</th>
 			{/foreach}
 		</tr>
 

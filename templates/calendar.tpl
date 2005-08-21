@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.19 2005/08/21 12:38:05 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.20 2005/08/21 15:09:58 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -45,7 +45,7 @@
 				<tr>
 					<th style="width:2%;"></th>
 					{foreach from=$dayNames item=name}
-						<th width="14%">{$name}</th>
+						<th style="width:14%">{$name}</th>
 					{/foreach}
 				</tr>
 
