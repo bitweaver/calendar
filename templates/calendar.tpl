@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.17 2005/08/21 09:54:50 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.18 2005/08/21 11:16:26 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -19,13 +19,13 @@
 		{include file="bitpackage:calendar/calendar_nav_inc.tpl"}
 
 		<table class="data {$smarty.session.calendar.view_mode}">
-			<caption>{tr}Selection: {$focus_date|bit_long_date}{/tr}</caption>
+			<caption>{tr}Selection: {$navigation.focus_date|bit_long_date}{/tr}</caption>
 			{if $smarty.session.calendar.view_mode eq 'day'}
 				<tr>
 					<th style="width:15%;">{tr}Time{/tr}</th>
 					<th>{tr}Events{/tr}</th>
 				</tr>
-				{foreach item=t from=$dayTime}
+				{foreach item=t from=$calDay}
 					<tr class="{cycle values="odd,even"}">
 						<td style="text-align:right; vertical-align:top; padding-right:15px;">{$t.time|date_format:"%R"}</td>
 						<td>
@@ -49,12 +49,12 @@
 					{/foreach}
 				</tr>
 
-				{foreach from=$calendar key=week_num item=week}
+				{foreach from=$calMonth key=week_num item=week}
 					<tr style="height:6em;">
 						<th>{$week_num}</th>
 						{foreach from=$week item=day}
 							{if $smarty.session.calendar.view_mode eq "month"}
-								{if $day.day|date_format:"%m" eq $focusmonth}
+								{if $day.day|date_format:"%m" eq $navigation.focus_month}
 									{cycle values="odd,even" print=false advance=false}
 								{else}
 									{cycle values="notmonth" print=false advance=false}
@@ -64,10 +64,10 @@
 							{/if}
 
 							<td class="calday {cycle}" style="vertical-align:top;">
-								{if $day.day|date_format:"%m" eq $focusmonth or $smarty.session.calendar.view_mode eq "week"}
-									{if $day.day eq $focus_date}<strong>{/if}
+								{if $day.day|date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
+									{if $day.day eq $navigation.focus_date}<strong>{/if}
 									<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$day.day}&amp;{$url_string}">{$day.day|date_format:"%d"}</a>
-									{if $day.day eq $focus_date}</strong>{/if}
+									{if $day.day eq $navigation.focus_date}</strong>{/if}
 									<hr />
 
 									{* - Calendar Content - *}

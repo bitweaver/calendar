@@ -36,10 +36,10 @@
 	<table>
 		<tr>
 			<td rowspan="2" style="text-align:left;">
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$daybefore}&amp;{$url_string}" title="{$daybefore|bit_long_date}">&laquo; {tr}day{/tr}</a><br />
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekbefore}&amp;{$url_string}" title="{$weekbefore|bit_long_date}">&laquo; {tr}week{/tr}</a><br />
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthbefore}&amp;{$url_string}" title="{$monthbefore|bit_long_date}">&laquo; {tr}month{/tr}</a><br />
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$yearbefore}&amp;{$url_string}" title="{$yearbefore|bit_long_date}">&laquo; {tr}year{/tr}</a>
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.before.day}&amp;{$url_string}" title="{$navigation.before.day|bit_long_date}">&laquo; {tr}day{/tr}</a><br />
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.before.week}&amp;{$url_string}" title="{$navigation.before.week|bit_long_date}">&laquo; {tr}week{/tr}</a><br />
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.before.month}&amp;{$url_string}" title="{$navigation.before.month|bit_long_date}">&laquo; {tr}month{/tr}</a><br />
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.before.year}&amp;{$url_string}" title="{$navigation.before.year|bit_long_date}">&laquo; {tr}year{/tr}</a>
 			</td>
 
 			<td style="text-align:center;">
@@ -47,10 +47,10 @@
 			</td>
 
 			<td rowspan="2" style="text-align:right;">
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$dayafter}&amp;{$url_string}" title="{$dayafter|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$weekafter}&amp;{$url_string}" title="{$weekafter|bit_long_date}">{tr}week{/tr} &raquo;</a><br />
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$monthafter}&amp;{$url_string}" title="{$monthafter|bit_long_date}">{tr}month{/tr} &raquo;</a><br />
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$yearafter}&amp;{$url_string}" title="{$yearafter|bit_long_date}">{tr}year{/tr} &raquo;</a>
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.day}&amp;{$url_string}" title="{$navigation.after.day|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.week}&amp;{$url_string}" title="{$navigation.after.week|bit_long_date}">{tr}week{/tr} &raquo;</a><br />
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.month}&amp;{$url_string}" title="{$navigation.after.month|bit_long_date}">{tr}month{/tr} &raquo;</a><br />
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.year}&amp;{$url_string}" title="{$navigation.after.year|bit_long_date}">{tr}year{/tr} &raquo;</a>
 			</td>
 		</tr>
 
