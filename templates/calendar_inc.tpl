@@ -1,43 +1,71 @@
-<table class="calendar">
-	<caption>{$month_name}&nbsp;{$year}</caption>
-	<tr>
-		<td style="text-align:left;" colspan="2">
-			<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$prev_month_end}">
-				&laquo; {$prev_month_abbrev}
-			</a>
-		</td>
-
-		<td style="text-align:center;" colspan="3">
-			<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$smarty.now}">{tr}Today{/tr}</a>
-		</td>
-
-		<td style="text-align:right;" colspan="2">
-			<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$next_month_begin}">
-				{$next_month_abbrev} &raquo;
-			</a>
-		</td>
-	</tr>
-	<tr>
-		{section name="day_of_week" loop=$day_of_week_abbrevs}
-			<th>{$day_of_week_abbrevs[day_of_week]}</th>
-		{/section}
-	</tr>
-		{section name="row" loop=$calendar}
-			<tr>
-				{section name="col" loop=$calendar[row]}
-					{assign var="date" value=$calendar[row][col]}
-					{if $date == $selected_date}
-						<td style="text-align:right;"><strong>{$date|date_format:"%e"}</strong></td>
-					{elseif $date|date_format:"%m" == $month}
-						<td style="text-align:right;">
-							<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$date}">
-								{$date|date_format:"%e"}
+<table class="data {$smarty.session.calendar.view_mode}">
+	<caption>{tr}Selection: {$navigation.focus_date|bit_long_date}{/tr}</caption>
+	{if $smarty.session.calendar.view_mode eq 'day'}
+		<tr>
+			<th style="width:15%;">{tr}Time{/tr}</th>
+			<th>{tr}Events{/tr}</th>
+		</tr>
+		{foreach item=t from=$calDay}
+			<tr class="{cycle values="odd,even"}">
+				<td style="text-align:right; vertical-align:top; padding-right:15px;">{$t.time|date_format:"%R"}</td>
+				<td>
+					{foreach from=$t.items item=item}
+						{assign var=over value=$item.over}
+						<div class="cal cal{$item.content_type_guid}">
+							{$item.last_modified|date_format:"%R"}: &nbsp;
+							<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+								 {$item.title|default:"..."}
 							</a>
-						</td>
-					{else}
-						<td></td>
-					{/if}
-				{/section}
+						</div>
+					{/foreach}
+				</td>
 			</tr>
-		{/section}
+		{/foreach}
+	{else}
+		<tr>
+			<th style="width:2%;"></th>
+			{foreach from=$dayNames item=name}
+				<th width="14%">{$name}</th>
+			{/foreach}
+		</tr>
+
+		{foreach from=$calMonth key=week_num item=week}
+			<tr style="height:6em;">
+				<th>{$week_num}</th>
+				{foreach from=$week item=day}
+					{if $smarty.session.calendar.view_mode eq "month"}
+						{if $day.day|date_format:"%m" eq $navigation.focus_month}
+							{cycle values="odd,even" print=false advance=false}
+						{else}
+							{cycle values="notmonth" print=false advance=false}
+						{/if}
+					{else}
+						{cycle values="odd,even" print=false advance=false}
+					{/if}
+
+					<td class="calday {cycle}" style="vertical-align:top;">
+						{if $day.day|date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
+							{if $day.day eq $navigation.focus_date}<strong>{/if}
+							<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$day.day}&amp;{$url_string}">{$day.day|date_format:"%d"}</a>
+							{if $day.day eq $navigation.focus_date}</strong>{/if}
+							<hr />
+
+							{* - Calendar Content - *}
+							{foreach from=$day.items item=item}
+								{assign var=over value=$item.over}
+								<div class="cal{$item.content_type_guid}">
+									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+										{$item.title|truncate:$trunc:"..."|default:"?"}
+									</a>
+								</div>
+							{/foreach}
+						{else}
+							&nbsp;
+						{/if}
+					</td>
+				{/foreach}
+			</tr>
+		{/foreach}
+	{/if}
 </table>
+
