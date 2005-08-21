@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.19 2005/08/21 00:23:02 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.20 2005/08/21 00:25:57 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -104,7 +104,7 @@ foreach( $calendar as $w => $week ) {
 				$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
 
 				// populate $dayTime array with events
-				if( !empty ( $bitEvent ) ) {
+				if( !empty ( $bitEvent ) && $_SESSION['calendar']['view_mode'] == 'day' ) {
 					foreach( $dayTime as $key => $t ) {
 						// special case - last time entry in array - check this first
 						if( $bitEvent['last_modified'] >= $dayTime[$key]['time'] && empty( $dayTime[$key + 1]['time'] ) ) {
