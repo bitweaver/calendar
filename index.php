@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.18 2005/08/21 00:21:50 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.19 2005/08/21 00:23:02 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -77,7 +77,7 @@ if( $_SESSION['calendar']['view_mode'] == 'day' ) {
 	// allow for custom time intervals
 	$hour_fraction = $gBitSystem->getPreference( 'calendar_hour_fraction', 1 );
 	$row_count = $hours_count * $hour_fraction;
-	$hour = strftime( '%H', $start ) - 1;
+	$hour = strftime( '%H', $start_time ) - 1;
 	$mins = 0;
 	for( $i = 0; $i < $row_count; $i++ ) {
 		if( !( $i % $hour_fraction ) ) {
