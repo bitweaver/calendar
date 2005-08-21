@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.22 2005/08/21 08:04:24 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.23 2005/08/21 08:33:35 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -29,9 +29,10 @@ foreach( $gLibertySystem->mContentTypes as $cType ) {
 }
 $gBitSmarty->assign( 'contentTypes', $contentTypes );
 
+// set up the todate
 if( !empty( $_REQUEST["todate"] ) ) {
 	// clean up todate. who knows where this has come from
-	$_SESSION['calendar']['focus_date'] = mktime( 0, 0, 0, date( 'm', $_REQUEST['todate'] ), date( 'd', $_REQUEST['todate'] ), date( 'Y', $_REQUEST['todate'] ) );
+	$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = mktime( 0, 0, 0, date( 'm', $_REQUEST['todate'] ), date( 'd', $_REQUEST['todate'] ), date( 'Y', $_REQUEST['todate'] ) );
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 } else {
@@ -39,13 +40,12 @@ if( !empty( $_REQUEST["todate"] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 }
 
-$focusdate = $_REQUEST['todate'];
+$focus_date = $_REQUEST['todate'];
 list( $focus_day, $focus_month, $focus_year ) = array(
-	date( "d", $focusdate ),
-	date( "m", $focusdate ),
-	date( "Y", $focusdate )
+	date( "d", $focus_date ),
+	date( "m", $focus_date ),
+	date( "Y", $focus_date )
 );
-$focusdate = mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year );
 
 if( !empty( $_REQUEST["view_mode"] ) ) {
 	$_SESSION['calendar']['view_mode'] = $_REQUEST["view_mode"];
@@ -71,7 +71,7 @@ $calendar = $Calendar->buildCalendar( $_SESSION['calendar'] );
 // TODO: make start and end time of day view configurable
 if( $_SESSION['calendar']['view_mode'] == 'day' ) {
 	// calculations in preparation of custom dayview range setting - all that needs to be done is adjust start and stop times accordingly
-	$start_time = $focusdate;
+	$start_time = $focus_date;
 	$stop_time  = mktime( 0, 0, 0, $focus_month, $focus_day + 1, $focus_year );
 	$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
 
@@ -200,7 +200,6 @@ $gBitSmarty->assign( 'weekafter',	mktime( 0, 0, 0, $focus_month, $focus_day + 7,
 $gBitSmarty->assign( 'monthafter',	mktime( 0, 0, 0, $focus_month + 1, $focus_day, $focus_year ) );
 $gBitSmarty->assign( 'yearafter',	mktime( 0, 0, 0, $focus_month, $focus_day, $focus_year + 1 ) );
 $gBitSmarty->assign( 'focusmonth',	$focus_month );
-$gBitSmarty->assign( 'focusdate',	$focusdate );
 
 $gBitSmarty->assign( 'trunc', 12 ); // put in a pref, number of chars displayed in cal cells
 
