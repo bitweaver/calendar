@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.6 2005/08/20 23:46:32 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.7 2005/08/21 01:14:21 squareing Exp $
  * @package calendar
  */
 
@@ -110,20 +110,17 @@ class Calendar extends LibertyContent {
 
 	// Build a two-dimensional array of UNIX timestamps.
 	function buildCalendar( $pDateHash ) {
-		global $gBitSmarty;
+		global $gBitSmarty, $gBitSystem;
 
 		$year  = date( 'Y', $pDateHash['focus_date'] );
 		$month = date( 'm', $pDateHash['focus_date'] );
 		$day   = date( 'd', $pDateHash['focus_date'] );
 
 		// set week offset - start with a day other than monday
-		$week_offset = 1;
+		$week_offset = $gBitSystem->getPreference( 'calendar_week_offset', 1 );
 
 		$prev_month_end	  = mktime( 0, 0, 0, $month,     0, $year );
 		$next_month_begin = mktime( 0, 0, 0, $month + 1, 1, $year );
-
-		//$prev_month_end = mktime( 0, 0, 0, $month - 1, $day, $year );
-		//$next_month_begin = mktime( 0, 0, 0, $month + 1, $day, $year );
 
 		$prev_month_end_info = getdate( $prev_month_end );
 		$prev_month = $prev_month_end_info['mon'];
@@ -134,9 +131,11 @@ class Calendar extends LibertyContent {
 
 		// Start the first row with the final day( s ) of the previous month.
 		$week = array();
-		$month_begin = mktime( 0, 0, 0, $month, 1, $year );
+		$month_begin = mktime( 0, 0, 0, $month, $week_offset, $year );
 		$month_begin_day_of_week = strftime( '%w', $month_begin );
 		$days_in_prev_month = $this->daysInMonth( $prev_month, $prev_month_year );
+
+		// Fill out the first row with the last day( s ) of the previous month.
 		for( $day_of_week = 0; $day_of_week < $month_begin_day_of_week; $day_of_week++ ) {
 			$_day = $days_in_prev_month - $month_begin_day_of_week + $day_of_week;
 			$week[]['day'] = mktime( 0, 0, 0, $month - 1, $_day, $year );
@@ -168,7 +167,7 @@ class Calendar extends LibertyContent {
 			$calendar[date( 'W', $week[$week_offset]['day'] )] = $week;
 		}
 
-		// this wieek number has to be calculated, since the cal starts with sunday
+		// this week number has to be calculated, since the cal start can be configured
 		$week_num = date( 'W', mktime( 0, 0, 0, $month, $day + $week_offset, $year ) );
 		// if we only want to see a weeks / days worth of data, nuke all xs data
 		if( $pDateHash['view_mode'] == 'week' ) {
@@ -179,11 +178,6 @@ class Calendar extends LibertyContent {
 			$calendar = array();
 			$calendar[$week_num][]['day'] = $pDateHash['focus_date'];
 		}
-
-		// Generate the URL for today, which will be null if $selected_date is
-		// today.
-		$today = getdate();
-		$today_date = mktime( 0, 0, 0, $today['mon'], $today['mday'], $today['year'] );
 
 		return $calendar;
 	}
