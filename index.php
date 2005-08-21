@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.21 2005/08/21 01:14:21 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.22 2005/08/21 08:04:24 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -30,7 +30,8 @@ foreach( $gLibertySystem->mContentTypes as $cType ) {
 $gBitSmarty->assign( 'contentTypes', $contentTypes );
 
 if( !empty( $_REQUEST["todate"] ) ) {
-	$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'];
+	// clean up todate. who knows where this has come from
+	$_SESSION['calendar']['focus_date'] = mktime( 0, 0, 0, date( 'm', $_REQUEST['todate'] ), date( 'd', $_REQUEST['todate'] ), date( 'Y', $_REQUEST['todate'] ) );
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 } else {
