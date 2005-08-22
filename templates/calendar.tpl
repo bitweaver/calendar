@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.22 2005/08/22 12:06:25 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.23 2005/08/22 18:46:53 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -33,7 +33,7 @@
 								{assign var=over value=$item.over}
 								<div class="cal cal{$item.content_type_guid}">
 									{$item.last_modified|bit_date_format:"%R"}: &nbsp;
-									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"}>
 										 {$item.title|default:"..."}
 									</a>
 								</div>
@@ -73,7 +73,7 @@
 									{foreach from=$day.items item=item}
 										{assign var=over value=$item.over}
 										<div class="cal{$item.content_type_guid}">
-											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
+											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"}>
 												{$item.title|truncate:$trunc:"..."|default:"?"}
 											</a>
 										</div>
