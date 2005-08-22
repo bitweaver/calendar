@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.12 2005/08/22 11:59:32 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.13 2005/08/22 13:28:17 lsces Exp $
  * @package calendar
  */
 
@@ -82,6 +82,11 @@ class Calendar extends LibertyContent {
 			'view_start' => $view_start,
 			'view_end' => $view_end,
 		);
+		// Insert ISO dates if they are set - Used for dates pre 1902
+		if ( !empty($view_start_iso) ) {
+			$ret['view_start_iso'] = $view_start_iso;
+			$ret['view_end_iso'] = $view_end_iso;
+		}
 
 		return $ret;
 	}
@@ -189,26 +194,23 @@ class Calendar extends LibertyContent {
 		$month_begin_day_of_week = adodb_dow( $focus['year'], $focus['mon'], $week_offset );
 		$days_in_prev_month = $this->daysInMonth( $prev_month, $prev_month_year );
 
-		$_day = 1; $_mon = $focus['mon'];
 		// Fill out the first row with the last day( s ) of the previous month.
 		for( $day_of_week = 0; $day_of_week < $month_begin_day_of_week; $day_of_week++ ) {
 			$_day = $days_in_prev_month - $month_begin_day_of_week + $day_of_week;
-			$_mon = $focus['mon'] - 1;
-			$week[]['day'] = adodb_mktime( 0, 0, 0, $_mon, $_day, $focus['year'] );
+			$week[]['day'] = adodb_mktime( 0, 0, 0, $focus['mon'] - 1, $_day, $focus['year'] );
 		}
 
 		// Fill in the days of the selected month.
 		$days_in_month = $this->daysInMonth( $focus['mon'], $focus['year'] );
 		for( $i = 1; $i <= $days_in_month; $i++ ) {
 			if( $day_of_week == 7 ) {
-				$calendar[adodb_woy($focus['year'],$_mon,$_day)] = $week;
+				$calendar[adodb_woy($focus['year'],$focus['mon'],$i)] = $week;
 				
 				// re-initialize $day_of_week and $week
 				$day_of_week = 0;
-				$_day = $i + 1;
-				$_mon = $focus['mon'];
 				unset( $week );
 				$week = array();
+				$fday = $i+1;
 			}
 			$week[]['day'] = adodb_mktime( 0, 0, 0, $focus['mon'], $i, $focus['year'] );
 			$day_of_week++;
@@ -218,7 +220,7 @@ class Calendar extends LibertyContent {
 		for( $i = 1; $day_of_week < 7; $i++, $day_of_week++ ) {
 			$week[]['day'] = adodb_mktime( 0, 0, 0, $focus['mon'] + 1, $i, $focus['year'] );
 		}
-		$calendar[adodb_woy($focus['year'],$focus['mon'],$_day)] = $week;
+		$calendar[adodb_woy($focus['year'],$focus['mon'],$fday)] = $week;
 
 		// this week number has to be calculated, since the cal start can be configured
 		$week_num = adodb_woy($focus['year'],$focus['mon'],$focus['mday']);
