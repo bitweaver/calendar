@@ -12,4 +12,7 @@ $gBitInstaller->registerPackageInfo( CALENDAR_PKG_NAME, array(
 $gBitInstaller->registerUserPermissions( CALENDAR_PKG_NAME, array(
 	array('bit_p_view_calendar', 'Can browse the calendar', 'basic', CALENDAR_PKG_NAME),
 ) );
+
+// this empty table registration is needed for the installer to pick it up to install the preferences
+$gBitInstaller->registerSchemaTable( CALENDAR_PKG_NAME, '', '' );
 ?>
