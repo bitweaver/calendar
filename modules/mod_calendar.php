@@ -5,11 +5,11 @@ $cal = new Calendar();
 // set up the todate
 if( !empty( $_REQUEST["todate"] ) ) {
 	// clean up todate. who knows where this has come from
-	$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = mktime( 0, 0, 0, date( 'm', $_REQUEST['todate'] ), date( 'd', $_REQUEST['todate'] ), date( 'Y', $_REQUEST['todate'] ) );
+	$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = adodb_mktime( 0, 0, 0, adodb_date( 'm', $_REQUEST['todate'] ), adodb_date( 'd', $_REQUEST['todate'] ), adodb_date( 'Y', $_REQUEST['todate'] ) );
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 } else {
-	$_SESSION['calendar']['focus_date'] = mktime( 0, 0, 0, date( 'm' ), date( 'd' ), date( 'Y' ) );
+	$_SESSION['calendar']['focus_date'] = adodb_mktime( 0, 0, 0, adodb_date( 'm' ), adodb_date( 'd' ), adodb_date( 'Y' ) );
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 }
 

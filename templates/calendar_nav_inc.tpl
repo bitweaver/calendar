@@ -14,7 +14,7 @@
 					{rdelim}
 
 					Calendar.setup( {ldelim}
-						date			: "{$focus_date|date_format:"%m/%d/%Y %H:%M"}",			// initial date
+						date			: "{$focus_date|bit_date_format:"%m/%d/%Y %H:%M"}",			// initial date
 						inputField		: "todate",												// ID of the input field
 						ifFormat		: "%s",													// the date format
 						displayArea 	: "datrigger",											// ID of the span where the date is to be shown
@@ -47,7 +47,7 @@
 			</td>
 
 			<td rowspan="2" style="text-align:right;">
-				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.day}&amp;{$url_string}" title="{$navigation.after.day|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
+				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.day}&amp;{$url_string}" title="{$navigation.after.dayn|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.week}&amp;{$url_string}" title="{$navigation.after.week|bit_long_date}">{tr}week{/tr} &raquo;</a><br />
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.month}&amp;{$url_string}" title="{$navigation.after.month|bit_long_date}">{tr}month{/tr} &raquo;</a><br />
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?todate={$navigation.after.year}&amp;{$url_string}" title="{$navigation.after.year|bit_long_date}">{tr}year{/tr} &raquo;</a>

@@ -1,12 +1,11 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.11 2005/08/21 12:42:06 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.12 2005/08/22 11:59:32 lsces Exp $
  * @package calendar
  */
 
 /**
  * @package calendar
- * @subpackage Calendar
  */
 class Calendar extends LibertyContent {
 
@@ -31,7 +30,7 @@ class Calendar extends LibertyContent {
 				// shift all time data by user timezone offset
 				$item['created']       = $item['created']       - $gBitSystem->get_display_offset();
 				$item['last_modified'] = $item['last_modified'] - $gBitSystem->get_display_offset();
-				$dstart = mktime( 0, 0, 0, date( "m", $item[$pListHash['calendar_sort_mode']] ), date( "d", $item[$pListHash['calendar_sort_mode']] ), date( "Y", $item[$pListHash['calendar_sort_mode']] ) );
+				$dstart = adodb_mktime( 0, 0, 0, adodb_date( "m", $item[$pListHash['calendar_sort_mode']] ), adodb_date( "d", $item[$pListHash['calendar_sort_mode']] ), adodb_date( "Y", $item[$pListHash['calendar_sort_mode']] ) );
 				$ret[$dstart][] = $item;
 			}
 		}
@@ -43,15 +42,15 @@ class Calendar extends LibertyContent {
 	**/
 	function doRangeCalculations( $pDateHash ) {
 		global $gBitSystem, $gBitUser;
-		$year  = date( 'Y', $pDateHash['focus_date'] );
-		$month = date( 'm', $pDateHash['focus_date'] );
-		$day   = date( 'd', $pDateHash['focus_date'] );
+		$year  = adodb_date( 'Y', $pDateHash['focus_date'] );
+		$month = adodb_date( 'm', $pDateHash['focus_date'] );
+		$day   = adodb_date( 'd', $pDateHash['focus_date'] );
 
 		if( $pDateHash['view_mode'] == 'month' ) {
-			$view_start = mktime( 0, 0, 0, $month,     1, $year );
-			$view_end   = mktime( 0, 0, 0, $month + 1, 1, $year ) - 1;
+			$view_start = adodb_mktime( 0, 0, 0, $month,     1, $year );
+			$view_end   = adodb_mktime( 0, 0, 0, $month + 1, 1, $year ) - 1;
 		} elseif( $pDateHash['view_mode'] == 'week') {
-			$wd  = date( 'w', $pDateHash['focus_date'] );
+			$wd  = adodb_date( 'w', $pDateHash['focus_date'] );
 			$wd += $gBitSystem->getPreference( 'week_offset', 1 );
 			// if we are moving out from the selected week, move us back in
 			if( $wd > 7 ) {
@@ -59,19 +58,25 @@ class Calendar extends LibertyContent {
 			}
 
 			// for some very odd reason, which i can't work out, we need to add a day here
-			$view_start = mktime( 0, 0, 0, $month, $day - $wd + 1 , $year );
-			$view_end   = mktime( 0, 0, 0, $month, $day - $wd + 8, $year ) - 1;
+			$view_start = adodb_mktime( 0, 0, 0, $month, $day - $wd + 1 , $year );
+			$view_end   = adodb_mktime( 0, 0, 0, $month, $day - $wd + 8, $year ) - 1;
 		} else {
-			$view_start = mktime( 0, 0, 0, $month, $day    , $year );
-			$view_end   = mktime( 0, 0, 0, $month, $day + 1, $year ) - 1;
+			$view_start = adodb_mktime( 0, 0, 0, $month, $day    , $year );
+			$view_end   = adodb_mktime( 0, 0, 0, $month, $day + 1, $year ) - 1;
 		}
 
 		// this is where we adjust the start and stop times to user local time settings
 		$view_start = $view_start + $gBitSystem->get_display_offset();
 		$view_end   = $view_end   + $gBitSystem->get_display_offset();
-
-//		vd( 'start: '.strftime( '%d %m %Y, %T', $view_start ) );
-//		vd( 'end: '.  strftime( '%d %m %Y, %T', $view_end   ) );
+		$start_year  = adodb_date( 'Y', $view_start );
+//		vd( 'start: '.adodb_strftime( '%d %m %Y, %T', $view_start ) );
+//		vd( 'end: '.  adodb_strftime( '%d %m %Y, %T', $view_end   ) );
+		if ( $start_year < 1902 ) {
+			$view_start_iso = $view_start  = adodb_date( 'Y-m-d', $view_start );
+			$view_end_iso = $view_end  = adodb_date( 'Y-m-d', $view_start );
+			$view_start = 0;
+			$view_end = 0;
+		}
 
 		$ret = array(
 			'view_start' => $view_start,
@@ -100,22 +105,22 @@ class Calendar extends LibertyContent {
 
 	function buildDay( $pDateHash ) {
 		global $gBitSystem;
-		$year  = date( 'Y', $pDateHash['focus_date'] );
-		$month = date( 'm', $pDateHash['focus_date'] );
-		$day   = date( 'd', $pDateHash['focus_date'] );
+		$year  = adodb_date( 'Y', $pDateHash['focus_date'] );
+		$month = adodb_date( 'm', $pDateHash['focus_date'] );
+		$day   = adodb_date( 'd', $pDateHash['focus_date'] );
 
 		$ret = array();
 		if( $pDateHash['view_mode'] == 'day' ) {
 			// calculations in preparation of custom dayview range setting
 			// all that needs to be done is adjust start and stop times accordingly
 			$start_time  = $pDateHash['focus_date'];
-			$stop_time   = mktime( 0, 0, 0, $month, $day + 1, $year );
+			$stop_time   = adodb_mktime( 0, 0, 0, $month, $day + 1, $year );
 			$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
 
 			// allow for custom time intervals
 			$hour_fraction = $gBitSystem->getPreference( 'hour_fraction', 1 );
 			$row_count = $hours_count * $hour_fraction;
-			$hour = strftime( '%H', $start_time ) - 1;
+			$hour = adodb_strftime( '%H', $start_time ) - 1;
 			$mins = 0;
 			for( $i = 0; $i < $row_count; $i++ ) {
 				if( !( $i % $hour_fraction ) ) {
@@ -123,7 +128,7 @@ class Calendar extends LibertyContent {
 					$hour++;
 					$mins = 0;
 				}
-				$ret[$i]['time'] = mktime( $hour, $mins, 0, $month, $day, $year );
+				$ret[$i]['time'] = adodb_mktime( $hour, $mins, 0, $month, $day, $year );
 				$mins += 60 / $hour_fraction;
 			}
 
@@ -133,22 +138,22 @@ class Calendar extends LibertyContent {
 	}
 
 	function buildCalendarNavigation( $pDateHash ) {
-		$year  = date( 'Y', $pDateHash['focus_date'] );
-		$month = date( 'm', $pDateHash['focus_date'] );
-		$day   = date( 'd', $pDateHash['focus_date'] );
+		$year  = adodb_date( 'Y', $pDateHash['focus_date'] );
+		$month = adodb_date( 'm', $pDateHash['focus_date'] );
+		$day   = adodb_date( 'd', $pDateHash['focus_date'] );
 
 		$ret = array(
 			'before' => array(
-				'day'   => mktime( 0, 0, 0, $month, $day - 1, $year ),
-				'week'  => mktime( 0, 0, 0, $month, $day - 7, $year ),
-				'month' => mktime( 0, 0, 0, $month - 1, $day, $year ),
-				'year'  => mktime( 0, 0, 0, $month, $day, $year - 1 ),
+				'day'   => adodb_mktime( 0, 0, 0, $month, $day - 1, $year ),
+				'week'  => adodb_mktime( 0, 0, 0, $month, $day - 7, $year ),
+				'month' => adodb_mktime( 0, 0, 0, $month - 1, $day, $year ),
+				'year'  => adodb_mktime( 0, 0, 0, $month, $day, $year - 1 ),
 			),
 			'after' => array(
-				'day'   => mktime( 0, 0, 0, $month, $day + 1, $year ),
-				'week'  => mktime( 0, 0, 0, $month, $day + 7, $year ),
-				'month' => mktime( 0, 0, 0, $month + 1, $day, $year ),
-				'year'  => mktime( 0, 0, 0, $month, $day, $year + 1 ),
+				'day'  => adodb_mktime( 0, 0, 0, $month, $day + 1, $year ),
+				'week'  => adodb_mktime( 0, 0, 0, $month, $day + 7, $year ),
+				'month' => adodb_mktime( 0, 0, 0, $month + 1, $day, $year ),
+				'year'  => adodb_mktime( 0, 0, 0, $month, $day, $year + 1 ),
 			),
 			'focus_month' => $month,
 			'focus_date' => $pDateHash['focus_date'],
@@ -163,17 +168,15 @@ class Calendar extends LibertyContent {
 	function buildCalendar( $pDateHash ) {
 		global $gBitSmarty, $gBitSystem;
 
-		$year  = date( 'Y', $pDateHash['focus_date'] );
-		$month = date( 'm', $pDateHash['focus_date'] );
-		$day   = date( 'd', $pDateHash['focus_date'] );
+		$focus = adodb_getdate( $pDateHash['focus_date'] );
 
 		// set week offset - start with a day other than monday
 		$week_offset = $gBitSystem->getPreference( 'week_offset', 1 );
 
-		$prev_month_end	  = mktime( 0, 0, 0, $month,     0, $year );
-		$next_month_begin = mktime( 0, 0, 0, $month + 1, 1, $year );
+		$prev_month_end	  = adodb_mktime( 0, 0, 0, $focus['mon'],     0, $focus['year'] );
+		$next_month_begin = adodb_mktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] );
 
-		$prev_month_end_info = getdate( $prev_month_end );
+		$prev_month_end_info = adodb_getdate( $prev_month_end );
 		$prev_month = $prev_month_end_info['mon'];
 		$prev_month_year = $prev_month_end_info['year'];
 
@@ -182,44 +185,43 @@ class Calendar extends LibertyContent {
 
 		// Start the first row with the final day( s ) of the previous month.
 		$week = array();
-		$month_begin = mktime( 0, 0, 0, $month, $week_offset, $year );
-		$month_begin_day_of_week = strftime( '%w', $month_begin );
+		$month_begin = adodb_mktime( 0, 0, 0, $focus['mon'], $week_offset, $focus['year'] );
+		$month_begin_day_of_week = adodb_dow( $focus['year'], $focus['mon'], $week_offset );
 		$days_in_prev_month = $this->daysInMonth( $prev_month, $prev_month_year );
 
+		$_day = 1; $_mon = $focus['mon'];
 		// Fill out the first row with the last day( s ) of the previous month.
 		for( $day_of_week = 0; $day_of_week < $month_begin_day_of_week; $day_of_week++ ) {
 			$_day = $days_in_prev_month - $month_begin_day_of_week + $day_of_week;
-			$week[]['day'] = mktime( 0, 0, 0, $month - 1, $_day, $year );
+			$_mon = $focus['mon'] - 1;
+			$week[]['day'] = adodb_mktime( 0, 0, 0, $_mon, $_day, $focus['year'] );
 		}
 
 		// Fill in the days of the selected month.
-		$days_in_month = $this->daysInMonth( $month, $year );
+		$days_in_month = $this->daysInMonth( $focus['mon'], $focus['year'] );
 		for( $i = 1; $i <= $days_in_month; $i++ ) {
 			if( $day_of_week == 7 ) {
-				$cal[] = $week;
-
+				$calendar[adodb_woy($focus['year'],$_mon,$_day)] = $week;
+				
 				// re-initialize $day_of_week and $week
 				$day_of_week = 0;
+				$_day = $i + 1;
+				$_mon = $focus['mon'];
 				unset( $week );
 				$week = array();
 			}
-			$week[]['day'] = mktime( 0, 0, 0, $month, $i, $year );
+			$week[]['day'] = adodb_mktime( 0, 0, 0, $focus['mon'], $i, $focus['year'] );
 			$day_of_week++;
 		}
 
 		// Fill out the last row with the first day( s ) of the next month.
 		for( $i = 1; $day_of_week < 7; $i++, $day_of_week++ ) {
-			$week[]['day'] = mktime( 0, 0, 0, $month + 1, $i, $year );
+			$week[]['day'] = adodb_mktime( 0, 0, 0, $focus['mon'] + 1, $i, $focus['year'] );
 		}
-		$cal[] = $week;
-
-		// apply weeknumber to calendar array
-		foreach( $cal as $week ) {
-			$calendar[date( 'W', $week[$week_offset]['day'] )] = $week;
-		}
+		$calendar[adodb_woy($focus['year'],$focus['mon'],$_day)] = $week;
 
 		// this week number has to be calculated, since the cal start can be configured
-		$week_num = date( 'W', mktime( 0, 0, 0, $month, $day + $week_offset, $year ) );
+		$week_num = adodb_woy($focus['year'],$focus['mon'],$focus['mday']);
 		// if we only want to see a weeks / days worth of data, nuke all xs data
 		if( $pDateHash['view_mode'] == 'week' ) {
 			$cal = $calendar[$week_num];
@@ -231,10 +233,6 @@ class Calendar extends LibertyContent {
 		}
 
 		return $calendar;
-	}
-
-	function isLeapYear( $year ) {
-		return( ( $year % 4 == 0 && $year % 100 != 0 ) || $year % 400 == 0 );
 	}
 
 	function daysInMonth( $month, $year ) {
@@ -256,7 +254,7 @@ class Calendar extends LibertyContent {
 				return 30;
 
 			case 2:
-				return isLeapYear( $year ) ? 29 : 28;
+				return adodb_is_leap_year( $year ) ? 29 : 28;
 
 			default:
 				assert( FALSE );

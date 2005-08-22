@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.20 2005/08/21 15:09:58 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.21 2005/08/22 11:59:31 lsces Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -22,17 +22,17 @@
 			<caption>{tr}Selection: {$navigation.focus_date|bit_long_date}{/tr}</caption>
 			{if $smarty.session.calendar.view_mode eq 'day'}
 				<tr>
-					<th style="width:15%;">{tr}Time{/tr}</th>
+					<th style="width:5%;">{tr}Time{/tr}</th>
 					<th>{tr}Events{/tr}</th>
 				</tr>
 				{foreach item=t from=$calDay}
 					<tr class="{cycle values="odd,even"}">
-						<td style="text-align:right; vertical-align:top; padding-right:15px;">{$t.time|date_format:"%R"}</td>
+						<td style="text-align:right; vertical-align:top; padding-right:15px;">{$t.time|bit_date_format:"%H:%M"}</td>
 						<td>
 							{foreach from=$t.items item=item}
 								{assign var=over value=$item.over}
 								<div class="cal cal{$item.content_type_guid}">
-									{$item.last_modified|date_format:"%R"}: &nbsp;
+									{$item.last_modified|bit_date_format:"%R"}: &nbsp;
 									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}>
 										 {$item.title|default:"..."}
 									</a>
@@ -54,7 +54,7 @@
 						<th>{$week_num}</th>
 						{foreach from=$week item=day}
 							{if $smarty.session.calendar.view_mode eq "month"}
-								{if $day.day|date_format:"%m" eq $navigation.focus_month}
+								{if $day.day|bit_date_format:"%m" eq $navigation.focus_month}
 									{cycle values="odd,even" print=false advance=false}
 								{else}
 									{cycle values="notmonth" print=false advance=false}
@@ -64,9 +64,9 @@
 							{/if}
 
 							<td class="calday {cycle}" style="vertical-align:top;">
-								{if $day.day|date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
+								{if $day.day|bit_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 									{if $day.day eq $navigation.focus_date}<strong>{/if}
-									<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$day.day}&amp;{$url_string}">{$day.day|date_format:"%d"}</a>
+									<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$day.day}&amp;{$url_string}">{$day.day|bit_date_format:"%d"}</a>
 									{if $day.day eq $navigation.focus_date}</strong>{/if}
 									<hr />
 
