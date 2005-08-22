@@ -1,3 +1,4 @@
+{strip}
 {bitmodule title="$moduleTitle" name="calendar"}
 	<table class="caltable">
 		<caption>{$modCalNavigation.focus_date|date_format:"%B %Y"}</caption>
@@ -50,3 +51,4 @@
 		{/foreach}
 	</table>
 {/bitmodule}
+{/strip}
