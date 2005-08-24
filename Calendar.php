@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.13 2005/08/22 13:28:17 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.14 2005/08/24 20:34:22 squareing Exp $
  * @package calendar
  */
 
@@ -155,7 +155,7 @@ class Calendar extends LibertyContent {
 				'year'  => adodb_mktime( 0, 0, 0, $month, $day, $year - 1 ),
 			),
 			'after' => array(
-				'day'  => adodb_mktime( 0, 0, 0, $month, $day + 1, $year ),
+				'day'   => adodb_mktime( 0, 0, 0, $month, $day + 1, $year ),
 				'week'  => adodb_mktime( 0, 0, 0, $month, $day + 7, $year ),
 				'month' => adodb_mktime( 0, 0, 0, $month + 1, $day, $year ),
 				'year'  => adodb_mktime( 0, 0, 0, $month, $day, $year + 1 ),
@@ -176,7 +176,7 @@ class Calendar extends LibertyContent {
 		$focus = adodb_getdate( $pDateHash['focus_date'] );
 
 		// set week offset - start with a day other than monday
-		$week_offset = $gBitSystem->getPreference( 'week_offset', 1 );
+		$week_offset = $gBitSystem->getPreference( 'week_offset', 0 );
 
 		$prev_month_end	  = adodb_mktime( 0, 0, 0, $focus['mon'],     0, $focus['year'] );
 		$next_month_begin = adodb_mktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] );
@@ -204,26 +204,30 @@ class Calendar extends LibertyContent {
 		$days_in_month = $this->daysInMonth( $focus['mon'], $focus['year'] );
 		for( $i = 1; $i <= $days_in_month; $i++ ) {
 			if( $day_of_week == 7 ) {
-				$calendar[adodb_woy($focus['year'],$focus['mon'],$i)] = $week;
+				$calendar[adodb_woy( $focus['year'], $focus['mon'], $i )] = $week;
 				
 				// re-initialize $day_of_week and $week
 				$day_of_week = 0;
-				unset( $week );
 				$week = array();
-				$fday = $i+1;
 			}
 			$week[]['day'] = adodb_mktime( 0, 0, 0, $focus['mon'], $i, $focus['year'] );
 			$day_of_week++;
 		}
 
 		// Fill out the last row with the first day( s ) of the next month.
-		for( $i = 1; $day_of_week < 7; $i++, $day_of_week++ ) {
-			$week[]['day'] = adodb_mktime( 0, 0, 0, $focus['mon'] + 1, $i, $focus['year'] );
+		for( $j = 1; $day_of_week < 7; $j++, $day_of_week++ ) {
+			$week[]['day'] = adodb_mktime( 0, 0, 0, $focus['mon'] + 1, $j, $focus['year'] );
 		}
-		$calendar[adodb_woy($focus['year'],$focus['mon'],$fday)] = $week;
+		$calendar[adodb_woy( $focus['year'], $focus['mon'], $i + 7 + $week_offset )] = $week;
 
 		// this week number has to be calculated, since the cal start can be configured
-		$week_num = adodb_woy($focus['year'],$focus['mon'],$focus['mday']);
+		$week_num = adodb_woy( $focus['year'], $focus['mon'], $focus['mday'] );
+
+		// this is needed to display the correct week.
+		if( ( $focus['wday'] + $week_offset  ) > 7 ) {
+			$week_num++;
+		}
+
 		// if we only want to see a weeks / days worth of data, nuke all xs data
 		if( $pDateHash['view_mode'] == 'week' ) {
 			$cal = $calendar[$week_num];
