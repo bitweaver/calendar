@@ -30,12 +30,9 @@ $dayNames = array(
 );
 
 // depending on what day we want to view first, we need to adjust the dayNames array
-$week_offset = $gBitSystem->getPreference( 'week_offset', 1 );
-if( !empty( $week_offset ) ) {
-	for( $i = 0; $i < $week_offset; $i++ ) {
-		$pop = array_pop( $dayNames );
-		array_unshift( $dayNames, $pop );
-	}
+for( $i = 0; $i < WEEK_OFFSET; $i++ ) {
+	$pop = array_pop( $dayNames );
+	array_unshift( $dayNames, $pop );
 }
 $gBitSmarty->assign( 'dayNames', $dayNames );
 
