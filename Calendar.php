@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.17 2005/08/25 06:41:28 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.18 2005/08/25 06:58:48 squareing Exp $
  * @package calendar
  */
 
@@ -67,8 +67,8 @@ class Calendar extends LibertyContent {
 		}
 
 		// this is where we adjust the start and stop times to user local time settings
-		$view_start = $view_start + $gBitSystem->get_display_offset();
-		$view_end   = $view_end   + $gBitSystem->get_display_offset();
+//		$view_start = $view_start + $gBitSystem->get_display_offset();
+//		$view_end   = $view_end   + $gBitSystem->get_display_offset();
 		$start_year  = adodb_date( 'Y', $view_start );
 //		vd( 'start: '.adodb_strftime( '%d %m %Y, %T', $view_start ) );
 //		vd( 'end: '.  adodb_strftime( '%d %m %Y, %T', $view_end   ) );
@@ -165,6 +165,7 @@ class Calendar extends LibertyContent {
 			),
 			'focus_month' => $focus['mon'],
 			'focus_date' => $focus[0],
+			'server_focus_date' => $focus[0] - $gBitSystem->get_display_offset(),
 		);
 
 		return $ret;

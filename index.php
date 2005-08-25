@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.28 2005/08/25 06:41:28 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.29 2005/08/25 06:58:48 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -43,12 +43,7 @@ if( !empty( $_REQUEST["todate"] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 }
 
-$focus_date = $_REQUEST['todate'];
-list( $focus_day, $focus_month, $focus_year ) = array(
-	adodb_date( "d", $focus_date ),
-	adodb_date( "m", $focus_date ),
-	adodb_date( "Y", $focus_date )
-);
+$focus = $_REQUEST['todate'];
 
 if( !empty( $_REQUEST["view_mode"] ) ) {
 	$_SESSION['calendar']['view_mode'] = $_REQUEST["view_mode"];

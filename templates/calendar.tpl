@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.24 2005/08/24 22:39:37 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.25 2005/08/25 06:58:48 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -19,7 +19,7 @@
 		{include file="bitpackage:calendar/calendar_nav_inc.tpl"}
 
 		<table class="data caltable {$smarty.session.calendar.view_mode}">
-			<caption>{tr}Selection: {$navigation.focus_date|date_format}{/tr}</caption>
+			<caption>{tr}Selection: {$navigation.focus_date|bit_long_date}{/tr}</caption>
 			{if $smarty.session.calendar.view_mode eq 'day'}
 				<tr>
 					<th style="width:5%;">{tr}Time{/tr}</th>
@@ -63,7 +63,7 @@
 								{cycle values="odd,even" print=false advance=false}
 							{/if}
 
-							<td class="calday {if $day.day eq $navigation.focus_date}current{/if} {cycle}" style="vertical-align:top;">
+							<td class="calday {if $day.day eq $navigation.server_focus_date}current{/if} {cycle}" style="vertical-align:top;">
 								{if $day.day|date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 									<div class="calnumber">
 										<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=day&amp;todate={$day.day}&amp;{$url_string}">{$day.day|date_format:"%d"}</a>
