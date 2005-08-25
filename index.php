@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.27 2005/08/24 22:39:37 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.28 2005/08/25 06:41:28 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -31,12 +31,15 @@ $gBitSmarty->assign( 'contentTypes', $contentTypes );
 // set up the todate
 if( !empty( $_REQUEST["todate"] ) ) {
 	// clean up todate. who knows where this has come from
-	if ( is_numeric($_REQUEST['todate']) ) $_SESSION['calendar']['focus_date'] = $_REQUEST['todate'];
-	else $_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = adodb_mktime( 0, 0, 0, adodb_date2( 'm', $_REQUEST['todate'] ), adodb_date2( 'd', $_REQUEST['todate'] ), adodb_date2( 'Y', $_REQUEST['todate'] ) );
+	if ( is_numeric( $_REQUEST['todate'] ) ) {
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] + $gBitSystem->get_display_offset();
+	} else {
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = adodb_mktime( 0, 0, 0, adodb_date2( 'm', $_REQUEST['todate'] ), adodb_date2( 'd', $_REQUEST['todate'] ), adodb_date2( 'Y', $_REQUEST['todate'] ) ) + $gBitSystem->get_display_offset();
+	}
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 } else {
-	$_SESSION['calendar']['focus_date'] = adodb_mktime( 0, 0, 0, adodb_date( 'm' ), adodb_date( 'd' ), adodb_date( 'Y' ) );
+	$_SESSION['calendar']['focus_date'] = adodb_mktime( 0, 0, 0, adodb_date( 'm' ), adodb_date( 'd' ), adodb_date( 'Y' ) ) + $gBitSystem->get_display_offset();
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 }
 

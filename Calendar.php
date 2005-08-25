@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.16 2005/08/25 06:22:06 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.17 2005/08/25 06:41:28 squareing Exp $
  * @package calendar
  */
 
@@ -46,26 +46,24 @@ class Calendar extends LibertyContent {
 	**/
 	function doRangeCalculations( $pDateHash ) {
 		global $gBitSystem, $gBitUser;
-		$year  = adodb_date( 'Y', $pDateHash['focus_date'] );
-		$month = adodb_date( 'm', $pDateHash['focus_date'] );
-		$day   = adodb_date( 'd', $pDateHash['focus_date'] );
+		$focus = adodb_getdate( $pDateHash['focus_date'] );
 
 		if( $pDateHash['view_mode'] == 'month' ) {
-			$view_start = adodb_mktime( 0, 0, 0, $month,     1, $year );
-			$view_end   = adodb_mktime( 0, 0, 0, $month + 1, 1, $year ) - 1;
+			$view_start = adodb_mktime( 0, 0, 0, $focus['mon'],     1, $focus['year'] );
+			$view_end   = adodb_mktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] ) - 1;
 		} elseif( $pDateHash['view_mode'] == 'week') {
-			$wd  = adodb_date( 'w', $pDateHash['focus_date'] ) + WEEK_OFFSET;
+			$wd  = adodb_date( 'w', $focus[0] ) + WEEK_OFFSET;
 			// if we are moving out from the selected week, move us back in
 			if( $wd > 7 ) {
 				$wd -= 7;
 			}
 
 			// for some very odd reason, which i can't work out, we need to add a day here
-			$view_start = adodb_mktime( 0, 0, 0, $month, $day - $wd + 1 , $year );
-			$view_end   = adodb_mktime( 0, 0, 0, $month, $day - $wd + 8, $year ) - 1;
+			$view_start = adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 1 , $focus['year'] );
+			$view_end   = adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 8, $focus['year'] ) - 1;
 		} else {
-			$view_start = adodb_mktime( 0, 0, 0, $month, $day    , $year );
-			$view_end   = adodb_mktime( 0, 0, 0, $month, $day + 1, $year ) - 1;
+			$view_start = adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday']    , $focus['year'] );
+			$view_end   = adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - 1;
 		}
 
 		// this is where we adjust the start and stop times to user local time settings
@@ -113,17 +111,19 @@ class Calendar extends LibertyContent {
 
 	function buildDay( $pDateHash ) {
 		global $gBitSystem, $gBitUser;
-		$year  = adodb_date( 'Y', $pDateHash['focus_date'] );
-		$month = adodb_date( 'm', $pDateHash['focus_date'] );
-		$day   = adodb_date( 'd', $pDateHash['focus_date'] );
+		$focus = adodb_getdate( $pDateHash['focus_date'] );
+
+		$focus['year']  = adodb_date( 'Y', $pDateHash['focus_date'] );
+		$focus['mon'] = adodb_date( 'm', $pDateHash['focus_date'] );
+		$focus['mday']   = adodb_date( 'd', $pDateHash['focus_date'] );
 
 		$ret = array();
 		if( $pDateHash['view_mode'] == 'day' ) {
 			// calculare what the visible day view range is
 			$day_start   = isset( $gBitUser->mUserPrefs['day_start'] ) ? $gBitUser->mUserPrefs['day_start'] : $gBitSystem->getPreference( 'day_start', 0 );
 			$day_end     = isset( $gBitUser->mUserPrefs['day_end'] ) ? $gBitUser->mUserPrefs['day_end'] : $gBitSystem->getPreference( 'day_end', 0 );
-			$start_time  = $pDateHash['focus_date']                         + ( 60 * 60 * $day_start );
-			$stop_time   = adodb_mktime( 0, 0, 0, $month, $day + 1, $year ) - ( 60 * 60 * ( 24 - $day_end ) );
+			$start_time  = $pDateHash['focus_date'] + ( 60 * 60 * $day_start );
+			$stop_time   = adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - ( 60 * 60 * ( 24 - $day_end ) );
 			$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
 
 			// allow for custom time intervals
@@ -137,7 +137,7 @@ class Calendar extends LibertyContent {
 					$hour++;
 					$mins = 0;
 				}
-				$ret[$i]['time'] = adodb_mktime( $hour, $mins, 0, $month, $day, $year );
+				$ret[$i]['time'] = adodb_mktime( $hour, $mins, 0, $focus['mon'], $focus['mday'], $focus['year'] );
 				$mins += 60 / $hour_fraction;
 			}
 
@@ -148,7 +148,7 @@ class Calendar extends LibertyContent {
 
 	function buildCalendarNavigation( $pDateHash ) {
 		global $gBitSystem;
-		$focus = adodb_getdate( $pDateHash['focus_date'] + $gBitSystem->get_display_offset() );
+		$focus = adodb_getdate( $pDateHash['focus_date'] );
 
 		$ret = array(
 			'before' => array(
