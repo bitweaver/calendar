@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.15 2005/08/24 22:39:37 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.16 2005/08/25 06:22:06 squareing Exp $
  * @package calendar
  */
 
@@ -147,25 +147,24 @@ class Calendar extends LibertyContent {
 	}
 
 	function buildCalendarNavigation( $pDateHash ) {
-		$year  = adodb_date( 'Y', $pDateHash['focus_date'] );
-		$month = adodb_date( 'm', $pDateHash['focus_date'] );
-		$day   = adodb_date( 'd', $pDateHash['focus_date'] );
+		global $gBitSystem;
+		$focus = adodb_getdate( $pDateHash['focus_date'] + $gBitSystem->get_display_offset() );
 
 		$ret = array(
 			'before' => array(
-				'day'   => adodb_mktime( 0, 0, 0, $month, $day - 1, $year ),
-				'week'  => adodb_mktime( 0, 0, 0, $month, $day - 7, $year ),
-				'month' => adodb_mktime( 0, 0, 0, $month - 1, $day, $year ),
-				'year'  => adodb_mktime( 0, 0, 0, $month, $day, $year - 1 ),
+				'day'   => adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - 1, $focus['year'] ),
+				'week'  => adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - 7, $focus['year'] ),
+				'month' => adodb_mktime( 0, 0, 0, $focus['mon'] - 1, $focus['mday'], $focus['year'] ),
+				'year'  => adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] - 1 ),
 			),
 			'after' => array(
-				'day'   => adodb_mktime( 0, 0, 0, $month, $day + 1, $year ),
-				'week'  => adodb_mktime( 0, 0, 0, $month, $day + 7, $year ),
-				'month' => adodb_mktime( 0, 0, 0, $month + 1, $day, $year ),
-				'year'  => adodb_mktime( 0, 0, 0, $month, $day, $year + 1 ),
+				'day'   => adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ),
+				'week'  => adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 7, $focus['year'] ),
+				'month' => adodb_mktime( 0, 0, 0, $focus['mon'] + 1, $focus['mday'], $focus['year'] ),
+				'year'  => adodb_mktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] + 1 ),
 			),
-			'focus_month' => $month,
-			'focus_date' => $pDateHash['focus_date'],
+			'focus_month' => $focus['mon'],
+			'focus_date' => $focus[0],
 		);
 
 		return $ret;
