@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.29 2005/08/25 06:58:48 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.30 2005/08/26 01:22:01 lsces Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -28,18 +28,21 @@ foreach( $gLibertySystem->mContentTypes as $cType ) {
 }
 $gBitSmarty->assign( 'contentTypes', $contentTypes );
 
+// now, lets get the ball rolling!
+$gCalendar = new Calendar();
+
 // set up the todate
 if( !empty( $_REQUEST["todate"] ) ) {
 	// clean up todate. who knows where this has come from
 	if ( is_numeric( $_REQUEST['todate'] ) ) {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] + $gBitSystem->get_display_offset();
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] + $gCalendar->mDate->get_display_offset();
 	} else {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = adodb_mktime( 0, 0, 0, adodb_date2( 'm', $_REQUEST['todate'] ), adodb_date2( 'd', $_REQUEST['todate'] ), adodb_date2( 'Y', $_REQUEST['todate'] ) ) + $gBitSystem->get_display_offset();
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->mktime( 0, 0, 0, $gCalendar->mDate->date2( 'm', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'd', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'Y', $_REQUEST['todate'] ) ) + $gBitSystem->get_display_offset();
 	}
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 } else {
-	$_SESSION['calendar']['focus_date'] = adodb_mktime( 0, 0, 0, adodb_date( 'm' ), adodb_date( 'd' ), adodb_date( 'Y' ) ) + $gBitSystem->get_display_offset();
+	$_SESSION['calendar']['focus_date'] = $gCalendar->mDate->mktime( 0, 0, 0, $gCalendar->mDate->date( 'm' ), $gCalendar->mDate->date( 'd' ), $gCalendar->mDate->date( 'Y' ) ) + $gBitSystem->get_display_offset();
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 }
 
@@ -50,9 +53,6 @@ if( !empty( $_REQUEST["view_mode"] ) ) {
 } elseif( empty( $_SESSION['calendar']['view_mode'] ) ) {
 	$_SESSION['calendar']['view_mode'] = 'month';
 }
-
-// now, lets get the ball rolling!
-$gCalendar = new Calendar();
 
 $gBitSmarty->assign( 'navigation', $gCalendar->buildCalendarNavigation( $_SESSION['calendar'] ) );
 $gBitSmarty->assign_by_ref( 'calMonth', $calMonth = $gCalendar->buildCalendar( $_SESSION['calendar'] ) );
@@ -80,6 +80,7 @@ foreach( $calMonth as $w => $week ) {
 				$gBitSmarty->assign( 'cellHash', $bitEvent );
 				$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
 
+
 				// populate $calDay array with events
 				if( !empty ( $bitEvent ) && $_SESSION['calendar']['view_mode'] == 'day' ) {
 					foreach( $calDay as $key => $t ) {
@@ -101,7 +102,6 @@ foreach( $calMonth as $w => $week ) {
 		}
 	}
 }
-
 // set up daynames for the calendar
 $dayNames = array(
 	tra( "Monday" ),
