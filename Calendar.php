@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.19 2005/08/26 01:22:01 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.20 2005/08/28 08:27:09 lsces Exp $
  * @package calendar
  */
 
@@ -21,7 +21,7 @@ class Calendar extends LibertyContent {
 	function Calendar() {
 		LibertyContent::LibertyContent();
 		global $gBitSystem;
-		$this->mDate = new BitDate();
+		$this->mDate = new BitDate(0);
 	}
 
 	/**
@@ -29,7 +29,6 @@ class Calendar extends LibertyContent {
 	* return array of items
 	**/
 	function getList( $pListHash ) {
-		global $gBitSystem, $gBitUser;
 		$ret = array();
 		if( $this->prepGetList( $pListHash ) ) {
 			include_once( LIBERTY_PKG_PATH.'LibertyContent.php' );
@@ -39,8 +38,8 @@ class Calendar extends LibertyContent {
 
 			foreach( $res['data'] as $item ) {
 				// shift all time data by user timezone offset
-				$item['created']       = $item['created']       - $gBitSystem->get_display_offset();
-				$item['last_modified'] = $item['last_modified'] - $gBitSystem->get_display_offset();
+				$item['created']       = $item['created']       + $this->mDate->get_display_offset();
+				$item['last_modified'] = $item['last_modified'] + $this->mDate->get_display_offset();
 				$dstart = $this->mDate->mktime( 0, 0, 0, $this->mDate->date( "m", $item[$pListHash['calendar_sort_mode']] ), $this->mDate->date( "d", $item[$pListHash['calendar_sort_mode']] ), $this->mDate->date( "Y", $item[$pListHash['calendar_sort_mode']] ) );
 				$ret[$dstart][] = $item;
 			}
@@ -52,7 +51,6 @@ class Calendar extends LibertyContent {
 	* calculate the start and stop time for the current display page
 	**/
 	function doRangeCalculations( $pDateHash ) {
-		global $gBitSystem, $gBitUser;
 		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
 
 		if( $pDateHash['view_mode'] == 'month' ) {
@@ -74,8 +72,8 @@ class Calendar extends LibertyContent {
 		}
 
 		// this is where we adjust the start and stop times to user local time settings
-//		$view_start = $view_start + $gBitSystem->get_display_offset();
-//		$view_end   = $view_end   + $gBitSystem->get_display_offset();
+//		$view_start = $view_start + $this->mDate->get_display_offset();
+//		$view_end   = $view_end   + $this->mDate->get_display_offset();
 		$start_year  = $this->mDate->date( 'Y', $view_start );
 //		vd( 'start: '.$this->mDate->strftime( '%d %m %Y, %T', $view_start ) );
 //		vd( 'end: '.  $this->mDate->strftime( '%d %m %Y, %T', $view_end   ) );
@@ -125,14 +123,15 @@ class Calendar extends LibertyContent {
 			// calculare what the visible day view range is
 			$day_start   = isset( $gBitUser->mUserPrefs['day_start'] ) ? $gBitUser->mUserPrefs['day_start'] : $gBitSystem->getPreference( 'day_start', 0 );
 			$day_end     = isset( $gBitUser->mUserPrefs['day_end'] ) ? $gBitUser->mUserPrefs['day_end'] : $gBitSystem->getPreference( 'day_end', 0 );
-			$start_time  = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - 1, $focus['year'] ) + ( 60 * 60 * $day_start );
-			$stop_time   = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] ) - ( 60 * 60 * ( 24 - $day_end ) );
+			$start_time  = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] ) + ( 60 * 60 * $day_start );
+			$stop_time   = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - ( 60 * 60 * ( 24 - $day_end ) );
 			$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
 
 			// allow for custom time intervals
 			$hour_fraction = !empty( $gBitUser->mUserPrefs['hour_fraction'] ) ? $gBitUser->mUserPrefs['hour_fraction'] : $gBitSystem->getPreference( 'hour_fraction', 1 );
 			$row_count = $hours_count * $hour_fraction;
-			$hour = $this->mDate->strftime( '%H', $start_time ) - 1;
+			$start_time_info = $this->mDate->getdate( $start_time );
+			$hour = $start_time_info['hours'] - 1;
 			$mins = 0;
 			for( $i = 0; $i < $row_count; $i++ ) {
 				if( !( $i % $hour_fraction ) ) {
@@ -143,7 +142,6 @@ class Calendar extends LibertyContent {
 				$ret[$i]['time'] = $this->mDate->mktime( $hour, $mins, 0, $focus['mon'], $focus['mday'], $focus['year'] );
 				$mins += 60 / $hour_fraction;
 			}
-
 			// calendar data is added below
 		}
 		return $ret;

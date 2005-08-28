@@ -3,7 +3,7 @@
 		<tr>
 			<td>
 				<form action="{$gBitLoc.CALENDAR_PKG_URL}index.php" method="get" id="f">
-					<input type="hidden" id="todate" name="todate" value="{$focus_date|date_format:"%B %e, %Y %H:%M"}" />
+					<input type="hidden" id="todate" name="todate" value="{$focus_date|cal_date_format:"%B %e, %Y %H:%M %Z"}" />
 					<span title="{tr}Date Selector{/tr}" id="datrigger">{$focus_date|bit_long_date}</span>
 					&lt;- {tr}click to navigate{/tr}
 				</form>

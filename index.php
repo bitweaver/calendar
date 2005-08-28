@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.30 2005/08/26 01:22:01 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.31 2005/08/28 08:27:09 lsces Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -35,7 +35,7 @@ $gCalendar = new Calendar();
 if( !empty( $_REQUEST["todate"] ) ) {
 	// clean up todate. who knows where this has come from
 	if ( is_numeric( $_REQUEST['todate'] ) ) {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] + $gCalendar->mDate->get_display_offset();
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'];
 	} else {
 		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->mktime( 0, 0, 0, $gCalendar->mDate->date2( 'm', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'd', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'Y', $_REQUEST['todate'] ) ) + $gBitSystem->get_display_offset();
 	}
@@ -96,7 +96,6 @@ foreach( $calMonth as $w => $week ) {
 				$i++;
 			}
 		}
-
 		if( !empty( $dayEvents ) ) {
 			$calMonth[$w][$d]['items'] = array_values( $dayEvents );
 		}
