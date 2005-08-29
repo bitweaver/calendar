@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.20 2005/08/28 08:27:09 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.21 2005/08/29 22:23:06 lsces Exp $
  * @package calendar
  */
 
@@ -35,12 +35,14 @@ class Calendar extends LibertyContent {
 			$content = new LibertyContent();
 			$content->prepGetList( $pListHash );
 			$res = $content->getContentList( $pListHash );
-
+			$offset = $this->mDate->get_display_offset();
 			foreach( $res['data'] as $item ) {
 				// shift all time data by user timezone offset
-				$item['created']       = $item['created']       + $this->mDate->get_display_offset();
-				$item['last_modified'] = $item['last_modified'] + $this->mDate->get_display_offset();
-				$dstart = $this->mDate->mktime( 0, 0, 0, $this->mDate->date( "m", $item[$pListHash['calendar_sort_mode']] ), $this->mDate->date( "d", $item[$pListHash['calendar_sort_mode']] ), $this->mDate->date( "Y", $item[$pListHash['calendar_sort_mode']] ) );
+				$item['timestamp']     = $item[$pListHash['calendar_sort_mode']];
+				$item['created']       = $item['created']       + $offset;
+				$item['last_modified'] = $item['last_modified'] + $offset;
+				$dstart = $this->mDate->mktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'] ), $this->mDate->date( "d", $item['timestamp'] ), $this->mDate->date( "Y", $item['timestamp'] ) );
+				$item['timestamp'] +=  $offset;
 				$ret[$dstart][] = $item;
 			}
 		}
@@ -57,14 +59,18 @@ class Calendar extends LibertyContent {
 			$view_start = $this->mDate->mktime( 0, 0, 0, $focus['mon'],     1, $focus['year'] );
 			$view_end   = $this->mDate->mktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] ) - 1;
 		} elseif( $pDateHash['view_mode'] == 'week') {
-			$wd  = $this->mDate->date( 'w', $focus[0] ) + WEEK_OFFSET;
+			if ( $focus['wday'] == 0 ) {
+				$wd = 7 + WEEK_OFFSET;
+			} else {
+				$wd  = $focus['wday'] + WEEK_OFFSET;
+			}
 			// if we are moving out from the selected week, move us back in
 			if( $wd > 7 ) {
 				$wd -= 7;
 			}
 
 			// for some very odd reason, which i can't work out, we need to add a day here
-			$view_start = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 1 , $focus['year'] );
+			$view_start = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 1, $focus['year'] );
 			$view_end   = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 8, $focus['year'] ) - 1;
 		} else {
 			$view_start = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday']    , $focus['year'] );
@@ -206,7 +212,7 @@ class Calendar extends LibertyContent {
 		for( $i = 1; $i <= $days_in_month; $i++ ) {
 			if( $day_of_week == 7 ) {
 				$calendar[$this->mDate->woy( $focus['year'], $focus['mon'], $i )] = $week;
-				
+
 				// re-initialize $day_of_week and $week
 				$day_of_week = 0;
 				$week = array();
@@ -219,15 +225,13 @@ class Calendar extends LibertyContent {
 		for( $j = 1; $day_of_week < 7; $j++, $day_of_week++ ) {
 			$week[]['day'] = $this->mDate->mktime( 0, 0, 0, $focus['mon'] + 1, $j, $focus['year'] );
 		}
-		$calendar[$this->mDate->woy( $focus['year'], $focus['mon'], $i + 7 + WEEK_OFFSET )] = $week;
+		$calendar[$this->mDate->woy( $focus['year'], $focus['mon'], $i + WEEK_OFFSET )] = $week;
 
+		// Weekday number needs fixing, this just hides the problem
+		if ( WEEK_OFFSET == 7 ) $focus['mday']++;
+		else if ( WEEK_OFFSET == 1 ) $focus['mday'] += 2;
 		// this week number has to be calculated, since the cal start can be configured
 		$week_num = $this->mDate->woy( $focus['year'], $focus['mon'], $focus['mday'] );
-
-		// this is needed to display the correct week.
-		if( ( $focus['wday'] + WEEK_OFFSET  ) > 7 ) {
-			$week_num++;
-		}
 
 		// if we only want to see a weeks / days worth of data, nuke all xs data
 		if( $pDateHash['view_mode'] == 'week' ) {

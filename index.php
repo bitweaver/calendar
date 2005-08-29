@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.31 2005/08/28 08:27:09 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.32 2005/08/29 22:23:06 lsces Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -85,9 +85,9 @@ foreach( $calMonth as $w => $week ) {
 				if( !empty ( $bitEvent ) && $_SESSION['calendar']['view_mode'] == 'day' ) {
 					foreach( $calDay as $key => $t ) {
 						// special case - last item entry in array - check this first
-						if( $bitEvent['last_modified'] >= $calDay[$key]['time'] && empty( $calDay[$key + 1]['time'] ) ) {
+						if( $bitEvent['timestamp'] >= $calDay[$key]['time'] && empty( $calDay[$key + 1]['time'] ) ) {
 							$calDay[$key]['items'][] = $dayEvents[$i];
-						} elseif( $bitEvent['last_modified'] >= $calDay[$key]['time'] && $bitEvent['last_modified'] <= $calDay[$key + 1]['time'] ) {
+						} elseif( $bitEvent['timestamp'] >= $calDay[$key]['time'] && $bitEvent['timestamp'] <= $calDay[$key + 1]['time'] ) {
 							$calDay[$key]['items'][] = $dayEvents[$i];
 						}
 					}
