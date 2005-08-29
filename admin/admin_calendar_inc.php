@@ -4,7 +4,7 @@ $hourOutput = array( 60, 30, 20, 15, 10, 5  );
 $gBitSmarty->assign( 'hourValues', $hourValues );
 $gBitSmarty->assign( 'hourOutput', $hourOutput );
 
-$firstDayValues = array( 0, 6, 5, 4, 3, 2, 1 );
+$firstDayValues = array( 7, 6, 5, 4, 3, 2, 1 );
 $firstDayOutput = array( tra( "Monday" ), tra( "Tuesday" ), tra( "Wednesday" ), tra( "Thursday" ), tra( "Friday" ), tra( "Saturday" ), tra( "Sunday" ) );
 $gBitSmarty->assign( 'firstDayValues', $firstDayValues );
 $gBitSmarty->assign( 'firstDayOutput', $firstDayOutput );
