@@ -1,16 +1,19 @@
-/* simple file to apply background colours to various content types */
-/* .cal is the class that can be used for all of these collectively */
-.calday div				{border-bottom:1px solid #aaa;}
-.calday div a			{display:block;}
+/* simple calendar styling to avaoid cumbersome maintenance of calendar css section */
+/* any of these settings can be overridden in your theme css file */
+/* hopefully we can select calendar styling options for the admin area soon */
+.caloptions div 		{border-width:0 0 2px 0; border-style:solid; padding:3px 0 0 0;}
+.calday div a			{border-width:0 0 2px 0; border-style:solid; display:block; padding:3px 2px;}
+.calday .calnumber a	{border-width:0; padding:0;}
 
 /* now for the individual content type settings */
-.calbitblog				{background:#feb;}
-.calbitblogpost			{background:#fd9;}
-.calbitcomment			{background:#eed;}
-.calbituser				{background:#cfb;}
-.calfisheyegallery		{background:#cdf;}
-.calfisheyeimage		{background:#bcf;}
-.calpigeonholes			{background:#fcc;}
-.caltikisticky			{background:#ffc;}
-.calbitbook				{background:#ccc;}
-.calbitpage				{background:#ddd;}
+.caloptions .calbitarticle		,.calday .calbitarticle		a	{border-bottom-color:#f80;}
+.caloptions .calbitblog			,.calday .calbitblog		a	{border-bottom-color:#fc9;}
+.caloptions .calbitblogpost		,.calday .calbitblogpost	a	{border-bottom-color:#fd9;}
+.caloptions .calbitcomment		,.calday .calbitcomment		a	{border-bottom-color:#f9f;}
+.caloptions .calbituser			,.calday .calbituser		a	{border-bottom-color:#af8;}
+.caloptions .calfisheyegallery	,.calday .calfisheyegallery	a	{border-bottom-color:#acf;}
+.caloptions .calfisheyeimage	,.calday .calfisheyeimage	a	{border-bottom-color:#7af;}
+.caloptions .calpigeonholes		,.calday .calpigeonholes	a	{border-bottom-color:#f99;}
+.caloptions .caltikisticky		,.calday .caltikisticky		a	{border-bottom-color:#ff9;}
+.caloptions .calbitbook			,.calday .calbitbook		a	{border-bottom-color:#777;}
+.caloptions .calbitpage			,.calday .calbitpage		a	{border-bottom-color:#bbb;}
