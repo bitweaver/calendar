@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.28 2005/08/31 10:33:31 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.29 2005/08/31 10:59:00 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -26,7 +26,6 @@
 					<th>{tr}Events{/tr}</th>
 				</tr>
 				{foreach item=time from=$calDay}
-					{if $time.items}
 						<tr class="{cycle values="odd,even"}">
 							<th>{$time.time|cal_date_format:"%H:%M"}</th>
 							<td class="calitems">
@@ -40,7 +39,6 @@
 								{/foreach}
 							</td>
 						</tr>
-					{/if}
 				{/foreach}
 			{elseif $smarty.session.calendar.view_mode eq 'week'}
 				{foreach from=$calMonth item=week}
