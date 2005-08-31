@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.26 2005/08/28 08:27:06 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.27 2005/08/31 09:44:32 lsces Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -63,7 +63,7 @@
 								{cycle values="odd,even" print=false advance=false}
 							{/if}
 
-							<td class="calday {if $day.day eq $navigation.server_focus_date}current{/if} {cycle}" style="vertical-align:top;">
+							<td class="calday {if $day.day eq $navigation.focus_date}current{/if} {cycle}" style="vertical-align:top;">
 								{if $day.day|cal_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 									<div class="calnumber">
 										<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=day&amp;todate={$day.day}&amp;{$url_string}">{$day.day|cal_date_format:"%d"}</a>
