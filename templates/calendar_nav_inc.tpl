@@ -1,3 +1,18 @@
+<div class="navbar">
+	<ul>
+		{if $smarty.request.user_id}
+			<li>{smartlink ititle="Show all" sort_mode=$smarty.request.sort_mode}</li>
+		{else}
+			<li>{smartlink ititle="Only my items" user_id=$gBitUser->mUserId sort_mode=$smarty.request.sort_mode}</li>
+		{/if}
+		<li>{smartlink ititle="Creation date" isort="created"}</li>
+		<li>{smartlink ititle="Modification date" idefault=1 isort="last_modified"}</li>
+	</ul>
+</div>
+
+<div class="clear"></div>
+<br />
+
 {if $gBitSystemPrefs.feature_jscalendar eq 'y'}
 	<table>
 		<tr>
@@ -14,7 +29,7 @@
 					{rdelim}
 
 					Calendar.setup( {ldelim}
-						date			: "{$focus_date|bit_date_format:"%m/%d/%Y %H:%M"}",			// initial date
+						date			: "{$focus_date|bit_date_format:"%m/%d/%Y %H:%M"}",		// initial date
 						inputField		: "todate",												// ID of the input field
 						ifFormat		: "%s",													// the date format
 						displayArea 	: "datrigger",											// ID of the span where the date is to be shown
