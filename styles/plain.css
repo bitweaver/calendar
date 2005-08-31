@@ -1,19 +1,21 @@
 /* simple calendar styling to avaoid cumbersome maintenance of calendar css section */
 /* any of these settings can be overridden in your theme css file */
 /* hopefully we can select calendar styling options for the admin area soon */
-.caloptions div 		{border-width:0 0 2px 0; border-style:solid; padding:3px 0 0 0;}
-.calday div a			{border-width:0 0 2px 0; border-style:solid; display:block; padding:3px 2px;}
-.calday .calnumber a	{border-width:0; padding:0;}
+.caltable th,.caltable td	{vertical-align:top;}
+.caltable .current			{border:2px solid red; background:#ffc;}
+.caloptions div 			{border-width:0 0 2px 0; border-style:solid; padding:3px 0 0 0;}
+.calitems div a				{border-width:0 0 2px 0; border-style:solid; display:block; padding:3px 2px;}
+.calitems .calnumber a		{border-width:0; padding:0;}
 
 /* now for the individual content type settings */
-.caloptions .calbitarticle		,.calday .calbitarticle		a	{border-bottom-color:#f80;}
-.caloptions .calbitblog			,.calday .calbitblog		a	{border-bottom-color:#fc9;}
-.caloptions .calbitblogpost		,.calday .calbitblogpost	a	{border-bottom-color:#fd9;}
-.caloptions .calbitcomment		,.calday .calbitcomment		a	{border-bottom-color:#f9f;}
-.caloptions .calbituser			,.calday .calbituser		a	{border-bottom-color:#af8;}
-.caloptions .calfisheyegallery	,.calday .calfisheyegallery	a	{border-bottom-color:#acf;}
-.caloptions .calfisheyeimage	,.calday .calfisheyeimage	a	{border-bottom-color:#7af;}
-.caloptions .calpigeonholes		,.calday .calpigeonholes	a	{border-bottom-color:#f99;}
-.caloptions .caltikisticky		,.calday .caltikisticky		a	{border-bottom-color:#ff9;}
-.caloptions .calbitbook			,.calday .calbitbook		a	{border-bottom-color:#777;}
-.caloptions .calbitpage			,.calday .calbitpage		a	{border-bottom-color:#bbb;}
+.caloptions .calbitarticle		,.calitems .calbitarticle		a	{border-bottom-color:#f80;}
+.caloptions .calbitblog			,.calitems .calbitblog			a	{border-bottom-color:#fc9;}
+.caloptions .calbitblogpost		,.calitems .calbitblogpost		a	{border-bottom-color:#fd9;}
+.caloptions .calbitcomment		,.calitems .calbitcomment		a	{border-bottom-color:#f9f;}
+.caloptions .calbituser			,.calitems .calbituser			a	{border-bottom-color:#af8;}
+.caloptions .calfisheyegallery	,.calitems .calfisheyegallery	a	{border-bottom-color:#acf;}
+.caloptions .calfisheyeimage	,.calitems .calfisheyeimage		a	{border-bottom-color:#7af;}
+.caloptions .calpigeonholes		,.calitems .calpigeonholes		a	{border-bottom-color:#f99;}
+.caloptions .caltikisticky		,.calitems .caltikisticky		a	{border-bottom-color:#ff9;}
+.caloptions .calbitbook			,.calitems .calbitbook			a	{border-bottom-color:#777;}
+.caloptions .calbitpage			,.calitems .calbitpage			a	{border-bottom-color:#bbb;}

@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.27 2005/08/31 09:44:32 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.28 2005/08/31 10:33:31 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -22,24 +22,59 @@
 			<caption>{tr}Selection: {$navigation.focus_date|cal_date_format:"%A %d of %B, %Y %Z"}{/tr}</caption>
 			{if $smarty.session.calendar.view_mode eq 'day'}
 				<tr>
-					<th style="width:5%;">{tr}Time{/tr}</th>
+					<th style="width:15%;">{tr}Time{/tr}</th>
 					<th>{tr}Events{/tr}</th>
 				</tr>
-				{foreach item=t from=$calDay}
-					<tr class="{cycle values="odd,even"}">
-						<td style="text-align:right; vertical-align:top; padding-right:15px;">{$t.time|cal_date_format:"%H:%M"}</td>
-						<td>
-							{foreach from=$t.items item=item}
-								{assign var=over value=$item.over}
-								<div class="cal cal{$item.content_type_guid}">
-									{$item.last_modified|cal_date_format:"%H:%M"}: &nbsp;
-									<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"}>
-										 {$item.title|default:"..."}
-									</a>
+				{foreach item=time from=$calDay}
+					{if $time.items}
+						<tr class="{cycle values="odd,even"}">
+							<th>{$time.time|cal_date_format:"%H:%M"}</th>
+							<td class="calitems">
+								{foreach from=$time.items item=item}
+									{assign var=over value=$item.over}
+									<div class="cal{$item.content_type_guid}">
+										<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
+											<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
+										</a>
+									</div>
+								{/foreach}
+							</td>
+						</tr>
+					{/if}
+				{/foreach}
+			{elseif $smarty.session.calendar.view_mode eq 'week'}
+				{foreach from=$calMonth item=week}
+					{counter assign=weekday print=false start=0}
+					{foreach from=$week item=day}
+						<tr>
+							<th style="width:10%">
+								{$dayNames.$weekday}
+								{counter assign=weekday print=false}
+
+								<div class="calnumber">
+									<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=day&amp;todate={$day.day}&amp;{$url_string}">{$day.day|cal_date_format:"%d"}</a>
 								</div>
-							{/foreach}
-						</td>
-					</tr>
+							</th>
+
+							{cycle values="odd,even" print=false advance=false}
+
+							<td class="calitems {if $day.day eq $navigation.focus_date}current{/if} {cycle}">
+								{if $day.day|cal_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
+									{* - Cell Content - *}
+									{foreach from=$day.items item=item}
+										{assign var=over value=$item.over}
+										<div class="cal{$item.content_type_guid}">
+											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
+												<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
+											</a>
+										</div>
+									{/foreach}
+								{else}
+									&nbsp;
+								{/if}
+							</td>
+						</tr>
+					{/foreach}
 				{/foreach}
 			{else}
 				<tr>
@@ -63,7 +98,7 @@
 								{cycle values="odd,even" print=false advance=false}
 							{/if}
 
-							<td class="calday {if $day.day eq $navigation.focus_date}current{/if} {cycle}" style="vertical-align:top;">
+							<td class="calitems {if $day.day eq $navigation.focus_date}current{/if} {cycle}">
 								{if $day.day|cal_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 									<div class="calnumber">
 										<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=day&amp;todate={$day.day}&amp;{$url_string}">{$day.day|cal_date_format:"%d"}</a>
@@ -73,8 +108,8 @@
 									{foreach from=$day.items item=item}
 										{assign var=over value=$item.over}
 										<div class="cal{$item.content_type_guid}">
-											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"}>
-												{$item.title|truncate:$trunc:"..."|default:"?"}
+											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
+												<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|truncate:$trunc:"..."|default:"?"}
 											</a>
 										</div>
 									{/foreach}
