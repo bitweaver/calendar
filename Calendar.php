@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.21 2005/08/29 22:23:06 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.22 2005/08/31 16:08:33 lsces Exp $
  * @package calendar
  */
 
@@ -58,7 +58,7 @@ class Calendar extends LibertyContent {
 		if( $pDateHash['view_mode'] == 'month' ) {
 			$view_start = $this->mDate->mktime( 0, 0, 0, $focus['mon'],     1, $focus['year'] );
 			$view_end   = $this->mDate->mktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] ) - 1;
-		} elseif( $pDateHash['view_mode'] == 'week') {
+		} elseif( $pDateHash['view_mode'] == 'week' or $pDateHash['view_mode'] == 'weeklist') {
 			if ( $focus['wday'] == 0 ) {
 				$wd = 7 + WEEK_OFFSET;
 			} else {
@@ -234,7 +234,7 @@ class Calendar extends LibertyContent {
 		$week_num = $this->mDate->woy( $focus['year'], $focus['mon'], $focus['mday'] );
 
 		// if we only want to see a weeks / days worth of data, nuke all xs data
-		if( $pDateHash['view_mode'] == 'week' ) {
+		if( $pDateHash['view_mode'] == 'week' or $pDateHash['view_mode'] == 'weeklist' ) {
 			$cal = $calendar[$week_num];
 			$calendar = array();
 			$calendar[$week_num] = $cal;
