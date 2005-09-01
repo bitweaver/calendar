@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.31 2005/08/31 17:13:47 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.32 2005/09/01 08:50:26 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -15,7 +15,6 @@
 			{jstab title="Calendar"}
 				{* this is used to keep stuff like sort_mode persistent in all links on this page *}
 				{assign var=url_string value="sort_mode=`$smarty.request.sort_mode`&amp;user_id=`$smarty.request.user_id`"}
-
 				{include file="bitpackage:calendar/calendar_nav_inc.tpl"}
 
 				<table class="data caltable {$smarty.session.calendar.view_mode}">
@@ -41,25 +40,19 @@
 							</tr>
 						{/foreach}
 					{elseif $smarty.session.calendar.view_mode eq 'weeklist'}
-						<tr>
-							<th style="width:15%;">{tr}Day{/tr}</th>
-							<th>{tr}Events{/tr}</th>
-						</tr>
 						{foreach from=$calMonth item=week}
 							{counter assign=weekday print=false start=0}
 							{foreach from=$week item=day}
 								<tr>
 									<th style="width:10%">
-										{$dayNames.$weekday}
+										<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=day&amp;todate={$day.day}&amp;{$url_string}">
+											{$dayNames.$weekday} - {$day.day|cal_date_format:"%d"}
+										</a>
 										{counter assign=weekday print=false}
-
-										<div class="calnumber">
-											<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=day&amp;todate={$day.day}&amp;{$url_string}">{$day.day|cal_date_format:"%d"}</a>
-										</div>
 									</th>
-
+								</tr>
+								<tr>
 									{cycle values="odd,even" print=false advance=false}
-
 									<td class="calitems {if $day.day eq $navigation.focus_date}current{/if} {cycle}">
 										{if $day.day|cal_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 											{foreach from=$day.items item=item}
@@ -86,7 +79,7 @@
 						</tr>
 
 						{foreach from=$calMonth key=week_num item=week}
-							<tr style="height:6em;">
+							<tr>
 								<th><a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=week&amp;todate={$week.6.day}">{$week_num}</a></th>
 								{foreach from=$week item=day}
 									{if $smarty.session.calendar.view_mode eq "month"}
