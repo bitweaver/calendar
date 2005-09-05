@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.22 2005/08/31 16:08:33 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.23 2005/09/05 17:28:41 lsces Exp $
  * @package calendar
  */
 
@@ -41,7 +41,7 @@ class Calendar extends LibertyContent {
 				$item['timestamp']     = $item[$pListHash['calendar_sort_mode']];
 				$item['created']       = $item['created']       + $offset;
 				$item['last_modified'] = $item['last_modified'] + $offset;
-				$dstart = $this->mDate->mktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'] ), $this->mDate->date( "d", $item['timestamp'] ), $this->mDate->date( "Y", $item['timestamp'] ) );
+				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'] ), $this->mDate->date( "d", $item['timestamp'] ), $this->mDate->date( "Y", $item['timestamp'] ) );
 				$item['timestamp'] +=  $offset;
 				$ret[$dstart][] = $item;
 			}
@@ -70,19 +70,17 @@ class Calendar extends LibertyContent {
 			}
 
 			// for some very odd reason, which i can't work out, we need to add a day here
-			$view_start = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 1, $focus['year'] );
-			$view_end   = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 8, $focus['year'] ) - 1;
+			$view_start = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 1, $focus['year'] );
+			$view_end   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 8, $focus['year'] ) - 1;
 		} else {
-			$view_start = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday']    , $focus['year'] );
-			$view_end   = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - 1;
+			$view_start = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday']    , $focus['year'] );
+			$view_end   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - 1;
 		}
 
 		// this is where we adjust the start and stop times to user local time settings
-//		$view_start = $view_start + $this->mDate->get_display_offset();
-//		$view_end   = $view_end   + $this->mDate->get_display_offset();
+		$view_start = $view_start + $this->mDate->get_display_offset();
+		$view_end   = $view_end   + $this->mDate->get_display_offset();
 		$start_year  = $this->mDate->date( 'Y', $view_start );
-//		vd( 'start: '.$this->mDate->strftime( '%d %m %Y, %T', $view_start ) );
-//		vd( 'end: '.  $this->mDate->strftime( '%d %m %Y, %T', $view_end   ) );
 		if ( $start_year < 1902 ) {
 			$view_start_iso = $view_start  = $this->mDate->date( 'Y-m-d', $view_start );
 			$view_end_iso = $view_end  = $this->mDate->date( 'Y-m-d', $view_start );
@@ -129,8 +127,8 @@ class Calendar extends LibertyContent {
 			// calculare what the visible day view range is
 			$day_start   = isset( $gBitUser->mUserPrefs['day_start'] ) ? $gBitUser->mUserPrefs['day_start'] : $gBitSystem->getPreference( 'day_start', 0 );
 			$day_end     = isset( $gBitUser->mUserPrefs['day_end'] ) ? $gBitUser->mUserPrefs['day_end'] : $gBitSystem->getPreference( 'day_end', 0 );
-			$start_time  = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] ) + ( 60 * 60 * $day_start );
-			$stop_time   = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - ( 60 * 60 * ( 24 - $day_end ) );
+			$start_time  = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] ) + ( 60 * 60 * $day_start );
+			$stop_time   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - ( 60 * 60 * ( 24 - $day_end ) );
 			$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
 
 			// allow for custom time intervals
@@ -145,7 +143,7 @@ class Calendar extends LibertyContent {
 					$hour++;
 					$mins = 0;
 				}
-				$ret[$i]['time'] = $this->mDate->mktime( $hour, $mins, 0, $focus['mon'], $focus['mday'], $focus['year'] );
+				$ret[$i]['time'] = $this->mDate->gmmktime( $hour, $mins, 0, $focus['mon'], $focus['mday'], $focus['year'] );
 				$mins += 60 / $hour_fraction;
 			}
 			// calendar data is added below
@@ -153,40 +151,52 @@ class Calendar extends LibertyContent {
 		return $ret;
 	}
 
+	/**
+	 * build an array of unix UTC timestamps relating to the current
+	 * calendar focus. This provides a fixed basis from which to apply local
+	 * offsets provided by tz_offset information. Daylight saving information
+	 * is not available via this route! 
+	 **/
 	function buildCalendarNavigation( $pDateHash ) {
 		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
 
 		$ret = array(
 			'before' => array(
-				'day'   => $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - 1, $focus['year'] ),
-				'week'  => $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] - 7, $focus['year'] ),
-				'month' => $this->mDate->mktime( 0, 0, 0, $focus['mon'] - 1, $focus['mday'], $focus['year'] ),
-				'year'  => $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] - 1 ),
+				'day'   => $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] - 1, $focus['year'] ),
+				'week'  => $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] - 7, $focus['year'] ),
+				'month' => $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] - 1, $focus['mday'], $focus['year'] ),
+				'year'  => $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] - 1 ),
 			),
 			'after' => array(
-				'day'   => $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ),
-				'week'  => $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 7, $focus['year'] ),
-				'month' => $this->mDate->mktime( 0, 0, 0, $focus['mon'] + 1, $focus['mday'], $focus['year'] ),
-				'year'  => $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] + 1 ),
+				'day'   => $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ),
+				'week'  => $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 7, $focus['year'] ),
+				'month' => $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, $focus['mday'], $focus['year'] ),
+				'year'  => $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] + 1 ),
 			),
 			'focus_month' => $focus['mon'],
+			'focus_year' => $focus['year'],
 			'focus_date' => $focus[0],
-			'server_focus_date' => $focus[0] - $this->mDate->get_display_offset(),
+			'display_focus_date' => $focus[0] + $this->mDate->get_display_offset(),
 		);
 
 		return $ret;
 	}
 
 	/**
-	* build a two dimensional array of unix timestamps
-	**/
+	 * build a two dimensional array of unix timestamps
+	 * The timestamps are either UTC or display local time depending on the
+	 * setting of the current users display time offset
+	 * mktime SHOULD NOT BE USED since it offsets the times based on server 
+	 * timezone and daylight saving, but the USERS daylight saving information
+	 * is not available, which will cause some problems!
+	 **/
 	function buildCalendar( $pDateHash ) {
 		global $gBitSmarty;
 
 		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
 
-		$prev_month_end	  = $this->mDate->mktime( 0, 0, 0, $focus['mon'],     0, $focus['year'] );
-		$next_month_begin = $this->mDate->mktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] );
+		$prev_month_end	  = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'],     0, $focus['year'] ) + $this->mDate->get_display_offset();
+		$next_month_begin = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] ) + $this->mDate->get_display_offset();
 
 		$prev_month_end_info = $this->mDate->getdate( $prev_month_end );
 		$prev_month = $prev_month_end_info['mon'];
@@ -197,41 +207,44 @@ class Calendar extends LibertyContent {
 
 		// Start the first row with the final day( s ) of the previous month.
 		$week = array();
-		$month_begin = $this->mDate->mktime( 0, 0, 0, $focus['mon'], WEEK_OFFSET, $focus['year'] );
-		$month_begin_day_of_week = $this->mDate->dow( $focus['year'], $focus['mon'], WEEK_OFFSET );
-		$days_in_prev_month = $this->daysInMonth( $prev_month, $prev_month_year );
+		$month_begin = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], WEEK_OFFSET, $focus['year'] );
+		$month_begin_day_of_week = $this->mDate->dayOfWeek( $focus['year'], $focus['mon'], WEEK_OFFSET );
+		$days_in_prev_month = $this->mDate->daysInMonth( $prev_month, $prev_month_year );
 
 		// Fill out the first row with the last day( s ) of the previous month.
 		for( $day_of_week = 0; $day_of_week < $month_begin_day_of_week; $day_of_week++ ) {
-			$_day = $days_in_prev_month - $month_begin_day_of_week + $day_of_week;
-			$week[]['day'] = $this->mDate->mktime( 0, 0, 0, $focus['mon'] - 1, $_day, $focus['year'] );
+			$_day = $days_in_prev_month - $month_begin_day_of_week + $day_of_week + 1;
+			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $prev_month, $_day, $prev_month_year ) + $this->mDate->get_display_offset();
 		}
 
 		// Fill in the days of the selected month.
-		$days_in_month = $this->daysInMonth( $focus['mon'], $focus['year'] );
+		$days_in_month = $this->mDate->daysInMonth( $focus['mon'], $focus['year'] );
 		for( $i = 1; $i <= $days_in_month; $i++ ) {
 			if( $day_of_week == 7 ) {
-				$calendar[$this->mDate->woy( $focus['year'], $focus['mon'], $i )] = $week;
+				$calendar[$this->mDate->weekOfYear( $focus['year'], $focus['mon'], $i )] = $week;
 
 				// re-initialize $day_of_week and $week
 				$day_of_week = 0;
 				$week = array();
 			}
-			$week[]['day'] = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $i, $focus['year'] );
+			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $i, $focus['year'] ) + $this->mDate->get_display_offset();
 			$day_of_week++;
 		}
 
 		// Fill out the last row with the first day( s ) of the next month.
 		for( $j = 1; $day_of_week < 7; $j++, $day_of_week++ ) {
-			$week[]['day'] = $this->mDate->mktime( 0, 0, 0, $focus['mon'] + 1, $j, $focus['year'] );
+			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, $j, $focus['year'] ) + $this->mDate->get_display_offset();
 		}
-		$calendar[$this->mDate->woy( $focus['year'], $focus['mon'], $i + WEEK_OFFSET )] = $week;
+		$week_num = $this->mDate->weekOfYear( $focus['year'], $focus['mon'], $days_in_month + $j );
+		$calendar[$week_num] = $week;
 
-		// Weekday number needs fixing, this just hides the problem
-		if ( WEEK_OFFSET == 7 ) $focus['mday']++;
-		else if ( WEEK_OFFSET == 1 ) $focus['mday'] += 2;
+		// Modify offset to fix roll over on week numbers
+		// This is required because the week numbers are calculated for Sunday
+		// Offseting the result in BitDate is the real solution
+		if ( WEEK_OFFSET == 7 ) $offset = $focus['mday'] + 1;
+		else $offset = $focus['mday'] + 1 + WEEK_OFFSET;
 		// this week number has to be calculated, since the cal start can be configured
-		$week_num = $this->mDate->woy( $focus['year'], $focus['mon'], $focus['mday'] );
+		$week_num = $this->mDate->weekOfYear( $focus['year'], $focus['mon'], $offset );
 
 		// if we only want to see a weeks / days worth of data, nuke all xs data
 		if( $pDateHash['view_mode'] == 'week' or $pDateHash['view_mode'] == 'weeklist' ) {
@@ -242,33 +255,8 @@ class Calendar extends LibertyContent {
 			$calendar = array();
 			$calendar[$week_num][]['day'] = $pDateHash['focus_date'];
 		}
+
 		return $calendar;
-	}
-
-	function daysInMonth( $month, $year ) {
-		switch( $month ) {
-			case 1:
-			case 3:
-			case 5:
-			case 7:
-			case 8:
-			case 10:
-			case 12:
-			case 0: // == 12
-				return 31;
-
-			case 4:
-			case 6:
-			case 9:
-			case 11:
-				return 30;
-
-			case 2:
-				return $this->mDate->is_leap_year( $year ) ? 29 : 28;
-
-			default:
-				assert( FALSE );
-		}
 	}
 }
 ?>

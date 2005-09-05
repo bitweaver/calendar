@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.32 2005/08/29 22:23:06 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.33 2005/09/05 17:28:41 lsces Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -35,14 +35,14 @@ $gCalendar = new Calendar();
 if( !empty( $_REQUEST["todate"] ) ) {
 	// clean up todate. who knows where this has come from
 	if ( is_numeric( $_REQUEST['todate'] ) ) {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'];
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->gmmktime( 0, 0, 0, $gCalendar->mDate->date( 'm', $_REQUEST['todate'] ), $gCalendar->mDate->date( 'd', $_REQUEST['todate'] ), $gCalendar->mDate->date( 'Y', $_REQUEST['todate'] ) );
 	} else {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->mktime( 0, 0, 0, $gCalendar->mDate->date2( 'm', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'd', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'Y', $_REQUEST['todate'] ) ) + $gBitSystem->get_display_offset();
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->gmmktime( 0, 0, 0, $gCalendar->mDate->date2( 'm', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'd', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'Y', $_REQUEST['todate'] ) );
 	}
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 } else {
-	$_SESSION['calendar']['focus_date'] = $gCalendar->mDate->mktime( 0, 0, 0, $gCalendar->mDate->date( 'm' ), $gCalendar->mDate->date( 'd' ), $gCalendar->mDate->date( 'Y' ) ) + $gBitSystem->get_display_offset();
+	$_SESSION['calendar']['focus_date'] = $gCalendar->mDate->gmmktime( 0, 0, 0, $gCalendar->mDate->date( 'm' ), $gCalendar->mDate->date( 'd' ), $gCalendar->mDate->date( 'Y' ) );
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 }
 
@@ -79,7 +79,6 @@ foreach( $calMonth as $w => $week ) {
 				$dayEvents[$i] = $bitEvent;
 				$gBitSmarty->assign( 'cellHash', $bitEvent );
 				$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
-
 
 				// populate $calDay array with events
 				if( !empty ( $bitEvent ) && $_SESSION['calendar']['view_mode'] == 'day' ) {
