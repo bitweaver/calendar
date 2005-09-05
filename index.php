@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.33 2005/09/05 17:28:41 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.34 2005/09/05 21:12:20 lsces Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -73,9 +73,9 @@ if( $_SESSION['calendar']['content_type_guid'] ) {
 foreach( $calMonth as $w => $week ) {
 	foreach( $week as $d => $day ) {
 		$dayEvents = array();
-		if( !empty( $bitEvents[$day['day']] ) ) {
+		if( !empty( $bitEvents[$day['day'] - $gCalendar->mDate->get_display_offset()] ) ) {
 			$i = 0;
-			foreach( $bitEvents[$day['day']] as $bitEvent ) {
+			foreach( $bitEvents[$day['day'] - $gCalendar->mDate->get_display_offset()] as $bitEvent ) {
 				$dayEvents[$i] = $bitEvent;
 				$gBitSmarty->assign( 'cellHash', $bitEvent );
 				$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
