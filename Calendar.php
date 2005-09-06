@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.23 2005/09/05 17:28:41 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.24 2005/09/06 08:43:58 lsces Exp $
  * @package calendar
  */
 
@@ -27,6 +27,13 @@ class Calendar extends LibertyContent {
 	/**
 	* get a full list of content for a given time period
 	* return array of items
+	* 
+	* The output array will be a set of UTC tagged pages covering the period
+	* defined in the $pListHash. Items identified from the list will be tagged to 
+	* the day identified in the selected timestamp from which the list was built.
+	* If the user has selected a local time display, then the day will be the actual
+	* UTC day that the item is in, rather than the UTC day of the item. In this way
+	* the display view provides a list of locally correct entries for each day. 
 	**/
 	function getList( $pListHash ) {
 		$ret = array();
@@ -38,11 +45,11 @@ class Calendar extends LibertyContent {
 			$offset = $this->mDate->get_display_offset();
 			foreach( $res['data'] as $item ) {
 				// shift all time data by user timezone offset
-				$item['timestamp']     = $item[$pListHash['calendar_sort_mode']];
+				// and then display as a simple UTC time
+				$item['timestamp']     = $item[$pListHash['calendar_sort_mode']] + $offset;
 				$item['created']       = $item['created']       + $offset;
 				$item['last_modified'] = $item['last_modified'] + $offset;
-				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'] ), $this->mDate->date( "d", $item['timestamp'] ), $this->mDate->date( "Y", $item['timestamp'] ) );
-				$item['timestamp'] +=  $offset;
+				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
 				$ret[$dstart][] = $item;
 			}
 		}
@@ -78,8 +85,9 @@ class Calendar extends LibertyContent {
 		}
 
 		// this is where we adjust the start and stop times to user local time settings
-		$view_start = $view_start + $this->mDate->get_display_offset();
-		$view_end   = $view_end   + $this->mDate->get_display_offset();
+		// The range is adjusted backwards so that it covers the correct window
+		$view_start = $view_start - $this->mDate->get_display_offset();
+		$view_end   = $view_end   - $this->mDate->get_display_offset();
 		$start_year  = $this->mDate->date( 'Y', $view_start );
 		if ( $start_year < 1902 ) {
 			$view_start_iso = $view_start  = $this->mDate->date( 'Y-m-d', $view_start );
@@ -176,7 +184,7 @@ class Calendar extends LibertyContent {
 			'focus_month' => $focus['mon'],
 			'focus_year' => $focus['year'],
 			'focus_date' => $focus[0],
-			'display_focus_date' => $focus[0] + $this->mDate->get_display_offset(),
+			'display_focus_date' => $focus[0],
 		);
 
 		return $ret;
@@ -195,8 +203,8 @@ class Calendar extends LibertyContent {
 
 		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
 
-		$prev_month_end	  = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'],     0, $focus['year'] ) + $this->mDate->get_display_offset();
-		$next_month_begin = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] ) + $this->mDate->get_display_offset();
+		$prev_month_end	  = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'],     0, $focus['year'] );
+		$next_month_begin = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] );
 
 		$prev_month_end_info = $this->mDate->getdate( $prev_month_end );
 		$prev_month = $prev_month_end_info['mon'];
@@ -214,7 +222,7 @@ class Calendar extends LibertyContent {
 		// Fill out the first row with the last day( s ) of the previous month.
 		for( $day_of_week = 0; $day_of_week < $month_begin_day_of_week; $day_of_week++ ) {
 			$_day = $days_in_prev_month - $month_begin_day_of_week + $day_of_week + 1;
-			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $prev_month, $_day, $prev_month_year ) + $this->mDate->get_display_offset();
+			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $prev_month, $_day, $prev_month_year );
 		}
 
 		// Fill in the days of the selected month.
@@ -227,13 +235,13 @@ class Calendar extends LibertyContent {
 				$day_of_week = 0;
 				$week = array();
 			}
-			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $i, $focus['year'] ) + $this->mDate->get_display_offset();
+			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $i, $focus['year'] );
 			$day_of_week++;
 		}
 
 		// Fill out the last row with the first day( s ) of the next month.
 		for( $j = 1; $day_of_week < 7; $j++, $day_of_week++ ) {
-			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, $j, $focus['year'] ) + $this->mDate->get_display_offset();
+			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, $j, $focus['year'] );
 		}
 		$week_num = $this->mDate->weekOfYear( $focus['year'], $focus['mon'], $days_in_month + $j );
 		$calendar[$week_num] = $week;
