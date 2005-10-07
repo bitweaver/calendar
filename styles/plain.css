@@ -2,7 +2,7 @@
 /* any of these settings can be overridden in your theme css file */
 /* hopefully we can select calendar styling options for the admin area soon */
 .caltable th,.caltable td	{vertical-align:top;}
-.caltable td				{height:6em;}
+.body .caltable td			{height:6em;}
 .caltable .current			{border:2px solid red; background:#ffc;}
 .caloptions div 			{border-width:0 0 2px 0; border-style:solid; padding:3px 0 0 0;}
 .calitems div a				{border-width:0 0 2px 0; border-style:solid; display:block; padding:3px 2px;}
