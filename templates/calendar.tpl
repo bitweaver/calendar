@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.33 2005/09/05 17:26:39 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.34 2005/10/07 06:24:05 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -32,7 +32,7 @@
 										{assign var=over value=$item.over}
 										<div class="cal{$item.content_type_guid}">
 											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-												<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
+												<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
 											</a>
 										</div>
 									{/foreach}
@@ -59,7 +59,7 @@
 												{assign var=over value=$item.over}
 												<div class="cal{$item.content_type_guid}">
 													<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-														<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
+														<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
 													</a>
 												</div>
 											{/foreach}
@@ -103,7 +103,7 @@
 												{assign var=over value=$item.over}
 												<div class="cal{$item.content_type_guid}">
 													<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-														<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" sticky="1" timeout="2500" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|truncate:$trunc:"..."|default:"?"}
+														<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|truncate:$trunc:"..."|default:"?"}
 													</a>
 												</div>
 											{/foreach}
