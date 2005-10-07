@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.34 2005/10/07 06:24:05 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.35 2005/10/07 07:09:32 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -32,7 +32,7 @@
 										{assign var=over value=$item.over}
 										<div class="cal{$item.content_type_guid}">
 											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-												<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
+												<img style="padding:0px 4px;" src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
 											</a>
 										</div>
 									{/foreach}
@@ -57,9 +57,9 @@
 										{if $day.day|cal_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 											{foreach from=$day.items item=item}
 												{assign var=over value=$item.over}
-												<div class="cal{$item.content_type_guid}">
+												<div class="cal{$item.content_type_guid}" style="float:left;width:50%;">
 													<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-														<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
+														<img style="padding:0px 4px;" src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|default:"?"}
 													</a>
 												</div>
 											{/foreach}
@@ -103,7 +103,7 @@
 												{assign var=over value=$item.over}
 												<div class="cal{$item.content_type_guid}">
 													<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-														<img src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|truncate:$trunc:"..."|default:"?"}
+														<img style="padding:0px 4px;" src="{biticon ipackage=liberty iname=collapsed iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|truncate:$trunc:"..."|default:"?"}
 													</a>
 												</div>
 											{/foreach}
