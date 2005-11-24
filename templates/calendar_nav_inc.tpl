@@ -20,7 +20,8 @@
 				<div>
 					{form method="get" id="f"}
 						<input type="hidden" id="todate" name="todate" value="{$navigation.focus_date|cal_date_format:"%B %e, %Y %H:%M %Z"}" />
-						<input type="button" title="{tr}Date Selector{/tr}" id="datrigger" value="{$navigation.focus_date|bit_long_date}" />
+						<span class="highlight" style="cursor:pointer;" title="{tr}Date Selector{/tr}" id="datrigger">{$navigation.focus_date|bit_long_date}</span>
+						&nbsp;&nbsp;&nbsp;<small>&laquo;&nbsp;{tr}click to navigate{/tr}</small>
 					{/form}
 				</div>
 
@@ -40,16 +41,18 @@
 					{rdelim} );
 				//]]></script>
 			</td>
-
-			<td style="white-space:nowrap; width:120px; text-align:right;">
+{strip}
+			<td style="white-space:nowrap; width:140px; text-align:right;">
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=day&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=week&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'week'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=weeklist&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'weeklist'}highlight{/if}">{biticon ipackage=calendar iname=weeklist iexplain=Weeklist}</a>
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=month&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'month'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
 			</td>
+{/strip}
 		</tr>
 	</table>
 {else}
+{strip}
 	<table>
 		<tr>
 			<td rowspan="2" style="text-align:left;">
@@ -80,4 +83,5 @@
 			</td>
 		</tr>
 	</table>
+{/strip}
 {/if}
