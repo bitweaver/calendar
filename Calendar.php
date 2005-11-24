@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.25 2005/10/07 07:25:31 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.25.2.1 2005/11/24 11:57:23 squareing Exp $
  * @package calendar
  */
 
@@ -167,6 +167,7 @@ class Calendar extends LibertyContent {
 	 **/
 	function buildCalendarNavigation( $pDateHash ) {
 		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
+		$today = $this->mDate->getdate( mktime() );
 
 		$ret = array(
 			'before' => array(
@@ -184,6 +185,7 @@ class Calendar extends LibertyContent {
 			'focus_month' => $focus['mon'],
 			'focus_year' => $focus['year'],
 			'focus_date' => $focus[0],
+			'today'   => $this->mDate->gmmktime( 0, 0, 0, $today['mon'], $today['mday'], $today['year'] ),
 			'display_focus_date' => $focus[0],
 		);
 

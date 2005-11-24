@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.35 2005/10/07 07:09:32 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.35.2.1 2005/11/24 11:57:23 squareing Exp $ *}
 {strip}
 
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
@@ -52,8 +52,7 @@
 									</th>
 								</tr>
 								<tr>
-									{cycle values="odd,even" print=false advance=false}
-									<td class="calitems {if $day.day eq $navigation.display_focus_date}current{/if} {cycle}">
+									<td class="calitems {if $day.day eq $navigation.display_focus_date} current{/if}{if $day.day eq $navigation.today} highlight{/if} {cycle}">
 										{if $day.day|cal_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 											{foreach from=$day.items item=item}
 												{assign var=over value=$item.over}
@@ -78,6 +77,7 @@
 							{/foreach}
 						</tr>
 
+						{debug}
 						{foreach from=$calMonth key=week_num item=week}
 							<tr>
 								<th><a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=week&amp;todate={$week.6.day}">{$week_num}</a></th>
@@ -92,7 +92,7 @@
 										{cycle values="odd,even" print=false advance=false}
 									{/if}
 
-									<td class="calitems {if $day.day eq $navigation.display_focus_date}current{/if} {cycle}">
+									<td class="calitems {if $day.day eq $navigation.display_focus_date} current{/if}{if $day.day eq $navigation.today} highlight{/if} {cycle}">
 										{if $day.day|cal_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 											<div class="calnumber">
 												<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=day&amp;todate={$day.day}&amp;{$url_string}">{$day.day|cal_date_format:"%d"}</a>
