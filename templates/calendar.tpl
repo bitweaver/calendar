@@ -1,9 +1,5 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.35.2.1 2005/11/24 11:57:23 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.35.2.2 2005/11/24 21:08:38 squareing Exp $ *}
 {strip}
-
-{if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
-	{popup_init src="`$smarty.const.THEMES_PKG_URL`js/overlib.js"}
-{/if}
 
 <div class="display calendar">
 	<div class="header">
@@ -77,7 +73,6 @@
 							{/foreach}
 						</tr>
 
-						{debug}
 						{foreach from=$calMonth key=week_num item=week}
 							<tr>
 								<th><a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=week&amp;todate={$week.6.day}">{$week_num}</a></th>
