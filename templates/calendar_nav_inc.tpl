@@ -13,7 +13,7 @@
 <div class="clear"></div>
 <br />
 
-{if $gBitSystemPrefs.feature_jscalendar eq 'y'}
+{if $gBitSystem->isFeatureActive( 'feature_jscalendar' )}
 	<table>
 		<tr>
 			<td>
