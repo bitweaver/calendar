@@ -3,7 +3,8 @@
 /* hopefully we can select calendar styling options for the admin area soon */
 .caltable th,.caltable td	{vertical-align:top;}
 .body .caltable td			{height:6em;}
-.caltable .current			{border:2px solid red; background:#ffc;}
+.caltable .current			{border:2px solid #900; background:#fed;}
+.caltable .highlight		{border:2px solid #aad;}
 .caloptions div 			{border-width:0 0 3px 0; border-style:solid; padding:2px 0 0 0;}
 .calitems div a				{border-width:0 0 3px 0; border-style:solid; display:block; padding:3px 2px 1px 2px;}
 .calitems .calnumber a		{border-width:0; padding:0;}
