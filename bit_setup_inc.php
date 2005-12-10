@@ -4,7 +4,7 @@ $gBitSystem->registerPackage( 'calendar', dirname( __FILE__).'/' );
 
 if( $gBitSystem->isPackageActive( 'calendar' ) ) {
 	if( $gBitUser->hasPermission( 'bit_p_view_calendar' ) ) {
-		$gBitSystem->registerAppMenu( 'calendar', 'Calendar', CALENDAR_PKG_URL.'index.php', 'bitpackage:calendar/menu_calendar.tpl', 'calendar');
+		$gBitSystem->registerAppMenu( CALENDAR_PKG_DIR, 'Calendar', CALENDAR_PKG_URL.'index.php', 'bitpackage:calendar/menu_calendar.tpl', CALENDAR_PKG_NAME );
 	}
 }
 
