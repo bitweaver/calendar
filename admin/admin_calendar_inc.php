@@ -19,6 +19,7 @@ $calendarValues = array(
 	'hour_fraction',
 	'day_start',
 	'day_end',
+	'user_prefs',
 );
 
 // this function only exists if it's been included by the index.php page. if

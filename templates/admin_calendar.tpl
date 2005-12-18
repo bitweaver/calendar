@@ -32,6 +32,16 @@
 		{/forminput}
 	</div>
 
+	{if $gBitUser->isAdmin() }
+	<div class="row">
+		{formlabel label="User Override of Global Calendar Setting" for="user_pref"}
+		{forminput}
+			{html_checkboxes name="user_prefs" values="y" checked=`$settings.user_prefs` labels=false id=user_prefs}
+			{formhelp note="Global override of the facility for users to set their own calendar preferences."}
+		{/forminput}
+	</div>
+	{/if}
+	
 	<div class="row submit">
 		<input type="submit" name="calendar_submit" value="{tr}Change preferences{/tr}" />
 	</div>
