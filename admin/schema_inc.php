@@ -10,11 +10,11 @@ $gBitInstaller->registerPackageInfo( CALENDAR_PKG_NAME, array(
 
 // ### Default Preferences
 $gBitInstaller->registerPreferences( KERNEL_PKG_NAME, array(
-	array(CALENDAR_PKG_NAME,'week_offset','7'),
-	array(CALENDAR_PKG_NAME,'hour_fraction','1'),
-	array(CALENDAR_PKG_NAME,'user_prefs','y'),
-	array(CALENDAR_PKG_NAME,'day_start','0'),
-	array(CALENDAR_PKG_NAME,'day_end','24'),
+	array(CALENDAR_PKG_NAME,'calendar_week_offset','7'),
+	array(CALENDAR_PKG_NAME,'calendar_hour_fraction','1'),
+	array(CALENDAR_PKG_NAME,'calendar_user_prefs','y'),
+	array(CALENDAR_PKG_NAME,'calendar_day_start','0'),
+	array(CALENDAR_PKG_NAME,'calendar_day_end','24'),
 ) );
 
 // ### Default User Permissions
