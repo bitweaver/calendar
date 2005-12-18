@@ -15,17 +15,21 @@ $dayEnd = range( 24, 13 );
 $gBitSmarty->assign( 'dayEnd', $dayEnd );
 
 $calendarValues = array(
-	'week_offset',
-	'hour_fraction',
-	'day_start',
-	'day_end',
+	'calendar_week_offset',
+	'calendar_hour_fraction',
+	'calendar_day_start',
+	'calendar_day_end',
+	'calendar_user_prefs',
 );
 
 // this function only exists if it's been included by the index.php page. if
 // it's been included from anywhere else, we don't execute this section
 if( function_exists( 'simple_set_value' ) && $gBitUser->isAdmin() && !empty( $_REQUEST['calendar_submit'] ) ) {
 	foreach( $calendarValues as $item ) {
-		simple_set_value( $item, CALENDAR_PKG_NAME );
+		if ( $item != 'calendar_user_prefs' )
+			simple_set_value( $item, CALENDAR_PKG_NAME );
+		else
+			simple_set_toggle( $item, CALENDAR_PKG_NAME );
 	}
 }
 ?>
