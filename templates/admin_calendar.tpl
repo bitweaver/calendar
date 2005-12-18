@@ -22,7 +22,7 @@
 	</div>
 
 	<div class="row">
-		{formlabel label="Day View times" for="calendar_day_start"}
+		{formlabel label="Day View" for="calendar_day_start"}
 		{forminput}
 			{tr}from{/tr} &nbsp;
 			{html_options name=calendar_day_start output=$dayStart values=$dayStart selected=`$settings.calendar_day_start` id=calendar_day_start}
@@ -32,14 +32,14 @@
 		{/forminput}
 	</div>
 
-	{if $gBitUser->isAdmin() }
-	<div class="row">
-		{formlabel label="User Override of Global Calendar Setting" for="user_pref"}
-		{forminput}
-			{html_checkboxes name="calendar_user_prefs" values="y" checked=`$settings.calendar_user_prefs` labels=false id=calendar_user_prefs}
-			{formhelp note="Global override of the facility for users to set their own calendar preferences."}
-		{/forminput}
-	</div>
+	{if $gBitUser->isAdmin() and $page eq "calendar"}
+		<div class="row">
+			{formlabel label="Individual Calendar Settings" for="calendar_user_prefs"}
+			{forminput}
+				{html_checkboxes name="calendar_user_prefs" values="y" checked=`$settings.calendar_user_prefs` labels=false id=calendar_user_prefs}
+				{formhelp note="Allow users to set their own calendar preferences."}
+			{/forminput}
+		</div>
 	{/if}
 	
 	<div class="row submit">
