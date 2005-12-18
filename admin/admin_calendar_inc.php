@@ -25,8 +25,12 @@ $calendarValues = array(
 // this function only exists if it's been included by the index.php page. if
 // it's been included from anywhere else, we don't execute this section
 if( function_exists( 'simple_set_value' ) && $gBitUser->isAdmin() && !empty( $_REQUEST['calendar_submit'] ) ) {
+vd($_REQUEST);
 	foreach( $calendarValues as $item ) {
-		simple_set_value( $item, CALENDAR_PKG_NAME );
+		if ( $item != 'user_prefs' )
+			simple_set_value( $item, CALENDAR_PKG_NAME );
+		else
+			simple_set_toggle( $item, CALENDAR_PKG_NAME );
 	}
 }
 ?>
