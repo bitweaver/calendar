@@ -8,15 +8,6 @@ $gBitInstaller->registerPackageInfo( CALENDAR_PKG_NAME, array(
 	'license' => '<a href="http://www.gnu.org/licenses/licenses.html#LGPL">LGPL</a>',
 ) );
 
-// ### Default Preferences
-$gBitInstaller->registerPreferences( KERNEL_PKG_NAME, array(
-	array(CALENDAR_PKG_NAME,'calendar_week_offset','7'),
-	array(CALENDAR_PKG_NAME,'calendar_hour_fraction','1'),
-	array(CALENDAR_PKG_NAME,'calendar_user_prefs','y'),
-	array(CALENDAR_PKG_NAME,'calendar_day_start','0'),
-	array(CALENDAR_PKG_NAME,'calendar_day_end','24'),
-) );
-
 // ### Default User Permissions
 $gBitInstaller->registerUserPermissions( CALENDAR_PKG_NAME, array(
 	array('bit_p_view_calendar', 'Can browse the calendar', 'basic', CALENDAR_PKG_NAME),

@@ -1,28 +1,15 @@
 <?php
-/**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.php,v 1.6 2005/12/18 08:50:01 lsces Exp $
- * @package calendar
- * @subpackage modules
- */
-
-/**
- * Required setup
- */
 include_once( CALENDAR_PKG_PATH.'Calendar.php' );
 $cal = new Calendar();
 
 // set up the todate
-if( !empty( $_REQUEST['todate'] ) ) {
+if( !empty( $_REQUEST["todate"] ) ) {
 	// clean up todate. who knows where this has come from
-	if ( is_numeric( $_REQUEST['todate'] ) ) {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $cal->mDate->gmmktime( 0, 0, 0, $cal->mDate->date( 'm', $_REQUEST['todate'] ), $cal->mDate->date( 'd', $_REQUEST['todate'] ), $cal->mDate->date( 'Y', $_REQUEST['todate'] ) );
-	} else {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $cal->mDate->gmmktime( 0, 0, 0, $cal->mDate->date2( 'm', $_REQUEST['todate'] ), $cal->mDate->date2( 'd', $_REQUEST['todate'] ), $cal->mDate->date2( 'Y', $_REQUEST['todate'] ) );
-	}
+	$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = adodb_mktime( 0, 0, 0, adodb_date( 'm', $_REQUEST['todate'] ), adodb_date( 'd', $_REQUEST['todate'] ), adodb_date( 'Y', $_REQUEST['todate'] ) );
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 } else {
-	$_SESSION['calendar']['focus_date'] = $cal->mDate->gmmktime( 0, 0, 0, $cal->mDate->date( 'm' ), $cal->mDate->date( 'd' ), $cal->mDate->date( 'Y' ) );
+	$_SESSION['calendar']['focus_date'] = adodb_mktime( 0, 0, 0, adodb_date( 'm' ), adodb_date( 'd' ), adodb_date( 'Y' ) );
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 }
 
