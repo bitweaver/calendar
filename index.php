@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.35.2.1 2005/11/24 21:08:38 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.35.2.2 2006/01/03 10:14:36 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -16,10 +16,15 @@ $gBitSystem->verifyPermission( 'bit_p_view_calendar' );
 // set up $_SESSION and $_REQUEST to make the usable later on
 // setup list of bit items displayed
 if( !empty( $_REQUEST["content_type_guid"] ) ) {
+	if( $gBitUser->isRegistered() ) {
+		$gBitUser->storePreference( 'calendar_default_guids', serialize( $_REQUEST['content_type_guid'] ) );
+	}
 	$_SESSION['calendar']['content_type_guid'] = $_REQUEST["content_type_guid"];
+} elseif( !isset( $_SESSION['calendar']['content_type_guid'] ) && $gBitUser->getPreference( 'calendar_default_guids' ) && $gBitUser->isRegistered() ) {
+	$_SESSION['calendar']['content_type_guid'] = unserialize( $gBitUser->getPreference( 'calendar_default_guids' ) );
 } elseif( !isset( $_SESSION['calendar']['content_type_guid'] ) ) {
 	$_SESSION['calendar']['content_type_guid'] = array();
-} elseif( isset( $_REQUEST["refresh"] )and !isset( $_REQUEST["content_type_guid"] ) ) {
+} elseif( isset( $_REQUEST["refresh"] ) && !isset( $_REQUEST["content_type_guid"] ) ) {
 	$_SESSION['calendar']['content_type_guid'] = array();
 }
 
