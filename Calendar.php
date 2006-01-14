@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.30 2006/01/10 21:19:49 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.31 2006/01/14 19:56:42 squareing Exp $
  * @package calendar
  */
 
@@ -8,14 +8,12 @@
  * Required setup
  */
 include_once( KERNEL_PKG_PATH . 'BitDate.php' );
+// set week offset - start with a day other than monday
+define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ? $gBitUser->mUserPrefs['calendar_week_offset'] : $gBitSystem->getPreference( 'calendar_week_offset', 0 ) );
 
 /**
  * @package calendar
  */
-
-// set week offset - start with a day other than monday
-define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ? $gBitUser->mUserPrefs['calendar_week_offset'] : $gBitSystem->getPreference( 'calendar_week_offset', 0 ) );
-
 class Calendar extends LibertyContent {
 
 	function Calendar() {
