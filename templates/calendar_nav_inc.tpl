@@ -6,7 +6,8 @@
 			<li>{smartlink ititle="Only my items" user_id=$gBitUser->mUserId sort_mode=$smarty.request.sort_mode}</li>
 		{/if}
 		<li>{smartlink ititle="Creation date" isort="created"}</li>
-		<li>{smartlink ititle="Modification date" idefault=1 isort="last_modified"}</li>
+		<li>{smartlink ititle="Modification date" isort="last_modified"}</li>
+		<li>{smartlink ititle="Event time" idefault=1 isort="event_time"}</li>
 	</ul>
 </div>
 
@@ -19,6 +20,7 @@
 			<td>
 				<div>
 					{form method="get" id="f"}
+						<input type="hidden" id="sort_mode" name="sort_mode" value="{$smarty.request.sort_mode}" />
 						<input type="hidden" id="todate" name="todate" value="{$navigation.focus_date|cal_date_format:"%B %e, %Y %H:%M %Z"}" />
 						<span class="highlight" style="cursor:pointer;" title="{tr}Date Selector{/tr}" id="datrigger">{$navigation.focus_date|bit_long_date}</span>
 						&nbsp;&nbsp;&nbsp;<small>&laquo;&nbsp;{tr}click to navigate{/tr}</small>
@@ -27,7 +29,7 @@
 
 				<script type="text/javascript">//<![CDATA[
 					function gotocal() {ldelim}
-						window.location = '{$gBitLoc.CALENDAR_PKG_URL}index.php?todate='+document.getElementById('todate').value;
+						document.getElementById('f').submit();
 					{rdelim}
 
 					Calendar.setup( {ldelim}

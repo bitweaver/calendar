@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.31 2006/01/14 19:56:42 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.32 2006/02/02 14:39:46 hash9 Exp $
  * @package calendar
  */
 
@@ -47,6 +47,7 @@ class Calendar extends LibertyContent {
 				$item['timestamp']     = $item[$pListHash['calendar_sort_mode']] + $offset;
 				$item['created']       = $item['created']       + $offset;
 				$item['last_modified'] = $item['last_modified'] + $offset;
+				$item['event_time']	   = $item['event_time'] + $offset;
 				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
 				$ret[$dstart][] = $item;
 			}
