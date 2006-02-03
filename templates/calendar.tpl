@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.38 2006/02/01 21:31:19 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.39 2006/02/03 12:39:44 squareing Exp $ *}
 {strip}
 {if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
 	{popup_init src="`$smarty.const.UTIL_PKG_URL`javascript/libs/overlib.js"}
@@ -84,7 +84,7 @@
 										{if $day.day|cal_date_format:"%m" eq $navigation.focus_month}
 											{cycle values="odd,even" print=false advance=false}
 										{else}
-											{cycle values="notmonth,notmonth" print=false advance=false}
+											{cycle values="notmonth" print=false advance=false}
 										{/if}
 									{else}
 										{cycle values="odd,even" print=false advance=false}

@@ -34,7 +34,7 @@
 					{if $day.day|date_format:"%m" eq $modCalNavigation.focus_month}
 						{cycle values="odd,even" print=false advance=false}
 					{else}
-						{cycle values="notmonth,notmonth" print=false advance=false}
+						{cycle values="notmonth" print=false advance=false}
 					{/if}
 
 					<td class="calday{if $day.day eq $navigation.today} highlight{/if} {cycle}">
