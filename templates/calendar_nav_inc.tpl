@@ -19,6 +19,7 @@
 			<td>
 				<div>
 					{form method="get" id="f"}
+						<input type="hidden" id="sort_mode" name="sort_mode" value="{$smarty.request.sort_mode}" />
 						<input type="hidden" id="todate" name="todate" value="{$navigation.focus_date|cal_date_format:"%B %e, %Y %H:%M %Z"}" />
 						<span class="highlight" style="cursor:pointer;" title="{tr}Date Selector{/tr}" id="datrigger">{$navigation.focus_date|bit_long_date}</span>
 						&nbsp;&nbsp;&nbsp;<small>&laquo;&nbsp;{tr}click to navigate{/tr}</small>
