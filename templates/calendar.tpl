@@ -1,6 +1,6 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.39 2006/02/03 12:39:44 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.40 2006/02/06 22:56:40 squareing Exp $ *}
 {strip}
-{if !$gBitSystem->isFeatureActive( 'feature_helppopup' )}
+{if !$gBitSystem->isFeatureActive( 'help_popup' )}
 	{popup_init src="`$smarty.const.UTIL_PKG_URL`javascript/libs/overlib.js"}
 {/if}
 
