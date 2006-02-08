@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.38 2006/02/02 14:39:46 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.39 2006/02/08 21:51:13 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -17,7 +17,7 @@ $gBitSystem->verifyPermission( 'bit_p_view_calendar' );
 // setup list of bit items displayed
 if( !empty( $_REQUEST["content_type_guid"] ) ) {
 	if( $gBitUser->isRegistered() ) {
-		$gBitUser->storePreference( 'calendar_default_guids', serialize( $_REQUEST['content_type_guid'] ) );
+		$gBitUser->storePreference( 'calendar_default_guids', serialize( $_REQUEST['content_type_guid'] ), CALENDAR_PKG_NAME );
 	}
 	$_SESSION['calendar']['content_type_guid'] = $_REQUEST["content_type_guid"];
 } elseif( !isset( $_SESSION['calendar']['content_type_guid'] ) && $gBitUser->getPreference( 'calendar_default_guids' ) && $gBitUser->isRegistered() ) {
