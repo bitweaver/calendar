@@ -1,6 +1,11 @@
 <?php
 global $gBitSystem, $gBitSmarty;
-$gBitSystem->registerPackage( 'calendar', dirname( __FILE__).'/' );
+
+$registerHash = array(
+	'package_name' => 'calendar',
+	'package_path' => dirname( __FILE__ ).'/',
+);
+$gBitSystem->registerPackage( $registerHash );
 
 if( $gBitSystem->isPackageActive( 'calendar' ) ) {
 	if( $gBitUser->hasPermission( 'bit_p_view_calendar' ) ) {
