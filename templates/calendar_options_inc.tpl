@@ -1,3 +1,4 @@
+{strip}
 {form legend="Data Options" id="data_options"}
 	<div class="row caloptions">
 		{forminput}
@@ -14,9 +15,9 @@
 					</label>
 				</div>
 			{/foreach}
-			<script type="text/javascript">//<![CDATA[
+			<script type="text/javascript">/* <![CDATA[ */
 				document.write("<label><input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'content_type_guid[]','switcher')\" /> {tr}Select all{/tr}</label><br />");
-			//]]></script>
+			/* ]]> */</script>
 		{/forminput}
 	</div>
 
@@ -24,3 +25,4 @@
 		<input type="submit" name="refresh" value="{tr}Update Calendar{/tr}" />
 	</div>
 {/form}
+{/strip}
