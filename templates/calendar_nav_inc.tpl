@@ -1,3 +1,4 @@
+{strip}
 <div class="navbar">
 	<ul>
 		{if $smarty.request.user_id}
@@ -27,34 +28,23 @@
 					{/form}
 				</div>
 
-				<script type="text/javascript">//<![CDATA[
+				<script type="text/javascript">/* <![CDATA[ */
 					function gotocal() {ldelim}
 						document.getElementById('f').submit();
 					{rdelim}
+				/* ]]> */</script>
 
-					Calendar.setup( {ldelim}
-						date			: "{$navigation.focus_date|bit_date_format:"%m/%d/%Y %H:%M"}",	// initial date
-						inputField		: "todate",				// ID of the input field
-						ifFormat		: "%s",					// the date format
-						displayArea 	: "datrigger",			// ID of the span where the date is to be shown
-						daFormat		: "{"%d/%m/%Y %H:%M"}",	// format of the displayed date
-						electric		: false,
-						onUpdate		: gotocal
-					{rdelim} );
-				//]]></script>
+				{jscalendar inputField=todate time=$navigation.focus_date onUpdate=gotocal displayArea=datrigger}
 			</td>
-{strip}
 			<td style="white-space:nowrap; width:140px; text-align:right;">
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=day&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=week&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'week'}highlight{/if}">{biticon ipackage=calendar iname=week iexplain=Week}</a>
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=weeklist&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'weeklist'}highlight{/if}">{biticon ipackage=calendar iname=weeklist iexplain=Weeklist}</a>
 				<a href="{$gBitLoc.CALENDAR_PKG_URL}index.php?view_mode=month&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'month'}highlight{/if}">{biticon ipackage=calendar iname=month iexplain=Month}</a>
 			</td>
-{/strip}
 		</tr>
 	</table>
 {else}
-{strip}
 	<table>
 		<tr>
 			<td rowspan="2" style="text-align:left;">
@@ -85,5 +75,5 @@
 			</td>
 		</tr>
 	</table>
-{/strip}
 {/if}
+{/strip}
