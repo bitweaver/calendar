@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.40 2006/02/08 22:01:04 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.41 2006/03/01 20:16:03 spiderr Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -124,7 +124,7 @@ for( $i = 0; $i < WEEK_OFFSET; $i++ ) {
 $gBitSmarty->assign( 'dayNames', $dayNames );
 
 // TODO: make this a pref
-$gBitSmarty->assign( 'trunc', $gBitSystem->getPreference( 'title_truncate', 12 ) );
+$gBitSmarty->assign( 'trunc', $gBitSystem->getConfig( 'title_truncate', 12 ) );
 
 $gBitSystem->display( 'bitpackage:calendar/calendar.tpl', tra( 'Calendar' ) );
 ?>

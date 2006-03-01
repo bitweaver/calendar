@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.32 2006/02/02 14:39:46 hash9 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.33 2006/03/01 20:16:03 spiderr Exp $
  * @package calendar
  */
 
@@ -9,7 +9,7 @@
  */
 include_once( KERNEL_PKG_PATH . 'BitDate.php' );
 // set week offset - start with a day other than monday
-define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ? $gBitUser->mUserPrefs['calendar_week_offset'] : $gBitSystem->getPreference( 'calendar_week_offset', 0 ) );
+define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ? $gBitUser->mUserPrefs['calendar_week_offset'] : $gBitSystem->getConfig( 'calendar_week_offset', 0 ) );
 
 /**
  * @package calendar
@@ -132,14 +132,14 @@ class Calendar extends LibertyContent {
 		$ret = array();
 		if( $pDateHash['view_mode'] == 'day' ) {
 			// calculare what the visible day view range is
-			$day_start   = isset( $gBitUser->mUserPrefs['calendar_day_start'] ) ? $gBitUser->mUserPrefs['calendar_day_start'] : $gBitSystem->getPreference( 'calendar_day_start', 0 );
-			$day_end     = isset( $gBitUser->mUserPrefs['calendar_day_end'] ) ? $gBitUser->mUserPrefs['calendar_day_end'] : $gBitSystem->getPreference( 'calendar_day_end', 24 );
+			$day_start   = isset( $gBitUser->mUserPrefs['calendar_day_start'] ) ? $gBitUser->mUserPrefs['calendar_day_start'] : $gBitSystem->getConfig( 'calendar_day_start', 0 );
+			$day_end     = isset( $gBitUser->mUserPrefs['calendar_day_end'] ) ? $gBitUser->mUserPrefs['calendar_day_end'] : $gBitSystem->getConfig( 'calendar_day_end', 24 );
 			$start_time  = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] ) + ( 60 * 60 * $day_start );
 			$stop_time   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - ( 60 * 60 * ( 24 - $day_end ) );
 			$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
 
 			// allow for custom time intervals
-			$hour_fraction = !empty( $gBitUser->mUserPrefs['calendar_hour_fraction'] ) ? $gBitUser->mUserPrefs['calendar_hour_fraction'] : $gBitSystem->getPreference( 'calendar_hour_fraction', 1 );
+			$hour_fraction = !empty( $gBitUser->mUserPrefs['calendar_hour_fraction'] ) ? $gBitUser->mUserPrefs['calendar_hour_fraction'] : $gBitSystem->getConfig( 'calendar_hour_fraction', 1 );
 			$row_count = $hours_count * $hour_fraction;
 			$start_time_info = $this->mDate->getdate( $start_time );
 			$hour = $start_time_info['hours'] - 1;
