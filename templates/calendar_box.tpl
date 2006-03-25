@@ -1,5 +1,5 @@
 <div class="calendar popup box">
-	<h3>{$cellHash.title}</h3>
+	<h3>{$cellHash.title|escape}</h3>
 	<div class="boxcontent">
 		{tr}Content Type{/tr}: {$cellHash.content_description}
 		<br />
