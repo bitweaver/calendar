@@ -19,7 +19,7 @@ $gBitInstaller->registerPreferences( KERNEL_PKG_NAME, array(
 
 // ### Default User Permissions
 $gBitInstaller->registerUserPermissions( CALENDAR_PKG_NAME, array(
-	array('bit_p_view_calendar', 'Can browse the calendar', 'basic', CALENDAR_PKG_NAME),
+	array('p_calendar_view', 'Can browse the calendar', 'basic', CALENDAR_PKG_NAME),
 ) );
 
 // this empty table registration is needed for the installer to pick it up to install the preferences

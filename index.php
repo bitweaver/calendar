@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.41 2006/03/01 20:16:03 spiderr Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.42 2006/04/11 13:03:51 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -11,7 +11,7 @@ include_once( CALENDAR_PKG_PATH.'Calendar.php' );
 
 $gBitSystem->isPackageActive( 'calendar', TRUE );
 
-$gBitSystem->verifyPermission( 'bit_p_view_calendar' );
+$gBitSystem->verifyPermission( 'p_calendar_view' );
 
 // set up $_SESSION and $_REQUEST to make the usable later on
 // setup list of bit items displayed
