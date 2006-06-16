@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.35.2.2 2006/01/03 10:14:36 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.35.2.3 2006/06/16 16:02:59 hash9 Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -31,7 +31,7 @@ if( !empty( $_REQUEST["content_type_guid"] ) ) {
 foreach( $gLibertySystem->mContentTypes as $cType ) {
 	$contentTypes[$cType['content_type_guid']] = $cType['content_description'];
 }
-$gBitSmarty->assign( 'contentTypes', $contentTypes );
+$gBitSmarty->assign( 'calContentTypes', $contentTypes );
 
 // now, lets get the ball rolling!
 $gCalendar = new Calendar();
@@ -60,8 +60,8 @@ if( !empty( $_REQUEST["view_mode"] ) ) {
 }
 
 $gBitSmarty->assign( 'navigation', $gCalendar->buildCalendarNavigation( $_SESSION['calendar'] ) );
-$gBitSmarty->assign_by_ref( 'calMonth', $calMonth = $gCalendar->buildCalendar( $_SESSION['calendar'] ) );
-$gBitSmarty->assign_by_ref( 'calDay', $calDay = $gCalendar->buildDay( $_SESSION['calendar'] ) );
+$calMonth = $gCalendar->buildCalendar( $_SESSION['calendar'] );
+$calDay = $gCalendar->buildDay( $_SESSION['calendar'] );
 
 if( $_SESSION['calendar']['content_type_guid'] ) {
 	$listHash = $_SESSION['calendar'];
@@ -105,6 +105,10 @@ foreach( $calMonth as $w => $week ) {
 		}
 	}
 }
+
+$gBitSmarty->assign_by_ref( 'calDay', $calDay );
+$gBitSmarty->assign_by_ref( 'calMonth', $calMonth );
+
 // set up daynames for the calendar
 $dayNames = array(
 	tra( "Monday" ),
