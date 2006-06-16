@@ -2,7 +2,7 @@
 {form legend="Data Options" id="data_options"}
 	<div class="row caloptions">
 		{forminput}
-			{foreach from=$contentTypes key=value item=type}
+			{foreach from=$calContentTypes key=value item=type}
 				<div class="cal{$value}">
 					<label>
 						<input type="checkbox" value="{$value}" name="content_type_guid[]"
