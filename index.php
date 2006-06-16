@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.42 2006/04/11 13:03:51 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.43 2006/06/16 13:56:34 hash9 Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -60,8 +60,8 @@ if( !empty( $_REQUEST["view_mode"] ) ) {
 }
 
 $gBitSmarty->assign( 'navigation', $gCalendar->buildCalendarNavigation( $_SESSION['calendar'] ) );
-$gBitSmarty->assign_by_ref( 'calMonth', $calMonth = $gCalendar->buildCalendar( $_SESSION['calendar'] ) );
-$gBitSmarty->assign_by_ref( 'calDay', $calDay = $gCalendar->buildDay( $_SESSION['calendar'] ) );
+$calMonth = $gCalendar->buildCalendar( $_SESSION['calendar'] );
+$calDay = $gCalendar->buildDay( $_SESSION['calendar'] );
 
 if( $_SESSION['calendar']['content_type_guid'] ) {
 	$listHash = $_SESSION['calendar'];
@@ -89,6 +89,7 @@ foreach( $calMonth as $w => $week ) {
 				if( !empty ( $bitEvent ) && $_SESSION['calendar']['view_mode'] == 'day' ) {
 					foreach( $calDay as $key => $t ) {
 						// special case - last item entry in array - check this first
+						
 						if( $bitEvent['timestamp'] >= $calDay[$key]['time'] && empty( $calDay[$key + 1]['time'] ) ) {
 							$calDay[$key]['items'][] = $dayEvents[$i];
 						} elseif( $bitEvent['timestamp'] >= $calDay[$key]['time'] && $bitEvent['timestamp'] <= $calDay[$key + 1]['time'] ) {
@@ -105,6 +106,9 @@ foreach( $calMonth as $w => $week ) {
 		}
 	}
 }
+$gBitSmarty->assign_by_ref( 'calDay', $calDay );
+$gBitSmarty->assign_by_ref( 'calMonth', $calMonth );
+
 // set up daynames for the calendar
 $dayNames = array(
 	tra( "Monday" ),
