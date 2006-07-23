@@ -1,5 +1,5 @@
 <?php
-global $gBitSystem, $gBitSmarty;
+global $gBitSystem, $gBitSmarty, $gBitUser;
 
 $registerHash = array(
 	'package_name' => 'calendar',
