@@ -4,6 +4,7 @@ global $gBitSystem, $gBitSmarty, $gBitUser;
 $registerHash = array(
 	'package_name' => 'calendar',
 	'package_path' => dirname( __FILE__ ).'/',
+	'homeable' => TRUE,
 );
 $gBitSystem->registerPackage( $registerHash );
 
