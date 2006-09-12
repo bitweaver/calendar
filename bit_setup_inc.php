@@ -10,7 +10,12 @@ $gBitSystem->registerPackage( $registerHash );
 
 if( $gBitSystem->isPackageActive( 'calendar' ) ) {
 	if( $gBitUser->hasPermission( 'p_calendar_view' ) ) {
-		$gBitSystem->registerAppMenu( CALENDAR_PKG_NAME, ucfirst( CALENDAR_PKG_DIR ), CALENDAR_PKG_URL.'index.php', 'bitpackage:calendar/menu_calendar.tpl', CALENDAR_PKG_NAME );
+		$menuHash = array(
+			'package_name'  => CALENDAR_PKG_NAME,
+			'index_url'     => CALENDAR_PKG_URL.'index.php',
+			'menu_template' => 'bitpackage:calendar/menu_calendar.tpl',
+		);
+		$gBitSystem->registerAppMenu( $menuHash );
 	}
 }
 
