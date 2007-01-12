@@ -15,7 +15,7 @@
 <div class="clear"></div>
 <br />
 
-{if $gBitSystem->isFeatureActive( 'feature_jscalendar' )}
+{if $gBitSystem->isFeatureActive( 'site_use_jscalendar' )}
 	<table>
 		<tr>
 			<td>
