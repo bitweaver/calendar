@@ -40,7 +40,7 @@
 					<td class="calday{if $day.day eq $navigation.today} highlight{/if} {cycle}">
 						{if $day.day|date_format:"%m" eq $modCalNavigation.focus_month}
 							{if $day.day eq $modCalNavigation.focus_date}<strong>{/if}
-							<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$day.day}&amp;{$url_string}">{$day.day|date_format:"%d"}</a>
+							<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$day.day}&amp;{$url_string}">{$day.day|cal_date_format:"%d"}</a>
 							{if $day.day eq $modCalNavigation.focus_date}</strong>{/if}
 						{else}
 							&nbsp;
