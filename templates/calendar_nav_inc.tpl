@@ -59,7 +59,7 @@
 			</td>
 
 			<td rowspan="2" style="text-align:right;">
-				<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$navigation.after.day}&amp;{$url_string}" title="{$navigation.after.dayn|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
+				<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$navigation.after.day}&amp;{$url_string}" title="{$navigation.after.day|bit_long_date}">{tr}day{/tr} &raquo;</a><br />
 				<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$navigation.after.week}&amp;{$url_string}" title="{$navigation.after.week|bit_long_date}">{tr}week{/tr} &raquo;</a><br />
 				<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$navigation.after.month}&amp;{$url_string}" title="{$navigation.after.month|bit_long_date}">{tr}month{/tr} &raquo;</a><br />
 				<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$navigation.after.year}&amp;{$url_string}" title="{$navigation.after.year|bit_long_date}">{tr}year{/tr} &raquo;</a>
