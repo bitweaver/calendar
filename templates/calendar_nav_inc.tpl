@@ -55,7 +55,7 @@
 			</td>
 
 			<td style="text-align:center;">
-				<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$smarty.now}&amp;{$url_string}" title="{$smarty.now|bit_long_date}">{tr}Today{/tr}: <strong>{$smarty.now|bit_long_date}</strong></a>
+				<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?todate={$smarty.now}&amp;{$url_string}" title="{$navigation.today|bit_long_date}">{tr}Today{/tr}: <strong>{$navigation.today|bit_long_date} {$navigation.tz_flag}</strong></a>
 			</td>
 
 			<td rowspan="2" style="text-align:right;">

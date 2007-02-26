@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.33 2006/03/01 20:16:03 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.34 2007/02/26 20:58:26 lsces Exp $
  * @package calendar
  */
 
@@ -165,8 +165,15 @@ class Calendar extends LibertyContent {
 	 * is not available via this route! 
 	 **/
 	function buildCalendarNavigation( $pDateHash ) {
+		global $gBitUser, $gBitSystem;
 		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
-		$today = $this->mDate->getdate( mktime() );
+		if ( $gBitUser->getPreference('site_display_timezone', "Local") != 'UTC' ) {
+			$today = $this->mDate->getdate( mktime() );
+			$flag = 'Local';
+		} else {
+			$today = $this->mDate->getdate( $this->mDate->getUTCFromServerDate( gmmktime() - mktime(0,0,0,1,2,1970,0) - gmmktime(0,0,0,1,2,1970,0) ) );
+			$flag = 'UTC';
+		}
 
 		$ret = array(
 			'before' => array(
@@ -185,6 +192,7 @@ class Calendar extends LibertyContent {
 			'focus_year' => $focus['year'],
 			'focus_date' => $focus[0],
 			'today'   => $this->mDate->gmmktime( 0, 0, 0, $today['mon'], $today['mday'], $today['year'] ),
+			'tz_flag' => $flag,
 			'display_focus_date' => $focus[0],
 		);
 
