@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.44 2006/06/16 16:10:27 hash9 Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.45 2007/02/27 17:33:02 lsces Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -38,11 +38,11 @@ $gCalendar = new Calendar();
 
 // set up the todate
 if( !empty( $_REQUEST["todate"] ) ) {
-	// clean up todate. who knows where this has come from
+// clean up todate. who knows where this has come from
 	if ( is_numeric( $_REQUEST['todate'] ) ) {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->gmmktime( 0, 0, 0, $gCalendar->mDate->date( 'm', $_REQUEST['todate'] ), $gCalendar->mDate->date( 'd', $_REQUEST['todate'] ), $gCalendar->mDate->date( 'Y', $_REQUEST['todate'] ) );
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->gmmktime( 0, 0, 0, $gCalendar->mDate->date( 'm', $_REQUEST['todate'], true ), $gCalendar->mDate->date( 'd', $_REQUEST['todate'], true ), $gCalendar->mDate->date( 'Y', $_REQUEST['todate'], true ) );
 	} else {
-		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->gmmktime( 0, 0, 0, $gCalendar->mDate->date2( 'm', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'd', $_REQUEST['todate'] ), $gCalendar->mDate->date2( 'Y', $_REQUEST['todate'] ) );
+		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $gCalendar->mDate->gmmktime( 0, 0, 0, $gCalendar->mDate->date2( 'm', $_REQUEST['todate'], true ), $gCalendar->mDate->date2( 'd', $_REQUEST['todate'], true ), $gCalendar->mDate->date2( 'Y', $_REQUEST['todate'], true ) );
 	}
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
@@ -52,7 +52,6 @@ if( !empty( $_REQUEST["todate"] ) ) {
 }
 
 $focus = $_REQUEST['todate'];
-
 if( !empty( $_REQUEST["view_mode"] ) ) {
 	$_SESSION['calendar']['view_mode'] = $_REQUEST["view_mode"];
 } elseif( empty( $_SESSION['calendar']['view_mode'] ) ) {
@@ -90,7 +89,7 @@ foreach( $calMonth as $w => $week ) {
 					foreach( $calDay as $key => $t ) {
 						// special case - last item entry in array - check this first
 						
-						if( $bitEvent['timestamp'] >= $calDay[$key]['time'] && empty( $calDay[$key + 1]['time'] ) ) {
+						if( $bitEvent['timestamp'] >= $calDay[$key]['time']  && empty( $calDay[$key + 1]['time'] ) ) {
 							$calDay[$key]['items'][] = $dayEvents[$i];
 						} elseif( $bitEvent['timestamp'] >= $calDay[$key]['time'] && $bitEvent['timestamp'] <= $calDay[$key + 1]['time'] ) {
 							$calDay[$key]['items'][] = $dayEvents[$i];

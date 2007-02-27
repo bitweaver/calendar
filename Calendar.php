@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.34 2007/02/26 20:58:26 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.35 2007/02/27 17:33:02 lsces Exp $
  * @package calendar
  */
 
@@ -10,16 +10,23 @@
 include_once( KERNEL_PKG_PATH . 'BitDate.php' );
 // set week offset - start with a day other than monday
 define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ? $gBitUser->mUserPrefs['calendar_week_offset'] : $gBitSystem->getConfig( 'calendar_week_offset', 0 ) );
-
 /**
  * @package calendar
  */
 class Calendar extends LibertyContent {
 
+	var $display_offset;
+	
 	function Calendar() {
 		LibertyContent::LibertyContent();
-		global $gBitSystem;
+		global $gBitUser;
 		$this->mDate = new BitDate(0);
+		$this->display_offset;
+		if ( $gBitUser->getPreference('site_display_utc', "UTC") == 'Local' ) {
+			$this->display_offset = $this->mDate->display_offset;
+		} elseif ( $gBitUser->getPreference('site_display_utc', "UTC") == 'Fixed' ) {
+			$this->display_offset = 3600 * $gBitUser->getPreference('site_display_timezone', 0);
+		}
 	}
 
 	/**
@@ -40,30 +47,30 @@ class Calendar extends LibertyContent {
 			$content = new LibertyContent();
 			$content->prepGetList( $pListHash );
 			$res = $content->getContentList( $pListHash );
-			$offset = $this->mDate->get_display_offset();
-			foreach( $res['data'] as $item ) {
+
+		foreach( $res['data'] as $item ) {
 				// shift all time data by user timezone offset
 				// and then display as a simple UTC time
-				$item['timestamp']     = $item[$pListHash['calendar_sort_mode']] + $offset;
-				$item['created']       = $item['created']       + $offset;
-				$item['last_modified'] = $item['last_modified'] + $offset;
-				$item['event_time']	   = $item['event_time'] + $offset;
+				$item['timestamp']     = $item[$pListHash['calendar_sort_mode']] + $this->display_offset;;
+				$item['created']       = $item['created']       + $this->display_offset;;
+				$item['last_modified'] = $item['last_modified'] + $this->display_offset;;
+				$item['event_time']	   = $item['event_time'] + $this->display_offset;;
 				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
 				$ret[$dstart][] = $item;
 			}
 		}
-		return $ret;
+	return $ret;
 	}
 
 	/**
 	* calculate the start and stop time for the current display page
 	**/
 	function doRangeCalculations( $pDateHash ) {
-		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
+		$focus = $this->mDate->getdate( $pDateHash['focus_date'], false, true );
 
 		if( $pDateHash['view_mode'] == 'month' ) {
-			$view_start = $this->mDate->mktime( 0, 0, 0, $focus['mon'],     1, $focus['year'] );
-			$view_end   = $this->mDate->mktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] ) - 1;
+			$view_start = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'],     1, $focus['year'] );
+			$view_end   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] ) - 1;
 		} elseif( $pDateHash['view_mode'] == 'week' or $pDateHash['view_mode'] == 'weeklist') {
 			if ( $focus['wday'] == 0 ) {
 				$wd = 7 + WEEK_OFFSET;
@@ -85,12 +92,12 @@ class Calendar extends LibertyContent {
 
 		// this is where we adjust the start and stop times to user local time settings
 		// The range is adjusted backwards so that it covers the correct window
-		$view_start = $view_start - $this->mDate->get_display_offset();
-		$view_end   = $view_end   - $this->mDate->get_display_offset();
-		$start_year  = $this->mDate->date( 'Y', $view_start );
+//		$view_start = $view_start - $this->display_offset;
+//		$view_end   = $view_end   - $this->display_offset;
+		$start_year  = $this->mDate->date( 'Y', $view_start, true );
 		if ( $start_year < 1902 ) {
-			$view_start_iso = $view_start  = $this->mDate->date( 'Y-m-d', $view_start );
-			$view_end_iso = $view_end  = $this->mDate->date( 'Y-m-d', $view_start );
+			$view_start_iso = $view_start  = $this->mDate->date( 'Y-m-d', $view_start, true );
+			$view_end_iso = $view_end  = $this->mDate->date( 'Y-m-d', $view_start, true );
 			$view_start = 0;
 			$view_end = 0;
 		}
@@ -104,7 +111,6 @@ class Calendar extends LibertyContent {
 			$ret['view_start_iso'] = $view_start_iso;
 			$ret['view_end_iso'] = $view_end_iso;
 		}
-
 		return $ret;
 	}
 
@@ -114,34 +120,32 @@ class Calendar extends LibertyContent {
 	function prepGetList( &$pListHash ) {
 		if( !empty( $pListHash['focus_date'] ) ) {
 			$calDates = $this->doRangeCalculations( $pListHash );
-			$pListHash['start'] = $calDates['view_start'];
-			$pListHash['stop'] = $calDates['view_end'];
+			$pListHash['start'] = $calDates['view_start'] - $this->display_offset;
+			$pListHash['stop'] = $calDates['view_end'] - $this->display_offset;
 		}
-
 		if( !empty( $pListHash['sort_mode'] ) ) {
 			$pListHash['calendar_sort_mode'] = preg_replace( "/(_asc$|_desc$)/i", "", $pListHash['sort_mode'] );
 		}
-
 		return TRUE;
 	}
 
 	function buildDay( $pDateHash ) {
 		global $gBitSystem, $gBitUser;
-		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
+		$focus = $this->mDate->getdate( $pDateHash['focus_date'], false, true );
 
 		$ret = array();
 		if( $pDateHash['view_mode'] == 'day' ) {
 			// calculare what the visible day view range is
 			$day_start   = isset( $gBitUser->mUserPrefs['calendar_day_start'] ) ? $gBitUser->mUserPrefs['calendar_day_start'] : $gBitSystem->getConfig( 'calendar_day_start', 0 );
 			$day_end     = isset( $gBitUser->mUserPrefs['calendar_day_end'] ) ? $gBitUser->mUserPrefs['calendar_day_end'] : $gBitSystem->getConfig( 'calendar_day_end', 24 );
-			$start_time  = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] ) + ( 60 * 60 * $day_start );
-			$stop_time   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - ( 60 * 60 * ( 24 - $day_end ) );
+			$start_time  = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'], $focus['year'] ) + ( 60 * 60 * $day_start );
+			$stop_time   = $this->mDate->mktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - ( 60 * 60 * ( 24 - $day_end ) );
 			$hours_count = ( $stop_time - $start_time ) / ( 60 * 60 );
 
 			// allow for custom time intervals
 			$hour_fraction = !empty( $gBitUser->mUserPrefs['calendar_hour_fraction'] ) ? $gBitUser->mUserPrefs['calendar_hour_fraction'] : $gBitSystem->getConfig( 'calendar_hour_fraction', 1 );
 			$row_count = $hours_count * $hour_fraction;
-			$start_time_info = $this->mDate->getdate( $start_time );
+			$start_time_info = $this->mDate->getdate( $start_time, false, true );
 			$hour = $start_time_info['hours'] - 1;
 			$mins = 0;
 			for( $i = 0; $i < $row_count; $i++ ) {
@@ -166,14 +170,8 @@ class Calendar extends LibertyContent {
 	 **/
 	function buildCalendarNavigation( $pDateHash ) {
 		global $gBitUser, $gBitSystem;
-		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
-		if ( $gBitUser->getPreference('site_display_timezone', "Local") != 'UTC' ) {
-			$today = $this->mDate->getdate( mktime() );
-			$flag = 'Local';
-		} else {
-			$today = $this->mDate->getdate( $this->mDate->getUTCFromServerDate( gmmktime() - mktime(0,0,0,1,2,1970,0) - gmmktime(0,0,0,1,2,1970,0) ) );
-			$flag = 'UTC';
-		}
+		$today = $this->mDate->getdate( gmmktime(), false, true );
+		$focus = $this->mDate->getdate( $pDateHash['focus_date'], false, true );
 
 		$ret = array(
 			'before' => array(
@@ -192,7 +190,7 @@ class Calendar extends LibertyContent {
 			'focus_year' => $focus['year'],
 			'focus_date' => $focus[0],
 			'today'   => $this->mDate->gmmktime( 0, 0, 0, $today['mon'], $today['mday'], $today['year'] ),
-			'tz_flag' => $flag,
+			'tz_flag' => $gBitUser->getPreference('site_display_utc', "Local"),
 			'display_focus_date' => $focus[0],
 		);
 
@@ -210,12 +208,12 @@ class Calendar extends LibertyContent {
 	function buildCalendar( $pDateHash ) {
 		global $gBitSmarty;
 
-		$focus = $this->mDate->getdate( $pDateHash['focus_date'] );
+		$focus = $this->mDate->getdate( $pDateHash['focus_date'], false, true );
 
 		$prev_month_end	  = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'],     0, $focus['year'] );
 		$next_month_begin = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'] + 1, 1, $focus['year'] );
 
-		$prev_month_end_info = $this->mDate->getdate( $prev_month_end );
+		$prev_month_end_info = $this->mDate->getdate( $prev_month_end, false, true );
 		$prev_month = $prev_month_end_info['mon'];
 		$prev_month_year = $prev_month_end_info['year'];
 
@@ -231,7 +229,7 @@ class Calendar extends LibertyContent {
 		// Fill out the first row with the last day( s ) of the previous month.
 		for( $day_of_week = 0; $day_of_week < $month_begin_day_of_week; $day_of_week++ ) {
 			$_day = $days_in_prev_month - $month_begin_day_of_week + $day_of_week + 1;
-			$week[]['day'] = $this->mDate->gmmktime( 0, 0, 0, $prev_month, $_day, $prev_month_year );
+			$week[]['day'] = $this->mDate->mktime( 0, 0, 0, $prev_month, $_day, $prev_month_year );
 		}
 
 		// Fill in the days of the selected month.
