@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.php,v 1.9 2006/01/10 21:19:49 squareing Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.php,v 1.10 2007/02/27 17:35:47 lsces Exp $
  * @package calendar
  * @subpackage modules
  */
@@ -14,11 +14,11 @@ $cal = new Calendar();
 // set up the todate
 if( !empty( $_REQUEST['todate'] ) ) {
 	// clean up todate. who knows where this has come from
-	if ( is_numeric( $_REQUEST['todate'] ) ) {
+/*	if ( is_numeric( $_REQUEST['todate'] ) ) {
 		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $cal->mDate->gmmktime( 0, 0, 0, $cal->mDate->date( 'm', $_REQUEST['todate'] ), $cal->mDate->date( 'd', $_REQUEST['todate'] ), $cal->mDate->date( 'Y', $_REQUEST['todate'] ) );
 	} else {
 		$_SESSION['calendar']['focus_date'] = $_REQUEST['todate'] = $cal->mDate->gmmktime( 0, 0, 0, $cal->mDate->date2( 'm', $_REQUEST['todate'] ), $cal->mDate->date2( 'd', $_REQUEST['todate'] ), $cal->mDate->date2( 'Y', $_REQUEST['todate'] ) );
-	}
+	} */
 } elseif( !empty( $_SESSION['calendar']['focus_date'] ) ) {
 	$_REQUEST["todate"] = $_SESSION['calendar']['focus_date'];
 } else {
