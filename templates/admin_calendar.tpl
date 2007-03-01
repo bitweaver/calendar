@@ -1,6 +1,8 @@
 {strip}
-{if !$settings}
+{if !$userPrefs}
 	{assign var=settings value=$gBitSystem->mConfig}
+{else}
+	{assign var=settings value=$userPrefs}
 {/if}
 
 {form legend="Calendar Settings"}
