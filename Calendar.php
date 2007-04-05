@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.35 2007/02/27 17:33:02 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.36 2007/04/05 18:33:12 nickpalmer Exp $
  * @package calendar
  */
 
@@ -42,6 +42,7 @@ class Calendar extends LibertyContent {
 	**/
 	function getList( $pListHash ) {
 		$ret = array();
+		$pListHash['include_data'] = TRUE;
 		if( $this->prepGetList( $pListHash ) ) {
 			include_once( LIBERTY_PKG_PATH.'LibertyContent.php' );
 			$content = new LibertyContent();
@@ -55,6 +56,7 @@ class Calendar extends LibertyContent {
 				$item['created']       = $item['created']       + $this->display_offset;;
 				$item['last_modified'] = $item['last_modified'] + $this->display_offset;;
 				$item['event_time']	   = $item['event_time'] + $this->display_offset;;
+				$item['parsed'] = $content->parseData($item['data'], $item['format_guid']);
 				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
 				$ret[$dstart][] = $item;
 			}

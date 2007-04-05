@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.45 2007/02/27 17:33:02 lsces Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.46 2007/04/05 18:33:12 nickpalmer Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -62,8 +62,12 @@ $gBitSmarty->assign( 'navigation', $gCalendar->buildCalendarNavigation( $_SESSIO
 $calMonth = $gCalendar->buildCalendar( $_SESSION['calendar'] );
 $calDay = $gCalendar->buildDay( $_SESSION['calendar'] );
 
-if( $_SESSION['calendar']['content_type_guid'] ) {
+if( $gBitUser->hasPermission("p_calendar_view_changes") && $_SESSION['calendar']['content_type_guid'] ) {	
 	$listHash = $_SESSION['calendar'];
+} else if ($gBitSystem->isPackageActive('events')) {
+	$listHash['content_type_guid'] = "bitevents";
+}
+if (!empty($listHash)) {
 	$listHash['user_id'] = !empty( $_REQUEST['user_id'] ) ?	$_REQUEST['user_id'] : NULL;
 	$listHash['sort_mode'] = !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'event_time_asc';
 	$listHash['offset'] = 0;
@@ -74,6 +78,9 @@ if( $_SESSION['calendar']['content_type_guid'] ) {
 }
 
 // finally we have all the stuff ready to populate the $calMonth and $calDay arrays
+if ($gBitSystem->isPackageActive('events')) {
+	$be = new BitEvents();
+}
 foreach( $calMonth as $w => $week ) {
 	foreach( $week as $d => $day ) {
 		$dayEvents = array();
@@ -81,7 +88,18 @@ foreach( $calMonth as $w => $week ) {
 			$i = 0;
 			foreach( $bitEvents[$day['day']] as $bitEvent ) {
 				$dayEvents[$i] = $bitEvent;
-				$gBitSmarty->assign( 'cellHash', $bitEvent );
+				// Terrible hack for the moment to get
+				// event description loaded.
+				// This goes away with ajax popups for
+				// the boxes which can render the content.
+				if ($bitEvent['content_type_guid'] == 'bitevents' && $gBitSystem->isPackageActive('events')) {
+					$be->mContentId = $bitEvent['content_id'];
+					$be->load();
+					$gBitSmarty->assign('cellHash', $be->mInfo);
+				}
+				else {
+				  $gBitSmarty->assign( 'cellHash', $bitEvent );
+				}
 				$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
 
 				// populate $calDay array with events

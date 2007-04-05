@@ -6,9 +6,11 @@
 		{else}
 			<li>{smartlink ititle="Only my items" user_id=$gBitUser->mUserId sort_mode=$smarty.request.sort_mode}</li>
 		{/if}
+		{if $gBitUser->hasPermission('p_calendar_view_changes')}
 		<li>{smartlink ititle="Creation date" isort="created"}</li>
 		<li>{smartlink ititle="Modification date" isort="last_modified"}</li>
 		<li>{smartlink ititle="Event time" idefault=1 isort="event_time"}</li>
+		{/if}
 	</ul>
 </div>
 
@@ -34,7 +36,7 @@
 					{rdelim}
 				/* ]]> */</script>
 
-				{jscalendar inputField=todate time=$navigation.focus_date onUpdate=gotocal displayArea=datrigger}
+				{jscalendar inputField=todate time=$navigation.focus_date onUpdate=gotocal displayArea=datrigger daFormat=$gBitSystem->getConfig('site_long_date_format')}
 			</td>
 			<td style="white-space:nowrap; width:140px; text-align:right;">
 				<a href="{$smarty.const.CALENDAR_PKG_URL}index.php?view_mode=day&amp;{$url_string}" class="{if $smarty.session.calendar.view_mode eq 'day'}highlight{/if}">{biticon ipackage=calendar iname=day iexplain=Day}</a>
