@@ -20,13 +20,13 @@ $calendarValues = array(
 	'calendar_day_start',
 	'calendar_day_end',
 	'calendar_user_prefs',
+	'calendar_ajax_popups',
 );
-
 // this function only exists if it's been included by the index.php page. if
 // it's been included from anywhere else, we don't execute this section
 if( function_exists( 'simple_set_value' ) && $gBitUser->isAdmin() && !empty( $_REQUEST['calendar_submit'] ) ) {
 	foreach( $calendarValues as $item ) {
-		if ( $item != 'calendar_user_prefs' )
+		if ( $item != 'calendar_user_prefs' && $item != 'calendar_ajax_popups')
 			simple_set_value( $item, CALENDAR_PKG_NAME );
 		else
 			simple_set_toggle( $item, CALENDAR_PKG_NAME );

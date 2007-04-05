@@ -1,5 +1,6 @@
 {strip}
 <div class="calendar popup box">
+{if $cellHash.content_id}
 	<h3>{$cellHash.title|escape}</h3>
 	{if $cellHash.content_type_guid == 'bitevents' && $gBitSystem->isPackageActive('events')}
 		<div class="center">
@@ -15,5 +16,8 @@
 		<strong>{tr}Last modified{/tr}</strong>: {displayname login=$cellHash.modifier_user real_name=$cellHash.modifier_real_name}<br />{$cellHash.last_modified|cal_date_format:"%Y-%m-%d - %H:%M %Z"}
 	</div>
 	{/if}
+{else}
+<div class=error>{tr}No such content.{/tr}</div>
+{/if}
 </div>
 {/strip}

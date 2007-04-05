@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.46 2007/04/05 18:33:12 nickpalmer Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.47 2007/04/05 21:21:02 nickpalmer Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -88,19 +88,18 @@ foreach( $calMonth as $w => $week ) {
 			$i = 0;
 			foreach( $bitEvents[$day['day']] as $bitEvent ) {
 				$dayEvents[$i] = $bitEvent;
-				// Terrible hack for the moment to get
-				// event description loaded.
-				// This goes away with ajax popups for
-				// the boxes which can render the content.
-				if ($bitEvent['content_type_guid'] == 'bitevents' && $gBitSystem->isPackageActive('events')) {
-					$be->mContentId = $bitEvent['content_id'];
-					$be->load();
-					$gBitSmarty->assign('cellHash', $be->mInfo);
+				if (!$gBitSystem->isFeatureActive('calendar_ajax_popups')) {				  
+					// This is expensive! Turn on the ajax popups!
+					if ($bitEvent['content_type_guid'] == 'bitevents' && $gBitSystem->isPackageActive('events')) {
+						$be->mContentId = $bitEvent['content_id'];
+						$be->load();
+						$gBitSmarty->assign('cellHash', $be->mInfo);
+					}
+					else {
+						$gBitSmarty->assign( 'cellHash', $bitEvent );
+					}
+					$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
 				}
-				else {
-				  $gBitSmarty->assign( 'cellHash', $bitEvent );
-				}
-				$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
 
 				// populate $calDay array with events
 				if( !empty ( $bitEvent ) && $_SESSION['calendar']['view_mode'] == 'day' ) {
@@ -143,7 +142,7 @@ for( $i = 0; $i < WEEK_OFFSET; $i++ ) {
 	array_unshift( $dayNames, $pop );
 }
 $gBitSmarty->assign( 'dayNames', $dayNames );
-
+$gBitSmarty->assign( 'loadAjax', true);
 // TODO: make this a pref
 $gBitSmarty->assign( 'trunc', $gBitSystem->getConfig( 'title_truncate', 12 ) );
 

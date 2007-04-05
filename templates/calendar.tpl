@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.44 2007/04/05 18:33:12 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.45 2007/04/05 21:21:04 nickpalmer Exp $ *}
 {strip}
 {if !$gBitSystem->isFeatureActive( 'site_help_popup' )}
 	{popup_init src="`$smarty.const.UTIL_PKG_URL`javascript/libs/overlib.js"}
@@ -8,8 +8,8 @@
 	<div class="header">
 		<h1>{tr}Calendar{/tr}</h1>
 	</div>
-
 	<div class="body">
+		<script type="text/javascript">/*<![CDATA[*/ show_spinner('spinner'); /*]]>*/</script>
 		{jstabs}
 			{jstab title="Calendar"}
 				{* this is used to keep stuff like sort_mode persistent in all links on this page *}
@@ -30,9 +30,10 @@
 									{foreach from=$time.items item=item}
 										{assign var=over value=$item.over}
 										<div class="cal{$item.content_type_guid}">
-											<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-												<img style="padding:0px 4px;" src="{biticon ipackage="icons" iname="list-add" iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|escape|default:"?"}
-											</a>
+	<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
+		{capture assign=itemurl}{$smarty.const.CALENDAR_PKG_URL}box.php?content_id={$item.content_id}{/capture}
+		<img style="padding:0px 4px;" src="{biticon ipackage="icons" iname="list-add" iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {if $gBitSystem->isFeatureActive('calendar_ajax_popups')}{popup fullhtml="1" target=$itemurl}{else}{popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}{/if} /> {$item.title|escape|default:"?"}
+	</a>
 										</div>
 									{/foreach}
 								</td>
@@ -55,10 +56,11 @@
 										{if $day.day|cal_date_format:"%m" eq $navigation.focus_month or $smarty.session.calendar.view_mode eq "week"}
 											{foreach from=$day.items item=item}
 												{assign var=over value=$item.over}
+		{capture assign=itemurl}{$smarty.const.CALENDAR_PKG_URL}box.php?content_id={$item.content_id}{/capture}
 												<div class="cal{$item.content_type_guid}" style="float:left;width:50%;">
 													<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-														<img style="padding:0px 4px;" src="{biticon ipackage="icons" iname="list-add" iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|escape|default:"?"}
-													</a>
+				<img style="padding:0px 4px;" src="{biticon ipackage="icons" iname="list-add" iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {if $gBitSystem->isFeatureActive('calendar_ajax_popups')}{popup fullhtml="1" target=$itemurl}{else}{popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}{/if} /> {$item.title|escape|default:"?"}
+			</a>
 												</div>
 											{/foreach}
 										{else}
@@ -99,10 +101,11 @@
 											{* - Cell Content - *}
 											{foreach from=$day.items item=item}
 												{assign var=over value=$item.over}
+		{capture assign=itemurl}{$smarty.const.CALENDAR_PKG_URL}box.php?content_id={$item.content_id}{/capture}
 												<div class="cal{$item.content_type_guid}">
 													<a href="{$smarty.const.BIT_ROOT_URL}index.php?content_id={$item.content_id}">
-														<img style="padding:0px 4px;" src="{biticon ipackage="icons" iname="list-add" iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"} /> {$item.title|escape|truncate:$trunc:"..."|default:"?"}
-													</a>
+				<img style="padding:0px 4px;" src="{biticon ipackage="icons" iname="list-add" iexplain="Detailed Information" url=true}" title="{tr}Detailed Information{/tr}" {if $gBitSystem->isFeatureActive('calendar_ajax_popups')}{popup fullhtml="1" target=$itemurl}{else}{popup fullhtml="1" text=$over|escape:"javascript"|escape:"html"}{/if} /> {$item.title|escape|truncate:$trunc:"..."|default:"?"}
+			</a>
 												</div>
 											{/foreach}
 										{else}

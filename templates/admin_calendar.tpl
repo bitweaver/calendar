@@ -41,6 +41,13 @@
 				{html_checkboxes name="calendar_user_prefs" values="y" checked=`$settings.calendar_user_prefs` labels=false id=calendar_user_prefs}
 				{formhelp note="Allow users to set their own calendar preferences."}
 			{/forminput}
+
+			{formlabel label="Ajax Popups" for="calendar_ajax_popups"}
+			{forminput}
+				{html_checkboxes name="calendar_ajax_popups" values="y" checked=`$settings.calendar_ajax_popups` labels=false id=calendar_ajax_popups}
+				{formhelp note="Use ajax for calendar popups. This saves page load time and bandwidth at the expense of requiring javascript."}
+			{/forminput}
+
 		</div>
 	{/if}
 	
