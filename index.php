@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.48 2007/04/06 12:38:44 nickpalmer Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.49 2007/04/06 14:30:10 nickpalmer Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -92,16 +92,8 @@ foreach( $calMonth as $w => $week ) {
 			$i = 0;
 			foreach( $bitEvents[$day['day']] as $bitEvent ) {
 				$dayEvents[$i] = $bitEvent;
-				if (!$gBitSystem->isFeatureActive('calendar_ajax_popups')) {				  
-					// This is expensive! Turn on the ajax popups!
-					if ($bitEvent['content_type_guid'] == 'bitevents' && $gBitSystem->isPackageActive('events')) {
-						$be->mContentId = $bitEvent['content_id'];
-						$be->load();
-						$gBitSmarty->assign('cellHash', $be->mInfo);
-					}
-					else {
-						$gBitSmarty->assign( 'cellHash', $bitEvent );
-					}
+				if (!$gBitSystem->isFeatureActive('calendar_ajax_popups')) {
+					$gBitSmarty->assign( 'cellHash', $bitEvent );
 					$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
 				}
 
