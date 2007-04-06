@@ -48,6 +48,11 @@
 				{formhelp note="Use ajax for calendar popups. This saves page load time and bandwidth at the expense of requiring javascript."}
 			{/forminput}
 
+			{formlabel label="Default Content Types"}
+			{forminput}
+				{html_checkboxes name="defaultTypes" options=$calendarTypeDefaults selected=$calendarTypesSelected separator="<br />"}
+				{formhelp note="Default content types to show on the calendar when users do not have permission to change types of content viewed."}
+			{/forminput}
 		</div>
 	{/if}
 	

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.47 2007/04/05 21:21:02 nickpalmer Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.48 2007/04/06 12:38:44 nickpalmer Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -64,8 +64,12 @@ $calDay = $gCalendar->buildDay( $_SESSION['calendar'] );
 
 if( $gBitUser->hasPermission("p_calendar_view_changes") && $_SESSION['calendar']['content_type_guid'] ) {	
 	$listHash = $_SESSION['calendar'];
-} else if ($gBitSystem->isPackageActive('events')) {
-	$listHash['content_type_guid'] = "bitevents";
+} else {
+	foreach ($gLibertySystem->mContentTypes as $key => $val) {
+		if ($gBitSystem->isFeatureActive('calendar_default_'.$key)) {
+			$listHash['content_type_guid'][] = $key;
+		}
+	}
 }
 if (!empty($listHash)) {
 	$listHash['user_id'] = !empty( $_REQUEST['user_id'] ) ?	$_REQUEST['user_id'] : NULL;

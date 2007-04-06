@@ -1,11 +1,17 @@
 {strip}
 <div class="calendar popup box">
 {if $cellHash.content_id}
+	{if $gBitSystem->isFeatureActive('calendar_ajax_popups')}
+		<div class="floaticon"><a onclick="javascript:return cClick();">{biticon ipackage=icons iname=window-close iexplain="Close Popup"}</a></div>
+	{/if}
 	<h3>{$cellHash.title|escape}</h3>
 	{if $cellHash.content_type_guid == 'bitevents' && $gBitSystem->isPackageActive('events')}
 		<div class="center">
 			{include file="bitpackage:events/render_header_inc.tpl" contentHash=$cellHash}
 		</div>
+		{if $gBitSystem->isFeatureActive('calendar_ajax_popups')}
+			{$cellHash.parsed_data}
+		{/if}
 	{/if}
 	{if $gBitUser->hasPermission('p_calendar_view_changes')}
 	<div class="boxcontent">
