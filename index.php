@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.50 2007/04/09 01:28:13 jetskijoe Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.51 2007/04/09 01:31:35 jetskijoe Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -82,10 +82,6 @@ if (!empty($listHash)) {
 }
 
 // finally we have all the stuff ready to populate the $calMonth and $calDay arrays
-if ($gBitSystem->isPackageActive('events')) {
-	require_once(EVENTS_PKG_PATH.'lookup_events_inc.php' );
-	$be = new BitEvents();
-}
 foreach( $calMonth as $w => $week ) {
 	foreach( $week as $d => $day ) {
 		$dayEvents = array();
