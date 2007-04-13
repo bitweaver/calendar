@@ -8,8 +8,8 @@ $registerHash = array(
 );
 $gBitSystem->registerPackage( $registerHash );
 
-if( $gBitSystem->isPackageActive( 'calendar' ) ) {
-	if( $gBitUser->hasPermission( 'p_calendar_view' ) ) {
+if( $gBitSystem->isPackageActive( 'calendar' ) && $gBitUser->hasPermission( 'p_calendar_view' )) {
+
 		$menuHash = array(
 			'package_name'  => CALENDAR_PKG_NAME,
 			'index_url'     => CALENDAR_PKG_URL.'index.php',
@@ -17,6 +17,5 @@ if( $gBitSystem->isPackageActive( 'calendar' ) ) {
 		);
 		$gBitSystem->registerAppMenu( $menuHash );
 	}
-}
 
 ?>
