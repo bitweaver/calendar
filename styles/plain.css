@@ -35,3 +35,11 @@
 .caloptions .calbitbook			,.calitems .calbitbook			a	{background:#777;}
 .caloptions .calbitpage			,.calitems .calbitpage			a	{background:#bbb;}
 */
+
+.minical td.day { text-align: center; }
+.minical td.prev { text-align: left; }
+.minical td.next { text-align: right; }
+.minical th.dow { font-size: 10pt; }
+.minical td.today { font-weight: bold; text-align: center;}
+.minical td.selected {background-color: #B0B0B0; text-align: center;}
+.minical td.dim {font-size:8pt; background-color: #FFFFFF; }
