@@ -1,7 +1,11 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.36 2007/04/05 18:33:12 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.37 2007/06/22 09:06:40 lsces Exp $
  * @package calendar
+ * 
+ * @copyright Copyright (c) 2004-2006, bitweaver.org
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
  */
 
 /**
@@ -12,6 +16,7 @@ include_once( KERNEL_PKG_PATH . 'BitDate.php' );
 define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ? $gBitUser->mUserPrefs['calendar_week_offset'] : $gBitSystem->getConfig( 'calendar_week_offset', 0 ) );
 /**
  * @package calendar
+ * @subpackage Calendar
  */
 class Calendar extends LibertyContent {
 

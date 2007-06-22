@@ -1,10 +1,17 @@
 <?php
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/box.php,v 1.4 2007/06/22 09:06:40 lsces Exp $
+ * @package calendar
+ * @subpackage functions
+ * 
+ * @copyright Copyright (c) 2004-2006, bitweaver.org
+ * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
+ */
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/box.php,v 1.3 2007/04/06 14:30:10 nickpalmer Exp $
-
-// Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
-// All Rights Reserved. See copyright.txt for details and a complete list of authors.
-// Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See license.txt for details.
+/**
+ * Setup
+ */
 require_once( '../bit_setup_inc.php' );
 
 global $gContent, $gBitSystem;
