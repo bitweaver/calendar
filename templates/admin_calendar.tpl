@@ -6,6 +6,7 @@
 {/if}
 
 {form legend="Calendar Settings"}
+	<input type="hidden" name="view_user" value="{$view_user}" />
 	<input type="hidden" name="page" value="{$page}" />
 	<div class="row">
 		{formlabel label="First day of Week" for="calendar_week_offset"}
