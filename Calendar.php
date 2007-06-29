@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.38 2007/06/22 11:12:46 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.39 2007/06/29 16:33:57 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -29,7 +29,7 @@ class Calendar extends LibertyContent {
 		if ( $gBitUser->getPreference('site_display_utc', "UTC") == 'Local' ) {
 			$this->display_offset = $this->mDate->display_offset;
 		} elseif ( $gBitUser->getPreference('site_display_utc', "UTC") == 'Fixed' ) {
-			$this->display_offset = 3600 * $gBitUser->getPreference('site_display_timezone', 0);
+			$this->display_offset = $gBitUser->getPreference('site_display_timezone', 0);
 		}
 	}
 
