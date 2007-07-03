@@ -35,6 +35,7 @@ foreach( $gLibertySystem->mContentTypes as $cType ) {
 	$calendarChecks[] = $option;
 	$calendarTypeDefaults[$option] = $cType['content_description'];
 }
+asort($calendarTypeDefaults);
 $gBitSmarty->assign('calendarTypeDefaults', $calendarTypeDefaults);
 
 // this function only exists if it's been included by the index.php page. if

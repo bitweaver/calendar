@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.51 2007/04/09 01:31:35 jetskijoe Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.52 2007/07/03 07:36:17 lsces Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -31,6 +31,7 @@ if( !empty( $_REQUEST["content_type_guid"] ) ) {
 foreach( $gLibertySystem->mContentTypes as $cType ) {
 	$contentTypes[$cType['content_type_guid']] = $cType['content_description'];
 }
+asort($contentTypes);
 $gBitSmarty->assign( 'calContentTypes', $contentTypes );
 
 // now, lets get the ball rolling!
