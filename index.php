@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.53 2007/07/09 22:03:18 squareing Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.54 2007/07/10 18:59:10 squareing Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -136,7 +136,7 @@ for( $i = 0; $i < WEEK_OFFSET; $i++ ) {
 	array_unshift( $dayNames, $pop );
 }
 $gBitSmarty->assign( 'dayNames', $dayNames );
-$gBitSystem->loadAjax( 'prototype' );
+$gBitThemes->loadAjax( 'prototype' );
 
 // TODO: make this a pref
 $gBitSmarty->assign( 'trunc', $gBitSystem->getConfig( 'title_truncate', 12 ) );
