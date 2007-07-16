@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.46 2007/04/06 12:38:44 nickpalmer Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.47 2007/07/16 12:39:26 squareing Exp $ *}
 {strip}
 {if !$gBitSystem->isFeatureActive( 'site_help_popup' )}
 	{popup_init src="`$smarty.const.UTIL_PKG_URL`javascript/libs/overlib.js"}
@@ -9,7 +9,6 @@
 		<h1>{tr}Calendar{/tr}</h1>
 	</div>
 	<div class="body">
-		<script type="text/javascript">/*<![CDATA[*/ show_spinner('spinner'); /*]]>*/</script>
 		{jstabs}
 			{jstab title="Calendar"}
 				{* this is used to keep stuff like sort_mode persistent in all links on this page *}
