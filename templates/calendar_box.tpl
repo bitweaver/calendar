@@ -8,7 +8,7 @@
 	{if !empty($cellHash.rendered)}
 		{$cellHash.rendered}
 	{/if}
-	{if $gBitUser->hasPermission('p_calendar_view_changes')}
+	{if $gBitUser->hasPermission('p_calendar_view_changes') && !empty($cellHash.creator_real_name) }
 	<div class="boxcontent">
 		{tr}Content Type{/tr}: {$cellHash.content_description}
 		<br />
