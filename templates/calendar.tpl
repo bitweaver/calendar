@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.47 2007/07/16 12:39:26 squareing Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_calendar/templates/calendar.tpl,v 1.48 2007/07/26 12:51:26 lsces Exp $ *}
 {strip}
 {if !$gBitSystem->isFeatureActive( 'site_help_popup' )}
 	{popup_init src="`$smarty.const.UTIL_PKG_URL`javascript/libs/overlib.js"}
@@ -117,7 +117,7 @@
 					{/if}
 				</table>
 			{/jstab}
-			{if $gBitUser->hasPermission('p_calendar_view_changes')}
+			{if $gBitUser->hasPermission('p_calendar_view')}
 				{jstab title="Display Options"}
 					{include file="bitpackage:calendar/calendar_options_inc.tpl"}
 				{/jstab}
