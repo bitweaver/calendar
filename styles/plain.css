@@ -37,8 +37,8 @@
 */
 
 .minical td.day { text-align: center; }
-.minical td.prev { text-align: left; }
-.minical td.next { text-align: right; }
+.minical .prev { text-align: left; float:left; }
+.minical .next { text-align: right; float:right; }
 .minical th.dow { font-size: 10pt; }
 .minical td.today { font-weight: bold; text-align: center;}
 .minical td.selected {background-color: #B0B0B0; text-align: center;}
