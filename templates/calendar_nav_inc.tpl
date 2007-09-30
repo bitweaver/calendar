@@ -7,9 +7,9 @@
 			<li>{smartlink ititle="Only my items" user_id=$gBitUser->mUserId sort_mode=$smarty.request.sort_mode}</li>
 		{/if}
 		{if $gBitUser->hasPermission('p_calendar_view_changes')}
-		<li>{smartlink ititle="Creation date" isort="created"}</li>
-		<li>{smartlink ititle="Modification date" isort="last_modified"}</li>
-		<li>{smartlink ititle="Event time" idefault=1 isort="event_time"}</li>
+			<li>{smartlink ititle="Creation date" isort="created"}</li>
+			<li>{smartlink ititle="Modification date" isort="last_modified"}</li>
+			<li>{smartlink ititle="Event time" idefault=1 isort="event_time"}</li>
 		{/if}
 	</ul>
 </div>
