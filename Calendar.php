@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.40 2007/09/30 15:47:40 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.41 2007/09/30 18:53:58 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -432,10 +432,12 @@ class Calendar extends LibertyContent {
 	}
 
 	// Display the actual calendar doing any other work required for the template
-	function display($pTitle) {
+	function display($pTitle, $pShowContentOptions = TRUE) {
 		global $gBitThemes, $gBitSmarty, $gBitSystem;
 
-		$this->setupContentTypes();
+		if ( $pShowContentOptions ) {
+			$this->setupContentTypes();
+		}
 		$this->setupDayNames();
 
 		$gBitThemes->loadAjax( 'prototype' );
@@ -443,7 +445,7 @@ class Calendar extends LibertyContent {
 		// TODO: make this a pref
 		$gBitSmarty->assign( 'trunc', $gBitSystem->getConfig( 'title_truncate', 12 ) );
 
-		$gBitSystem->display( 'bitpackage:calendar/calendar.tpl', tra( 'Calendar' ) );
+		$gBitSystem->display( 'bitpackage:calendar/calendar.tpl', $pTitle );
 
 	}
 }
