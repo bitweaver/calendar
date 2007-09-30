@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.39 2007/06/29 16:33:57 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.40 2007/09/30 15:47:40 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -46,21 +46,17 @@ class Calendar extends LibertyContent {
 	**/
 	function getList( $pListHash ) {
 		$ret = array();
-		$pListHash['include_data'] = TRUE;
 		if( $this->prepGetList( $pListHash ) ) {
-			include_once( LIBERTY_PKG_PATH.'LibertyContent.php' );
-			$content = new LibertyContent();
-			$content->prepGetList( $pListHash );
-			$res = $content->getContentList( $pListHash );
+			$res = $this->getContentList( $pListHash );
 
-		foreach( $res['data'] as $item ) {
+			foreach( $res['data'] as $item ) {
 				// shift all time data by user timezone offset
 				// and then display as a simple UTC time
-				$item['timestamp']     = $item[$pListHash['calendar_sort_mode']] + $this->display_offset;;
+				$item['timestamp']     = $item[$pListHash['time_limit_column']] + $this->display_offset;;
 				$item['created']       = $item['created']       + $this->display_offset;;
 				$item['last_modified'] = $item['last_modified'] + $this->display_offset;;
 				$item['event_time']	   = $item['event_time'] + $this->display_offset;;
-				$item['parsed'] = $content->parseData($item['data'], $item['format_guid']);
+ 				$item['parsed'] = $this->parseData($item['data'], $item['format_guid']);
 				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
 				$ret[$dstart][] = $item;
 			}
@@ -124,14 +120,30 @@ class Calendar extends LibertyContent {
 	* prepare ListHash to ensure errorfree usage
 	**/
 	function prepGetList( &$pListHash ) {
+		$pListHash['include_data'] = TRUE;
 		if( !empty( $pListHash['focus_date'] ) ) {
 			$calDates = $this->doRangeCalculations( $pListHash );
-			$pListHash['start'] = $calDates['view_start'] - $this->display_offset;
-			$pListHash['stop'] = $calDates['view_end'] - $this->display_offset;
+			$pListHash['time_limit_start'] = $calDates['view_start'] - $this->display_offset;
+			$pListHash['time_limit_stop'] = $calDates['view_end'] - $this->display_offset;
 		}
-		if( !empty( $pListHash['sort_mode'] ) ) {
-			$pListHash['calendar_sort_mode'] = preg_replace( "/(_asc$|_desc$)/i", "", $pListHash['sort_mode'] );
+		if (  empty( $pListHash['sort_mode'] ) ) {
+			$pListHash['sort_mode'] = !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'event_time_asc';
 		}
+		$pListHash['time_limit_column'] = preg_replace( "/(_asc$|_desc$)/i", "", $pListHash['sort_mode'] );
+
+		if ( empty( $pListHash['user_id'] ) ) {
+			$pListHash['user_id'] = !empty( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : NULL;
+		}
+		if ( !empty( $_REQUEST['order_table'] ) ) {
+			$pListHash['order_table'] = $_REQUEST['order_table'];
+		}
+
+		// Don't think this is required.
+		$pListHash['offset'] = 0;
+		// There should at least be a preference for this.
+		$pListHash['max_records'] = 500;
+
+		LibertyContent::prepGetList( $pListHash );
 		return TRUE;
 	}
 
@@ -211,7 +223,7 @@ class Calendar extends LibertyContent {
 	 * timezone and daylight saving, but the USERS daylight saving information
 	 * is not available, which will cause some problems!
 	 **/
-	function buildCalendar( $pDateHash ) {
+	function buildMonth( $pDateHash ) {
 		global $gBitSmarty;
 
 		$focus = $this->mDate->getdate( $pDateHash['focus_date'], false, true );
@@ -278,6 +290,161 @@ class Calendar extends LibertyContent {
 		}
 
 		return $calendar;
+	}
+
+	// Setup the content types for use in the calendar.
+	function setupContentTypes() {
+		global $gLibertySystem, $gBitSmarty, $gBitSystem;
+		foreach( $gLibertySystem->mContentTypes as $cName => $cType ) {
+			if ( $gBitSystem->isPackageActive( $cType['handler_package'] ) ) {
+				$contentTypes[$cType['content_type_guid']] = $cType['content_description'];
+			}
+		}
+		asort($contentTypes);
+		$gBitSmarty->assign( 'calContentTypes', $contentTypes );
+	}
+
+	// Setup the day names for use in the calendar
+	function setupDayNames() {
+		global $gBitSmarty;
+
+		// set up daynames for the calendar
+		$dayNames = array(
+			tra( "Monday" ),
+			tra( "Tuesday" ),
+			tra( "Wednesday" ),
+			tra( "Thursday" ),
+			tra( "Friday" ),
+			tra( "Saturday" ),
+			tra( "Sunday" ),
+			);
+
+		// depending on what day we want to view first, we need to adjust the dayNames array
+		for( $i = 0; $i < WEEK_OFFSET; $i++ ) {
+			$pop = array_pop( $dayNames );
+			array_unshift( $dayNames, $pop );
+		}
+		$gBitSmarty->assign( 'dayNames', $dayNames );
+	}
+
+	function processRequestHash(&$pRequest, &$pStore) {
+		global $gBitUser;
+		if( !empty( $pRequest["content_type_guid"] ) ) {
+			if( $gBitUser->isRegistered() ) {
+				$gBitUser->storePreference( 'calendar_default_guids', serialize( $pRequest['content_type_guid'] ) );
+			}
+			$pStore['content_type_guid'] = $pRequest["content_type_guid"];
+		} elseif( !isset( $pStore['content_type_guid'] ) && $gBitUser->getPreference( 'calendar_default_guids' ) && $gBitUser->isRegistered() ) {
+			$pStore['content_type_guid'] = unserialize( $gBitUser->getPreference( 'calendar_default_guids' ) );
+		} elseif( !isset( $pStore['content_type_guid'] ) ) {
+			$pStore['content_type_guid'] = array();
+		} elseif( isset( $pRequest["refresh"] ) && !isset( $pRequest["content_type_guid"] ) ) {
+			$pStore['content_type_guid'] = array();
+		}
+
+		// set up the todate
+		if( !empty( $pRequest["todate"] ) ) {
+			// clean up todate. who knows where this has come from
+			if ( is_numeric( $pRequest['todate'] ) ) {
+				$pStore['focus_date'] = $pRequest['todate'] = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( 'm', $pRequest['todate'], true ), $this->mDate->date( 'd', $pRequest['todate'], true ), $this->mDate->date( 'Y', $pRequest['todate'], true ) );
+			} else {
+				$pStore['focus_date'] = $pRequest['todate'] = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date2( 'm', $pRequest['todate'], true ), $this->mDate->date2( 'd', $pRequest['todate'], true ), $this->mDate->date2( 'Y', $pRequest['todate'], true ) );
+			}
+		} elseif( !empty( $pStore['focus_date'] ) ) {
+			$pRequest["todate"] = $pStore['focus_date'];
+		} else {
+			$pStore['focus_date'] = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( 'm' ), $this->mDate->date( 'd' ), $this->mDate->date( 'Y' ) );
+			$pRequest["todate"] = $pStore['focus_date'];
+		}
+
+		$focus = $pRequest['todate'];
+		if( !empty( $pRequest["view_mode"] ) ) {
+			$pStore['view_mode'] = $pRequest["view_mode"];
+		} elseif( empty( $pStore['view_mode'] ) ) {
+			$pStore['view_mode'] = 'month';
+		}
+	}
+
+	function getEvents(&$pListHash) {
+		global $gBitSystem, $gLibertySystem;
+
+		$bitEvents = array();
+		if ( !empty( $pListHash['content_type_guid'] ) ) {
+			// Verify that the type is still active
+			foreach ( $pListHash['content_type_guid'] as $index => $type ) {
+				if ( !$gBitSystem->isPackageActive( $gLibertySystem->mContentTypes[$type]['handler_package'] ) ) {
+					unset( $pListHash['content_type_guid'][$index] );
+				}
+				if ( !empty( $pListHash['content_type_guid'] ) ) {
+					$bitEvents = $this->getList( $pListHash );
+				}
+			}
+		}
+
+		return $bitEvents;
+	}
+
+	function buildCalendar(&$pListHash, &$pDateHash) {
+		global $gBitSmarty, $gBitSystem;
+
+		$bitEvents = $this->getEvents($pListHash);
+
+		$gBitSmarty->assign( 'navigation', $this->buildCalendarNavigation( $pDateHash ) );
+		$calMonth = $this->buildMonth( $pDateHash );
+		$calDay = $this->buildDay( $pDateHash );
+
+		foreach( $calMonth as $w => $week ) {
+			foreach( $week as $d => $day ) {
+				$dayEvents = array();
+				if( !empty( $bitEvents[$day['day']] ) ) {
+					$i = 0;
+					foreach( $bitEvents[$day['day']] as $bitEvent ) {
+						$bitEvent['parsed_data'] = $this->parseData($bitEvent);
+						$dayEvents[$i] = $bitEvent;
+						if (!$gBitSystem->isFeatureActive('calendar_ajax_popups')) {
+							$gBitSmarty->assign( 'cellHash', $bitEvent );
+							$dayEvents[$i]["over"] = $gBitSmarty->fetch( "bitpackage:calendar/calendar_box.tpl" );
+						}
+
+						// populate $calDay array with events
+						if( !empty ( $bitEvent ) && $pDateHash['view_mode'] == 'day' ) {
+							foreach( $calDay as $key => $t ) {
+								// special case - last item entry in array - check this first
+
+								if( $bitEvent['timestamp'] >= $calDay[$key]['time']  && empty( $calDay[$key + 1]['time'] ) ) {
+									$calDay[$key]['items'][] = $dayEvents[$i];
+								} elseif( $bitEvent['timestamp'] >= $calDay[$key]['time'] && $bitEvent['timestamp'] <= $calDay[$key + 1]['time'] ) {
+									$calDay[$key]['items'][] = $dayEvents[$i];
+								}
+							}
+						}
+
+						$i++;
+					}
+				}
+				if( !empty( $dayEvents ) ) {
+					$calMonth[$w][$d]['items'] = array_values( $dayEvents );
+				}
+			}
+		}
+		$gBitSmarty->assign_by_ref( 'calDay', $calDay );
+		$gBitSmarty->assign_by_ref( 'calMonth', $calMonth );
+	}
+
+	// Display the actual calendar doing any other work required for the template
+	function display($pTitle) {
+		global $gBitThemes, $gBitSmarty, $gBitSystem;
+
+		$this->setupContentTypes();
+		$this->setupDayNames();
+
+		$gBitThemes->loadAjax( 'prototype' );
+
+		// TODO: make this a pref
+		$gBitSmarty->assign( 'trunc', $gBitSystem->getConfig( 'title_truncate', 12 ) );
+
+		$gBitSystem->display( 'bitpackage:calendar/calendar.tpl', tra( 'Calendar' ) );
+
 	}
 }
 ?>
