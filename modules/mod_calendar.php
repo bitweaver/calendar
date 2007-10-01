@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.php,v 1.10 2007/02/27 17:35:47 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.php,v 1.11 2007/10/01 16:02:37 nickpalmer Exp $
  * @package calendar
  * @subpackage modules
  */
@@ -31,24 +31,8 @@ $calHash = array(
 	'view_mode' => 'month',
 );
 
-// set up daynames for the calendar
-$dayNames = array(
-	tra( "Monday" ),
-	tra( "Tuesday" ),
-	tra( "Wednesday" ),
-	tra( "Thursday" ),
-	tra( "Friday" ),
-	tra( "Saturday" ),
-	tra( "Sunday" ),
-);
-
-// depending on what day we want to view first, we need to adjust the dayNames array
-for( $i = 0; $i < WEEK_OFFSET; $i++ ) {
-	$pop = array_pop( $dayNames );
-	array_unshift( $dayNames, $pop );
-}
-$gBitSmarty->assign( 'dayNames', $dayNames );
+$cal->setupCalendar(FALSE);
 
 $gBitSmarty->assign( 'modCalNavigation', $cal->buildCalendarNavigation( $calHash ) );
-$gBitSmarty->assign( 'modCalMonth', $calMonth = $cal->buildCalendar( $calHash ) );
+$gBitSmarty->assign( 'modCalMonth', $calMonth = $cal->buildMonth( $calHash ) );
 ?>
