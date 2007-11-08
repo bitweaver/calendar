@@ -1,5 +1,4 @@
 {strip}
-<link rel="stylesheet" title="{$style}" type="text/css" href="{$smarty.const.CALENDAR_PKG_URL}styles/plain.css" media="all" />
 {assign var=calendar_url value="`$smarty.const.CALENDAR_PKG_URL`index.php?todate="}
 {assign var=calendar_day_url value="`$smarty.const.CALENDAR_PKG_URL`index.php?view_mode=day&amp;todate="}
 <table class="minical" border="0" cellpadding="1" cellspacing="1">
@@ -10,7 +9,7 @@
 	</tr>
 	<tr>
 		<td colspan="3" class="last">
-			<a href="{$calendar_url}{$last_month}"> &lt;&nbsp;&lt </a>
+			<a href="{$calendar_url}{$last_month}"> &lt;&nbsp;&lt; </a>
 		</td>
 		<td colspan="4" class="next">
 			<a href="{$calendar_url}{$next_month}"> &gt;&nbsp;&gt; </a>
