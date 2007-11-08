@@ -1,7 +1,7 @@
 {strip}
 <link rel="stylesheet" title="{$style}" type="text/css" href="{$smarty.const.CALENDAR_PKG_URL}styles/plain.css" media="all" />
 {assign var=calendar_url value="`$smarty.const.CALENDAR_PKG_URL`index.php?todate="}
-{assign var=calendar_day_url value="`$smarty.const.CALENDAR_PKG_URL`index.php?view_mode=day&todate="}
+{assign var=calendar_day_url value="`$smarty.const.CALENDAR_PKG_URL`index.php?view_mode=day&amp;todate="}
 <table class="minical" border="0" cellpadding="1" cellspacing="1">
 	<tr>
 		<th class="month odd" colspan="7">
