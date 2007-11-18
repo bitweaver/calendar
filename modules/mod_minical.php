@@ -1,4 +1,13 @@
 <?php
+/**
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_minical.php,v 1.3 2007/11/18 12:00:25 lsces Exp $
+ * @package calendar
+ * @subpackage modules
+ */
+
+/**
+ * Required setup
+ */
 global $gBitSmarty;
 
 // Make sure we know how to do the data_calendar
