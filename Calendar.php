@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.42 2007/10/20 22:18:56 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.43 2008/01/12 14:42:11 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -25,12 +25,7 @@ class Calendar extends LibertyContent {
 		LibertyContent::LibertyContent();
 		global $gBitUser;
 		$this->mDate = new BitDate(0);
-		$this->display_offset;
-		if ( $gBitUser->getPreference('site_display_utc', "UTC") == 'Local' ) {
-			$this->display_offset = $this->mDate->display_offset;
-		} elseif ( $gBitUser->getPreference('site_display_utc', "UTC") == 'Fixed' ) {
-			$this->display_offset = $gBitUser->getPreference('site_display_timezone', 0);
-		}
+		$this->display_offset = BitDate::get_display_offset();
 	}
 
 	/**
@@ -52,10 +47,10 @@ class Calendar extends LibertyContent {
 			foreach( $res['data'] as $item ) {
 				// shift all time data by user timezone offset
 				// and then display as a simple UTC time
-				$item['timestamp']     = $item[$pListHash['time_limit_column']] + $this->display_offset;;
-				$item['created']       = $item['created']       + $this->display_offset;;
-				$item['last_modified'] = $item['last_modified'] + $this->display_offset;;
-				$item['event_time']	   = $item['event_time'] + $this->display_offset;;
+				$item['timestamp']     = $item[$pListHash['time_limit_column']] + $this->display_offset;
+				$item['created']       = $item['created']       + $this->display_offset;
+				$item['last_modified'] = $item['last_modified'] + $this->display_offset;
+				$item['event_time']	   = $item['event_time'] + $this->display_offset;
  				$item['parsed'] = $this->parseData($item['data'], $item['format_guid']);
 				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
 				$ret[$dstart][] = $item;
