@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.43 2008/01/12 14:42:11 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.44 2008/01/13 22:28:36 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -433,7 +433,9 @@ class Calendar extends LibertyContent {
 		}
 		$this->setupDayNames();
 
-		$gBitThemes->loadAjax( 'prototype' );
+		if ($gBitSystem->isFeatureActive('calendar_ajax_popups')) {
+			$gBitThemes->loadAjax( 'mochikit' );
+		}
 
 		// TODO: make this a pref
 		$gBitSmarty->assign( 'trunc', $gBitSystem->getConfig( 'title_truncate', 12 ) );
