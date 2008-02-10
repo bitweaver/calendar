@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.44 2008/01/13 22:28:36 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.45 2008/02/10 12:18:52 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -14,6 +14,7 @@
 include_once( KERNEL_PKG_PATH . 'BitDate.php' );
 // set week offset - start with a day other than monday
 define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ? $gBitUser->mUserPrefs['calendar_week_offset'] : $gBitSystem->getConfig( 'calendar_week_offset', 0 ) );
+
 /**
  * @package calendar
  */
@@ -442,10 +443,17 @@ class Calendar extends LibertyContent {
 	}
 
 	// Display the actual calendar doing any other work required for the template
-	function display($pTitle, $pShowContentOptions = TRUE) {
-		global $gBitSystem;
+	function display($pTitle, $pShowContentOptions = TRUE, $pBaseUrl=NULL) {
+		global $gBitSystem, $gBitSmarty;
 
 		$this->setupCalendar($pShowContentOptions);
+
+		// A default base for the calendar
+		if( empty($pBaseUrl) ){
+			$pBaseUrl = CALENDAR_PKG_URL.'index.php';
+		}
+		// Asssign it so templates see it.
+		$gBitSmarty->assign('baseCalendarUrl', $pBaseUrl);
 
 		$gBitSystem->display( 'bitpackage:calendar/calendar.tpl', $pTitle );
 

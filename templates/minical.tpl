@@ -1,6 +1,6 @@
 {strip}
-{assign var=calendar_url value="`$smarty.const.CALENDAR_PKG_URL`index.php?todate="}
-{assign var=calendar_day_url value="`$smarty.const.CALENDAR_PKG_URL`index.php?view_mode=day&amp;todate="}
+{assign var=calendar_url value="`$baseCalendarUrl`?todate="}
+{assign var=calendar_day_url value="`$baseCalendarUrl`?view_mode=day&amp;todate="}
 <table class="minical" border="0" cellpadding="1" cellspacing="1">
 	<tr>
 		<th class="month odd" colspan="7">
