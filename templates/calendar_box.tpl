@@ -9,6 +9,7 @@
 		{$cellHash.rendered}
 	{/if}
 	{if $gBitUser->hasPermission('p_calendar_view_changes') && !empty($cellHash.creator_real_name) }
+{*
 	<div class="boxcontent">
 		{tr}Content Type{/tr}: {$cellHash.content_description}
 		<br />
@@ -16,6 +17,7 @@
 		<br />
 		<strong>{tr}Last modified{/tr}</strong>: {displayname login=$cellHash.modifier_user real_name=$cellHash.modifier_real_name}<br />{$cellHash.last_modified|cal_date_format:"%Y-%m-%d - %H:%M %Z"}
 	</div>
+*}
 	{/if}
 {else}
 <div class=error>{tr}No such content.{/tr}</div>

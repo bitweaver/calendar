@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.45 2008/02/10 12:18:52 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.46 2008/02/26 16:48:35 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -439,7 +439,7 @@ class Calendar extends LibertyContent {
 		}
 
 		// TODO: make this a pref
-		$gBitSmarty->assign( 'trunc', $gBitSystem->getConfig( 'title_truncate', 12 ) );
+		$gBitSmarty->assign( 'trunc', $gBitSystem->getConfig( 'title_truncate', 32 ) );
 	}
 
 	// Display the actual calendar doing any other work required for the template
