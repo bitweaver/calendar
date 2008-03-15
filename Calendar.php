@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.46 2008/02/26 16:48:35 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.47 2008/03/15 10:54:19 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -64,7 +64,7 @@ class Calendar extends LibertyContent {
 	* calculate the start and stop time for the current display page
 	**/
 	function doRangeCalculations( $pDateHash ) {
-		$focus = $this->mDate->getdate( $pDateHash['focus_date'], false, true );
+		$focus = $this->mDate->_getdate( $pDateHash['focus_date'], false, true );
 
 		if( $pDateHash['view_mode'] == 'month' ) {
 			$view_start = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'],     1, $focus['year'] );
@@ -80,18 +80,13 @@ class Calendar extends LibertyContent {
 				$wd -= 7;
 			}
 
-			// for some very odd reason, which i can't work out, we need to add a day here
-			$view_start = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 1, $focus['year'] );
-			$view_end   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 8, $focus['year'] ) - 1;
+			$view_start = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd, $focus['year'] );
+			$view_end   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] - $wd + 7, $focus['year'] ) - 1;
 		} else {
 			$view_start = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday']    , $focus['year'] );
 			$view_end   = $this->mDate->gmmktime( 0, 0, 0, $focus['mon'], $focus['mday'] + 1, $focus['year'] ) - 1;
 		}
 
-		// this is where we adjust the start and stop times to user local time settings
-		// The range is adjusted backwards so that it covers the correct window
-//		$view_start = $view_start - $this->display_offset;
-//		$view_end   = $view_end   - $this->display_offset;
 		$start_year  = $this->mDate->date( 'Y', $view_start, true );
 		if ( $start_year < 1902 ) {
 			$view_start_iso = $view_start  = $this->mDate->date( 'Y-m-d', $view_start, true );
@@ -383,6 +378,12 @@ class Calendar extends LibertyContent {
 	function buildCalendar(&$pListHash, &$pDateHash) {
 		global $gBitSmarty, $gBitSystem;
 
+		if( isset($pDateHash['focus_date']) && !isset($pListHash['focus_date']) ) {
+			$pListHash['focus_date'] = $pDateHash['focus_date'];
+		}
+		if( isset($pDateHash['view_mode']) && !isset($pListHash['view_mode']) ) {
+			$pListHash['view_mode'] = $pDateHash['view_mode'];
+		}
 		$bitEvents = $this->getEvents($pListHash);
 
 		$gBitSmarty->assign( 'navigation', $this->buildCalendarNavigation( $pDateHash ) );
