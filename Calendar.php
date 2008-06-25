@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.47 2008/03/15 10:54:19 nickpalmer Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.48 2008/06/25 22:21:08 spiderr Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -456,7 +456,7 @@ class Calendar extends LibertyContent {
 		// Asssign it so templates see it.
 		$gBitSmarty->assign('baseCalendarUrl', $pBaseUrl);
 
-		$gBitSystem->display( 'bitpackage:calendar/calendar.tpl', $pTitle );
+		$gBitSystem->display( 'bitpackage:calendar/calendar.tpl', $pTitle , array( 'display_mode' => 'display' ));
 
 	}
 }
