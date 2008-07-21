@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.48 2008/06/25 22:21:08 spiderr Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.49 2008/07/21 13:37:05 lsces Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -42,20 +42,18 @@ class Calendar extends LibertyContent {
 	**/
 	function getList( $pListHash ) {
 		$ret = array();
-		if( $this->prepGetList( $pListHash ) ) {
-			$res = $this->getContentList( $pListHash );
+		$res = $this->getContentList( $pListHash );
 
-			foreach( $res['data'] as $item ) {
-				// shift all time data by user timezone offset
-				// and then display as a simple UTC time
-				$item['timestamp']     = $item[$pListHash['time_limit_column']] + $this->display_offset;
-				$item['created']       = $item['created']       + $this->display_offset;
-				$item['last_modified'] = $item['last_modified'] + $this->display_offset;
-				$item['event_time']	   = $item['event_time'] + $this->display_offset;
- 				$item['parsed'] = $this->parseData($item['data'], $item['format_guid']);
-				$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
-				$ret[$dstart][] = $item;
-			}
+		foreach( $res['data'] as $item ) {
+			// shift all time data by user timezone offset
+			// and then display as a simple UTC time
+			$item['timestamp']     = $item[$pListHash['time_limit_column']] + $this->display_offset;
+			$item['created']       = $item['created']       + $this->display_offset;
+			$item['last_modified'] = $item['last_modified'] + $this->display_offset;
+			$item['event_time']	   = $item['event_time'] + $this->display_offset;
+ 			$item['parsed'] = $this->parseData($item['data'], $item['format_guid']);
+			$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
+			$ret[$dstart][] = $item;
 		}
 	return $ret;
 	}
@@ -410,7 +408,7 @@ class Calendar extends LibertyContent {
 
 								if( $bitEvent['timestamp'] >= $calDay[$key]['time']  && empty( $calDay[$key + 1]['time'] ) ) {
 									$calDay[$key]['items'][] = $dayEvents[$i];
-								} elseif( $bitEvent['timestamp'] >= $calDay[$key]['time'] && $bitEvent['timestamp'] <= $calDay[$key + 1]['time'] ) {
+								} elseif( $bitEvent['timestamp'] >= $calDay[$key]['time'] && $bitEvent['timestamp'] < $calDay[$key + 1]['time'] ) {
 									$calDay[$key]['items'][] = $dayEvents[$i];
 								}
 							}
