@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.49 2008/07/21 13:37:05 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.50 2008/07/29 18:06:58 lsces Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -44,7 +44,7 @@ class Calendar extends LibertyContent {
 		$ret = array();
 		$res = $this->getContentList( $pListHash );
 
-		foreach( $res['data'] as $item ) {
+		foreach( $res as $item ) {
 			// shift all time data by user timezone offset
 			// and then display as a simple UTC time
 			$item['timestamp']     = $item[$pListHash['time_limit_column']] + $this->display_offset;
