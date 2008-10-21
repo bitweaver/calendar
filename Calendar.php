@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.50 2008/07/29 18:06:58 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.51 2008/10/21 10:30:03 nickpalmer Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -26,7 +26,7 @@ class Calendar extends LibertyContent {
 		LibertyContent::LibertyContent();
 		global $gBitUser;
 		$this->mDate = new BitDate(0);
-		$this->display_offset = BitDate::get_display_offset();
+		$this->display_offset = $this->mDate->get_display_offset();
 	}
 
 	/**
