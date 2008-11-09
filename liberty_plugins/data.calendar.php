@@ -1,6 +1,6 @@
 <?php
 /**
- * @version  $Revision: 1.1 $
+ * @version  $Revision: 1.2 $
  * @package  liberty
  * @subpackage plugins_data
  */
@@ -17,7 +17,7 @@
 // | Reworked for Bitweaver (& Undoubtedly Screwed-Up)
 // | by: StarRider <starrrider@users.sourceforge.net>
 // +----------------------------------------------------------------------+
-// $Id: data.calendar.php,v 1.1 2008/07/08 07:23:57 squareing Exp $
+// $Id: data.calendar.php,v 1.2 2008/11/09 09:08:55 squareing Exp $
 
 /**
  * definitions
@@ -33,7 +33,6 @@ $pluginParams = array (
 	'help_page' => 'DataPluginCalendar',
 	'description' => tra("Displays a mini calendar that links to the calendar package."),	
 	'syntax' => " {CALENDAR} ",
-	'path' => LIBERTY_PKG_PATH.'plugins/data.calendar.php',
 	'plugin_type' => DATA_PLUGIN
 );
 $gLibertySystem->registerPlugin( PLUGIN_GUID_DATACALENDAR, $pluginParams );
