@@ -1,10 +1,10 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.52 2009/10/01 13:45:32 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.53 2009/10/01 14:16:58 wjames5 Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
- * All Rights Reserved. See copyright.txt for details and a complete list of authors.
+ * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
  */
 
