@@ -1,11 +1,11 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.57 2009/10/01 14:16:58 wjames5 Exp $
+// $Header: /cvsroot/bitweaver/_bit_calendar/index.php,v 1.58 2010/02/08 21:27:22 wjames5 Exp $
 
 // Copyright( c ) 2002-2003, Luis Argerich, Garland Foster, Eduardo Polidor, et. al.
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 
 include_once( CALENDAR_PKG_PATH.'Calendar.php' );
 
