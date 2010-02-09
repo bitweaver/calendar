@@ -16,7 +16,7 @@
 				</div>
 			{/foreach}
 			<script type="text/javascript">/* <![CDATA[ */
-				document.write("<label><input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"switchCheckboxes(this.form.id,'content_type_guid[]','switcher')\" /> {tr}Select all{/tr}</label><br />");
+				document.write("<label><input name=\"switcher\" id=\"switcher\" type=\"checkbox\" onclick=\"BitBase.switchCheckboxes(this.form.id,'content_type_guid[]','switcher')\" /> {tr}Select all{/tr}</label><br />");
 			/* ]]> */</script>
 		{/forminput}
 	</div>
