@@ -11,7 +11,7 @@
 	{if $gBitUser->hasPermission('p_calendar_view_changes') && !empty($cellHash.creator_real_name) }
 
 	<div class="boxcontent">
-		{tr}Content Type{/tr}: {$cellHash.content_description}
+		{tr}Content Type{/tr}: {$gLibertySystem->getContentTypeName($cellHash.content_type_guid)}
 		<br />
 		<strong>{tr}First created{/tr}</strong>: {displayname login=$cellHash.creator_user real_name=$cellHash.creator_real_name}<br />{$cellHash.created|cal_date_format:"%Y-%m-%d - %H:%M %Z"}
 		<br />

@@ -33,7 +33,7 @@ global $gLibertySystem;
 foreach( $gLibertySystem->mContentTypes as $cType ) {
 	$option = 'calendar_default_'.$cType['content_type_guid'];
 	$calendarChecks[] = $option;
-	$calendarTypeDefaults[$option] = $cType['content_description'];
+	$calendarTypeDefaults[$option] = $gLibertySystem->getContentTypeName( $cType['content_type_guid'] );
 }
 asort($calendarTypeDefaults);
 $gBitSmarty->assign('calendarTypeDefaults', $calendarTypeDefaults);
