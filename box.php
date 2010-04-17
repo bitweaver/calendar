@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/box.php,v 1.7 2010/02/08 21:27:22 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/box.php,v 1.8 2010/04/17 04:56:46 wjames5 Exp $
  * @package calendar
  * @subpackage functions
  * 
@@ -20,7 +20,7 @@ include_once( LIBERTY_PKG_PATH.'lookup_content_inc.php' );
 $gContent->mInfo['rendered'] = $gContent->getPreview();
 
 if (!empty($gContent->mInfo['content_type_guid'])) {
-	$gContent->mInfo['content_description'] = $gLibertySystem->mContentTypes[$gContent->mInfo['content_type_guid']]['content_description'];
+	$gContent->mInfo['content_description'] = $gLibertySystem->getContentTypeName( $gContent->mInfo['content_type_guid'] );
 }
 
 $gBitSmarty->assign('cellHash', $gContent->mInfo);
