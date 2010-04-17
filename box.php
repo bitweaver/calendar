@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/box.php,v 1.9 2010/04/17 15:36:06 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/box.php,v 1.10 2010/04/17 22:46:07 wjames5 Exp $
  * @package calendar
  * @subpackage functions
  * 
@@ -18,12 +18,6 @@ global $gContent, $gBitSystem;
 include_once( LIBERTY_PKG_PATH.'lookup_content_inc.php' );
 
 $gContent->mInfo['rendered'] = $gContent->getPreview();
-
-/* DEPRECATED content type name is immediately accessible via gLibertySystem in the tpl
-if (!empty($gContent->mInfo['content_type_guid'])) {
-	$gContent->mInfo['content_description'] = $gLibertySystem->getContentTypeName( $gContent->mInfo['content_type_guid'] );
-}
-*/
 
 $gBitSmarty->assign('cellHash', $gContent->mInfo);
 

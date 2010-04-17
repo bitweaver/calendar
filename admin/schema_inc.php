@@ -23,4 +23,8 @@ $gBitInstaller->registerUserPermissions( CALENDAR_PKG_NAME, array(
 
 // this empty table registration is needed for the installer to pick it up to install the preferences
 $gBitInstaller->registerSchemaTable( CALENDAR_PKG_NAME, '', '' );
-?>
+
+// Requirements
+$gBitInstaller->registerRequirements( CALENDAR_PKG_NAME, array(
+	'liberty' => array( 'min' => '2.1.4' ),
+));
