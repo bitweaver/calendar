@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.54 2010/04/17 15:36:06 wjames5 Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.55 2010/04/19 10:55:50 lsces Exp $
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org
@@ -286,7 +286,7 @@ class Calendar extends LibertyContent {
 		global $gLibertySystem, $gBitSmarty, $gBitSystem;
 		foreach( $gLibertySystem->mContentTypes as $cName => $cType ) {
 			if ( $gBitSystem->isPackageActive( $cType['handler_package'] ) ) {
-				$contentTypes[$cType['content_type_guid']] = $gLibetySystem->getContentTypeName( $cType['content_type_guid'] );
+				$contentTypes[$cType['content_type_guid']] = $gLibertySystem->getContentTypeName( $cType['content_type_guid'] );
 			}
 		}
 		asort($contentTypes);
