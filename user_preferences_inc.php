@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/user_preferences_inc.php,v 1.5 2009/10/01 14:16:58 wjames5 Exp $
+ * @version $Header$
  * @package calendar
  * @subpackage functions
  * 

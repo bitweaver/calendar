@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/Calendar.php,v 1.55 2010/04/19 10:55:50 lsces Exp $
+ * @version $Header$
  * @package calendar
  * 
  * @copyright Copyright (c) 2004-2006, bitweaver.org

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_minical.php,v 1.5 2008/07/23 12:47:17 wjames5 Exp $
+ * @version $Header$
  * @package calendar
  * @subpackage modules
  */

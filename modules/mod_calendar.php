@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/modules/mod_calendar.php,v 1.11 2007/10/01 16:02:37 nickpalmer Exp $
+ * @version $Header$
  * @package calendar
  * @subpackage modules
  */

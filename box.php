@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_calendar/box.php,v 1.10 2010/04/17 22:46:07 wjames5 Exp $
+ * @version $Header$
  * @package calendar
  * @subpackage functions
  * 
