@@ -4,21 +4,21 @@
 		<caption>{$modCalNavigation.focus_date|date_format:"%B %Y"}</caption>
 		<tr>
 			<td style="text-align:left;">
-				<a href="{$smarty.server.PHP_SELF}?todate={$modCalNavigation.before.year}&amp;{$url_string}" title="{$modCalNavigation.before.year|bit_long_date}">&laquo;{tr}y{/tr}</a>
+				<a href="{$smarty.server.SCRIPT_NAME}?todate={$modCalNavigation.before.year}&amp;{$url_string}" title="{$modCalNavigation.before.year|bit_long_date}">&laquo;{tr}y{/tr}</a>
 			</td>
 			<td style="text-align:left;">
-				<a href="{$smarty.server.PHP_SELF}?todate={$modCalNavigation.before.month}&amp;{$url_string}" title="{$modCalNavigation.before.month|bit_long_date}">&laquo;{tr}m{/tr}</a><br />
+				<a href="{$smarty.server.SCRIPT_NAME}?todate={$modCalNavigation.before.month}&amp;{$url_string}" title="{$modCalNavigation.before.month|bit_long_date}">&laquo;{tr}m{/tr}</a><br />
 			</td>
 
 			<td colspan="3" style="text-align:center;">
-				<a href="{$smarty.server.PHP_SELF}?todate={$smarty.now}&amp;{$url_string}" title="{$smarty.now|bit_long_date}">{tr}Today{/tr}</a>
+				<a href="{$smarty.server.SCRIPT_NAME}?todate={$smarty.now}&amp;{$url_string}" title="{$smarty.now|bit_long_date}">{tr}Today{/tr}</a>
 			</td>
 
 			<td style="text-align:right;">
-				<a href="{$smarty.server.PHP_SELF}?todate={$modCalNavigation.after.month}&amp;{$url_string}" title="{$modCalNavigation.after.month|bit_long_date}">{tr}m{/tr}&raquo;</a><br />
+				<a href="{$smarty.server.SCRIPT_NAME}?todate={$modCalNavigation.after.month}&amp;{$url_string}" title="{$modCalNavigation.after.month|bit_long_date}">{tr}m{/tr}&raquo;</a><br />
 			</td>
 			<td style="text-align:right;">
-				<a href="{$smarty.server.PHP_SELF}?todate={$modCalNavigation.after.year}&amp;{$url_string}" title="{$modCalNavigation.after.year|bit_long_date}">{tr}y{/tr}&raquo;</a>
+				<a href="{$smarty.server.SCRIPT_NAME}?todate={$modCalNavigation.after.year}&amp;{$url_string}" title="{$modCalNavigation.after.year|bit_long_date}">{tr}y{/tr}&raquo;</a>
 			</td>
 		</tr>
 
