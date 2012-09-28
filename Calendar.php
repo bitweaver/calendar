@@ -108,7 +108,7 @@ class Calendar extends LibertyContent {
 	/**
 	* prepare ListHash to ensure errorfree usage
 	**/
-	function prepGetList( &$pListHash ) {
+	public static function prepGetList( &$pListHash ) {
 		$pListHash['include_data'] = TRUE;
 		if( !empty( $pListHash['focus_date'] ) ) {
 			$calDates = $this->doRangeCalculations( $pListHash );
@@ -177,7 +177,7 @@ class Calendar extends LibertyContent {
 	 **/
 	function buildCalendarNavigation( $pDateHash ) {
 		global $gBitUser, $gBitSystem;
-		$today = $this->mDate->getdate( gmmktime(), false, true );
+		$today = $this->mDate->getdate( time(), false, true );
 		$focus = $this->mDate->getdate( $pDateHash['focus_date'], false, true );
 
 		$ret = array(
