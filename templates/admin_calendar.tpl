@@ -8,7 +8,7 @@
 {form legend="Calendar Settings"}
 	<input type="hidden" name="view_user" value="{$view_user}" />
 	<input type="hidden" name="page" value="{$page}" />
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="First day of Week" for="calendar_week_offset"}
 		{forminput}
 			{html_options name=calendar_week_offset output=$firstDayOutput values=$firstDayValues selected=`$settings.calendar_week_offset` id=calendar_week_offset}
@@ -16,7 +16,7 @@
 		{/forminput}
 	</div>
 
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Time Blocks" for="calendar_hour_fraction"}
 		{forminput}
 			{html_options name=calendar_hour_fraction output=$hourOutput values=$hourValues selected=`$settings.calendar_hour_fraction` id=calendar_hour_fraction} {tr}minutes{/tr}
@@ -24,7 +24,7 @@
 		{/forminput}
 	</div>
 
-	<div class="row">
+	<div class="control-group">
 		{formlabel label="Day View" for="calendar_day_start"}
 		{forminput}
 			{tr}from{/tr} &nbsp;
@@ -36,7 +36,7 @@
 	</div>
 
 	{if $gBitUser->isAdmin() and $page eq "calendar"}
-		<div class="row">
+		<div class="control-group">
 			{formlabel label="Individual Calendar Settings" for="calendar_user_prefs"}
 			{forminput}
 				{html_checkboxes name="calendar_user_prefs" values="y" checked=`$settings.calendar_user_prefs` labels=false id=calendar_user_prefs}
@@ -44,7 +44,7 @@
 			{/forminput}
 		</div>
 
-		<div class="row">
+		<div class="control-group">
 			{formlabel label="Ajax Popups" for="calendar_ajax_popups"}
 			{forminput}
 				{html_checkboxes name="calendar_ajax_popups" values="y" checked=`$settings.calendar_ajax_popups` labels=false id=calendar_ajax_popups}
@@ -52,7 +52,7 @@
 			{/forminput}
 		</div>
 
-		<div class="row">
+		<div class="control-group">
 			{formlabel label="Default Content Types"}
 			{forminput}
 				{html_checkboxes name="defaultTypes" options=$calendarTypeDefaults selected=$calendarTypesSelected separator="<br />"}
@@ -61,7 +61,7 @@
 		</div>
 	{/if}
 	
-	<div class="row submit">
+	<div class="control-group submit">
 		<input type="submit" name="calendar_submit" value="{tr}Change preferences{/tr}" />
 	</div>
 {/form}

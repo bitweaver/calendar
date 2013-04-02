@@ -21,7 +21,7 @@
 		{/forminput}
 	</div>
 
-	<div class="row submit">
+	<div class="control-group submit">
 		<input type="submit" name="refresh" value="{tr}Update Calendar{/tr}" />
 	</div>
 {/form}
