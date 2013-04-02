@@ -2,7 +2,7 @@
 <div class="calendar popup box">
 {if $cellHash.content_id}
 	{if $gBitSystem->isFeatureActive('calendar_ajax_popups')}
-		<div class="floaticon"><a onclick="javascript:return cClick();">{biticon ipackage=icons iname=window-close iexplain="Close Popup"}</a></div>
+		<div class="floaticon"><a onclick="javascript:return cClick();">{booticon iname="icon-remove"  ipackage=icons  iexplain="Close Popup"}</a></div>
 	{/if}
 	<h3>{$cellHash.title|escape}</h3>
 	{if !empty($cellHash.rendered)}
