@@ -22,7 +22,7 @@
 	</div>
 
 	<div class="control-group submit">
-		<input type="submit" name="refresh" value="{tr}Update Calendar{/tr}" />
+		<input type="submit" class="btn" name="refresh" value="{tr}Update Calendar{/tr}" />
 	</div>
 {/form}
 {/strip}
