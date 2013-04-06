@@ -1,8 +1,3 @@
 {strip}
-<ul>
-	<li><a class="item" href="{$smarty.const.CALENDAR_PKG_URL}index.php">{booticon iname="icon-calendar" iexplain="Display Calendar" ilocation=menu}</a></li>
-	{if $gBitSystem->isPackageActive( 'minical' )}
-		<li><a class="item" href="{$smarty.const.MINICAL_PKG_URL}index.php">{booticon iname="icon-calendar"  iexplain="Mini Calendar" ilocation=menu}</a></li>
-	{/if}
-</ul>
+<a href="{$smarty.const.CALENDAR_PKG_URL}index.php">{tr}{$packageMenuTitle}{/tr}</a>
 {/strip}
