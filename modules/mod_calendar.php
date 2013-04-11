@@ -33,6 +33,6 @@ $calHash = array(
 
 $cal->setupCalendar(FALSE);
 
-$gBitSmarty->assign( 'modCalNavigation', $cal->buildCalendarNavigation( $calHash ) );
-$gBitSmarty->assign( 'modCalMonth', $calMonth = $cal->buildMonth( $calHash ) );
+$_template->tpl_vars['modCalNavigation'] = new Smarty_variable( $cal->buildCalendarNavigation( $calHash );
+$_template->tpl_vars['modCalMonth'] = new Smarty_variable( $calMonth = $cal->buildMonth( $calHash );
 ?>
