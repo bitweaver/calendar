@@ -1,9 +1,4 @@
-{* $Header$ *}
 {strip}
-{if !$gBitSystem->isFeatureActive( 'site_help_popup' )}
-	{popup_init src="`$smarty.const.UTIL_PKG_URL`javascript/libs/overlib.js"}
-{/if}
-
 <div class="display calendar">
 	<div class="header">
 		<h1>{tr}Calendar{/tr}</h1>
