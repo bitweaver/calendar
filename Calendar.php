@@ -2,7 +2,7 @@
 /**
  * @version $Header$
  * @package calendar
- * 
+ *
  * @copyright Copyright (c) 2004-2006, bitweaver.org
  * All Rights Reserved. See below for details and a complete list of authors.
  * Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
@@ -21,7 +21,7 @@ define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ?
 class Calendar extends LibertyContent {
 
 	var $display_offset;
-	
+
 	function Calendar() {
 		parent::__construct();
 		global $gBitUser;
@@ -38,7 +38,7 @@ class Calendar extends LibertyContent {
 	* the day identified in the selected timestamp from which the list was built.
 	* If the user has selected a local time display, then the day will be the actual
 	* UTC day that the item is in, rather than the UTC day of the item. In this way
-	* the display view provides a list of locally correct entries for each day. 
+	* the display view provides a list of locally correct entries for each day.
 	**/
 	function getList( $pListHash ) {
 		$ret = array();
@@ -173,7 +173,7 @@ class Calendar extends LibertyContent {
 	 * build an array of unix UTC timestamps relating to the current
 	 * calendar focus. This provides a fixed basis from which to apply local
 	 * offsets provided by tz_offset information. Daylight saving information
-	 * is not available via this route! 
+	 * is not available via this route!
 	 **/
 	function buildCalendarNavigation( $pDateHash ) {
 		global $gBitUser, $gBitSystem;
@@ -208,7 +208,7 @@ class Calendar extends LibertyContent {
 	 * build a two dimensional array of unix timestamps
 	 * The timestamps are either UTC or display local time depending on the
 	 * setting of the current users display time offset
-	 * mktime SHOULD NOT BE USED since it offsets the times based on server 
+	 * mktime SHOULD NOT BE USED since it offsets the times based on server
 	 * timezone and daylight saving, but the USERS daylight saving information
 	 * is not available, which will cause some problems!
 	 **/
