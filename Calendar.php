@@ -32,9 +32,9 @@ class Calendar extends LibertyContent {
 	/**
 	* get a full list of content for a given time period
 	* return array of items
-	* 
+	*
 	* The output array will be a set of UTC tagged pages covering the period
-	* defined in the $pListHash. Items identified from the list will be tagged to 
+	* defined in the $pListHash. Items identified from the list will be tagged to
 	* the day identified in the selected timestamp from which the list was built.
 	* If the user has selected a local time display, then the day will be the actual
 	* UTC day that the item is in, rather than the UTC day of the item. In this way
@@ -42,6 +42,30 @@ class Calendar extends LibertyContent {
 	**/
 	function getList( $pListHash ) {
 		$ret = array();
+
+		$pListHash['include_data'] = TRUE;
+		if( !empty( $pListHash['focus_date'] ) ) {
+			$calDates = $this->doRangeCalculations( $pListHash );
+			$pListHash['time_limit_start'] = $calDates['view_start'] - $this->display_offset;
+			$pListHash['time_limit_stop'] = $calDates['view_end'] - $this->display_offset;
+		}
+		if (  empty( $pListHash['sort_mode'] ) ) {
+			$pListHash['sort_mode'] = !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'event_time_asc';
+		}
+		$pListHash['time_limit_column'] = preg_replace( "/(_asc$|_desc$)/i", "", $pListHash['sort_mode'] );
+
+		if ( empty( $pListHash['user_id'] ) ) {
+			$pListHash['user_id'] = !empty( $_REQUEST['user_id'] ) ? $_REQUEST['user_id'] : NULL;
+		}
+		if ( !empty( $_REQUEST['order_table'] ) ) {
+			$pListHash['order_table'] = $_REQUEST['order_table'];
+		}
+
+		// Don't think this is required.
+		$pListHash['offset'] = 0;
+		// There should at least be a preference for this.
+		$pListHash['max_records'] = 500;
+
 		$res = $this->getContentList( $pListHash );
 
 		foreach( $res as $item ) {
