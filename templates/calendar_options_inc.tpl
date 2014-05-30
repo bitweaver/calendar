@@ -3,7 +3,7 @@
 	<div class="caloptions">
 		{forminput}
 			{foreach from=$calContentTypes key=value item=type}
-				<div class="control-group cal{$value}">
+				<div class="form-group cal{$value}">
 					<label>
 						<input type="checkbox" value="{$value}" name="content_type_guid[]"
 							{foreach from=$smarty.session.calendar.content_type_guid item=selected}
@@ -21,7 +21,7 @@
 		{/forminput}
 	</div>
 
-	<div class="control-group submit">
+	<div class="form-group submit">
 		<input type="submit" class="btn btn-default" name="refresh" value="{tr}Update Calendar{/tr}" />
 	</div>
 {/form}
