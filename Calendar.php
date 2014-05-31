@@ -49,9 +49,10 @@ class Calendar extends LibertyContent {
 			$pListHash['time_limit_start'] = $calDates['view_start'] - $this->display_offset;
 			$pListHash['time_limit_stop'] = $calDates['view_end'] - $this->display_offset;
 		}
-		if (  empty( $pListHash['sort_mode'] ) ) {
-			$pListHash['sort_mode'] = !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'event_time_asc';
-		}
+//		if (  empty( $pListHash['sort_mode'] ) ) {
+//			$pListHash['sort_mode'] = !empty( $_REQUEST['sort_mode'] ) ? $_REQUEST['sort_mode'] : 'event_time_asc';
+//		}
+		$pListHash['sort_mode'] = 'event_time_asc';
 		$pListHash['time_limit_column'] = preg_replace( "/(_asc$|_desc$)/i", "", $pListHash['sort_mode'] );
 
 		if ( empty( $pListHash['user_id'] ) ) {
