@@ -11,31 +11,29 @@
 .calendar					{border:2px solid #999; background-color:#eee; padding:5px;}
 
 /* now for the individual content type settings */
-.caloptions .calbitarticle	,.calitems .calbitarticle	a	{border-bottom-color:#f80;}
-.caloptions .calbitblog		,.calitems .calbitblog		a	{border-bottom-color:#fb6;}
-.caloptions .calbitblogpost	,.calitems .calbitblogpost	a	{border-bottom-color:#fd6;}
-.caloptions .calbitcomment	,.calitems .calbitcomment	a	{border-bottom-color:#f6f;}
-.caloptions .calbituser		,.calitems .calbituser		a	{border-bottom-color:#9f6;}
+.caloptions .calbitarticle		,.calitems .calbitarticle		a	{border-bottom-color:#f80;}
+.caloptions .calbitblog			,.calitems .calbitblog			a	{border-bottom-color:#fb6;}
+.caloptions .calbitblogpost		,.calitems .calbitblogpost		a	{border-bottom-color:#fd6;}
+.caloptions .calbitcomment		,.calitems .calbitcomment		a	{border-bottom-color:#f6f;}
+.caloptions .calbituser			,.calitems .calbituser			a	{border-bottom-color:#9f6;}
 .caloptions .calfisheyegallery	,.calitems .calfisheyegallery	a	{border-bottom-color:#9cf;}
-.caloptions .calfisheyeimage	,.calitems .calfisheyeimage	a	{border-bottom-color:#39f;}
-.caloptions .calpigeonholes	,.calitems .calpigeonholes	a	{border-bottom-color:#f66;}
-.caloptions .caltikisticky	,.calitems .caltikisticky	a	{border-bottom-color:#ff6;}
-.caloptions .calbitbook		,.calitems .calbitbook		a	{border-bottom-color:#777;}
-.caloptions .calbitpage		,.calitems .calbitpage		a	{border-bottom-color:#bbb;}
-.caloptions .calbitevents	,.calitems .calbitevents	a	{border-bottom-color:#f0f;}
+.caloptions .calfisheyeimage	,.calitems .calfisheyeimage		a	{border-bottom-color:#39f;}
+.caloptions .calpigeonholes		,.calitems .calpigeonholes		a	{border-bottom-color:#f66;}
+.caloptions .caltikisticky		,.calitems .caltikisticky		a	{border-bottom-color:#ff6;}
+.caloptions .calbitbook			,.calitems .calbitbook			a	{border-bottom-color:#777;}
+.caloptions .calbitpage			,.calitems .calbitpage			a	{border-bottom-color:#bbb;}
 
-
-.caloptions .calbitarticle	,.calitems .calbitarticle	a	{background:#fa6;}
-.caloptions .calbitblog		,.calitems .calbitblog		a	{background:#fa9;}
-.caloptions .calbitblogpost	,.calitems .calbitblogpost	a	{background:#fc9;}
-.caloptions .calbitcomment	,.calitems .calbitcomment	a	{background:#f9f;}
-.caloptions .calbituser		,.calitems .calbituser		a	{background:#af8;}
+/*
+.caloptions .calbitarticle		,.calitems .calbitarticle		a	{background:#fa6;}
+.caloptions .calbitblog			,.calitems .calbitblog			a	{background:#fa9;}
+.caloptions .calbitblogpost		,.calitems .calbitblogpost		a	{background:#fc9;}
+.caloptions .calbitcomment		,.calitems .calbitcomment		a	{background:#f9f;}
+.caloptions .calbituser			,.calitems .calbituser			a	{background:#af8;}
 .caloptions .calfisheyegallery	,.calitems .calfisheyegallery	a	{background:#acf;}
-.caloptions .calfisheyeimage	,.calitems .calfisheyeimage	a	{background:#7af;}
-.caloptions .calpigeonholes	,.calitems .calpigeonholes	a	{background:#f99;}
-.caloptions .caltikisticky	,.calitems .caltikisticky	a	{background:#ff9;}
-.caloptions .calbitbook		,.calitems .calbitbook		a	{background:#777;}
-.caloptions .calbitpage		,.calitems .calbitpage		a	{background:#bbb;}
-.caloptions .calbitevents	,.calitems .calbitevents	a	{background:#fdf;}
-
+.caloptions .calfisheyeimage	,.calitems .calfisheyeimage		a	{background:#7af;}
+.caloptions .calpigeonholes		,.calitems .calpigeonholes		a	{background:#f99;}
+.caloptions .caltikisticky		,.calitems .caltikisticky		a	{background:#ff9;}
+.caloptions .calbitbook			,.calitems .calbitbook			a	{background:#777;}
+.caloptions .calbitpage			,.calitems .calbitpage			a	{background:#bbb;}
+*/
 
