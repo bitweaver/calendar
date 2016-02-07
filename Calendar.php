@@ -447,8 +447,8 @@ class Calendar extends LibertyContent {
 				}
 			}
 		}
-		$gBitSmarty->assign_by_ref( 'calDay', $calDay );
-		$gBitSmarty->assign_by_ref( 'calMonth', $calMonth );
+		$gBitSmarty->assignByRef( 'calDay', $calDay );
+		$gBitSmarty->assignByRef( 'calMonth', $calMonth );
 	}
 
 	function setupCalendar($pShowContentOptions = TRUE) {
