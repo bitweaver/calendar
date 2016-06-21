@@ -1,4 +1,4 @@
-{if $smarty.const.ACTIVE_PACKAGE == 'calendar'}
+{if $gBitSystem->getActivePackage() == 'calendar'}
 	<link rel="stylesheet" title="{$style}" type="text/css" href="{$smarty.const.CALENDAR_PKG_URL}styles/plain.css" media="all" />
 {/if}
 {if $minical}
