@@ -20,7 +20,7 @@ define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ?
  */
 class Calendar extends LibertyContent {
 
-	var $display_offset;
+	public $display_offset;
 
 	function Calendar() {
 		parent::__construct();
