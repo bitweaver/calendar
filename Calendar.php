@@ -76,7 +76,7 @@ class Calendar extends LibertyContent {
 			$item['created']       = $item['created']       + $this->display_offset;
 			$item['last_modified'] = $item['last_modified'] + $this->display_offset;
 			$item['event_time']	   = $item['event_time'] + $this->display_offset;
- 			$item['parsed'] = $this->parseData($item['data'], $item['format_guid']);
+ 			$item['parsed'] = self::parseDataHash( $item['data'] );
 			$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
 			$ret[$dstart][] = $item;
 		}
@@ -419,7 +419,7 @@ class Calendar extends LibertyContent {
 				if( !empty( $bitEvents[$day['day']] ) ) {
 					$i = 0;
 					foreach( $bitEvents[$day['day']] as $bitEvent ) {
-						$bitEvent['parsed_data'] = $this->parseData($bitEvent);
+						$bitEvent['parsed_data'] = self::parseDataHash($bitEvent);
 						$dayEvents[$i] = $bitEvent;
 						if (!$gBitSystem->isFeatureActive('calendar_ajax_popups')) {
 							$gBitSmarty->assign( 'cellHash', $bitEvent );
