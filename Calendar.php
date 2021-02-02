@@ -11,7 +11,7 @@
 /**
  * Required setup
  */
-include_once( KERNEL_PKG_PATH . 'BitDate.php' );
+include_once( KERNEL_PKG_CLASS_PATH.'BitDate.php' );
 // set week offset - start with a day other than monday
 define( 'WEEK_OFFSET', !empty( $gBitUser->mUserPrefs['calendar_week_offset'] ) ? $gBitUser->mUserPrefs['calendar_week_offset'] : $gBitSystem->getConfig( 'calendar_week_offset', 0 ) );
 
@@ -76,7 +76,7 @@ class Calendar extends LibertyContent {
 			$item['created']       = $item['created']       + $this->display_offset;
 			$item['last_modified'] = $item['last_modified'] + $this->display_offset;
 			$item['event_time']	   = $item['event_time'] + $this->display_offset;
- 			$item['parsed'] = self::parseDataHash( $item['data'] );
+ 			$item['parsed'] = self::parseDataHash( $item );
 			$dstart = $this->mDate->gmmktime( 0, 0, 0, $this->mDate->date( "m", $item['timestamp'], true ), $this->mDate->date( "d", $item['timestamp'], true ), $this->mDate->date( "Y", $item['timestamp'], true ) );
 			$ret[$dstart][] = $item;
 		}
