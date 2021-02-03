@@ -12,7 +12,7 @@
 /**
  * Setup
  */
-require_once( '../kernel/setup_inc.php' );
+require_once( '../kernel/includes/setup_inc.php' );
 
 global $gContent, $gBitSystem;
 include_once( LIBERTY_PKG_INCLUDE_PATH.'lookup_content_inc.php' );
