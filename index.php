@@ -9,7 +9,7 @@ require_once( '../kernel/includes/setup_inc.php' );
 
 include_once( CALENDAR_PKG_PATH.'Calendar.php' );
 
-$gBitSystem->isPackageActive( 'calendar', TRUE );
+$gBitSystem->verifyPackage( 'calendar' );
 
 $gBitSystem->verifyPermission( 'p_calendar_view' );
 
